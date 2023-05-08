@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_AdManager : MonoBehaviour
+public class E_AdManager : MonoBehaviour, IExtraManager
 {
     // Start is called before the first frame update
     void Start()

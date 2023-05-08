@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B_InputOutputManager : MonoBehaviour
+public class B_InputOutputManager : MonoBehaviour, IBaseManager
 {
     // Start is called before the first frame update
     void Start()

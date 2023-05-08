@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_LobbyChatManager : MonoBehaviour
+public class E_LobbyChatManager : MonoBehaviour, IExtraManager
 {
     // Start is called before the first frame update
     void Start()

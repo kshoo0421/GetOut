@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using GoogleMobileAds.Api;
 
 public class GoogleAdMobManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool isTestMode;
+    public Text LogText;
+    public Button FrontAdsBtn, RewardAdsBtn;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
