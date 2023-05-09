@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/02_WaitingRoom.unity
     guid: 30eb6edb10b2c124d92dd7098ab0f613
   - enabled: 1
-    path: Assets/Scenes/03_CustumMatching.unity
+    path: Assets/Scenes/03_CustomMatching.unity
     guid: be143d159431a50428c454e1698449c7
   - enabled: 1
     path: Assets/Scenes/04_RandomMatching.unity

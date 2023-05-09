@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_CustumMatchingManager : MonoBehaviour, ISceneManager
+public class S_CustomMatchingManager : MonoBehaviour, ISceneManager
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 

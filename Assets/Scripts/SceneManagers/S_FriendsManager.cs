@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class S_FriendsManager : MonoBehaviour, ISceneManager
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeToScene01()
     {
-        
+        sceneChanger.ChangetoScene(1);
     }
 }

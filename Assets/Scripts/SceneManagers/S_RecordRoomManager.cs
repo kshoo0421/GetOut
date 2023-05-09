@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class S_RecordRoomManager : MonoBehaviour, ISceneManager
 {
-    // Start is called before the first frame update
-    void Start()
+    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+
+    public void ChangeToScene01()
     {
-        
+        sceneChanger.ChangetoScene(1);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeToScene08()
     {
-        
+        sceneChanger.ChangetoScene(8);
     }
 }
