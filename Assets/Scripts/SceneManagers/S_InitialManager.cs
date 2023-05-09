@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class S_InitialManager : MonoBehaviour, ISceneManager
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeToScene1()
     {
-        
+        sceneChanger.ChangetoScene(1);
     }
 }

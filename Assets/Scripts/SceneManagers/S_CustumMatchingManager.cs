@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class S_CustumMatchingManager : MonoBehaviour, ISceneManager
 {
-    // Start is called before the first frame update
-    void Start()
+    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+
+    public void ChangeToScene02()
     {
-        
+        sceneChanger.ChangetoScene(2);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeToScene05()
     {
-        
+        sceneChanger.ChangetoScene(5);
     }
 }

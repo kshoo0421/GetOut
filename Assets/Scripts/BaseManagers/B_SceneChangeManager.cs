@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class B_SceneChangeManager : MonoBehaviour, IBaseManager
 {
-    // Start is called before the first frame update
-    void Start()
+    public void ChangetoScene(int sceneIndex)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SceneManager.LoadScene(sceneIndex);
+        Debug.Log("æ¿ " + sceneIndex + "¿∏∑Œ ¿Ãµø");
     }
 }
