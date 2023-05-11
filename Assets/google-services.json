@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "767643581180",
+    "project_id": "getout-38c84",
+    "storage_bucket": "getout-38c84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767643581180:android:077ec7e2dbb2659cbfb579",
+        "android_client_info": {
+          "package_name": "com.kshoo0421.getout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767643581180-cpaa2vtm8cjvi32pss5i315nkmk9tah6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJlzSb5e4yXSMQHjfZhqznAwuqvuL6CJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767643581180-9muhlvf0jmdivkbhrfae5epka2dtj1li.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
