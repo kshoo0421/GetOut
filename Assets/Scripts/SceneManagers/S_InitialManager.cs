@@ -7,11 +7,14 @@ using UnityEngine.UI;
 public class S_InitialManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+
     [SerializeField] private GameObject baseManagers;
     [SerializeField] private GameObject classManagers;
 
     [SerializeField] private TMP_InputField[] inputFields; // 모든 InputField를 배열로 가져옴
     private int currentInputFieldIndex = 0; // 현재 포커스를 가지고 있는 InputField 인덱스
+
+    [SerializeField] private GameObject LanguageSettingPanel;
 
     #region Start - Awake - Update
     private void Start()
@@ -45,9 +48,24 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region 씬 변경
-    public void ChangeToScene1()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(1);
+        sceneChanger.ChangetoScene(sceneIndex);
+    }
+    #endregion
+
+    #region 기타 설정
+    public void LanguageSettingPanelOpenAndClose()
+    {
+        Debug.Log(LanguageSettingPanel.activeSelf);
+        if(LanguageSettingPanel.activeSelf)
+        {
+            LanguageSettingPanel.SetActive(false);
+        }
+        else
+        {
+            LanguageSettingPanel.SetActive(true);
+        }
     }
     #endregion
 }

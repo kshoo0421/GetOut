@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MyTable Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: MyTable
+  m_TableCollectionNameGuidString: bd616bd265d469e4e9db46ce9c754549
+  m_Entries:
+  - m_Id: 297895411712
+    m_Key: UI-SceneName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 476430155776
+    m_Key: UI Sign-In
+    m_Metadata:
+      m_Items: []
+  - m_Id: 754961301504
+    m_Key: UI Sign Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3479153360896
+    m_Key: SceneChange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10213158764544
+    m_Key: Language Setting - English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10560870760448
+    m_Key: Language Setting - Korean
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11434376511488
+    m_Key: Language Setting - Close Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12809567158272
+    m_Key: LanguageSetting_Button
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 5994233159642775553
+  references:
+    version: 2
+    RefIds:
+    - rid: 5994233159642775553
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1684070767500

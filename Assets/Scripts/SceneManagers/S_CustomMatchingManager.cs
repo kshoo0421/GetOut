@@ -6,13 +6,8 @@ public class S_CustomMatchingManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    public void ChangeToScene02()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(2);
-    }
-
-    public void ChangeToScene05()
-    {
-        sceneChanger.ChangetoScene(5);
+        sceneChanger.ChangetoScene(sceneIndex);
     }
 }

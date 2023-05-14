@@ -6,13 +6,8 @@ public class S_GameManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    public void ChangeToScene03()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(3);
-    }
-
-    public void ChangeToScene04()
-    {
-        sceneChanger.ChangetoScene(4);
+        sceneChanger.ChangetoScene(sceneIndex);
     }
 }

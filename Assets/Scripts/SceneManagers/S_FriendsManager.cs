@@ -5,9 +5,8 @@ using UnityEngine;
 public class S_FriendsManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
-
-    public void ChangeToScene01()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(1);
+        sceneChanger.ChangetoScene(sceneIndex);
     }
 }

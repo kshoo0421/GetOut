@@ -6,13 +6,8 @@ public class S_RecordRoomManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    public void ChangeToScene01()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(1);
-    }
-
-    public void ChangeToScene08()
-    {
-        sceneChanger.ChangetoScene(8);
+        sceneChanger.ChangetoScene(sceneIndex);
     }
 }

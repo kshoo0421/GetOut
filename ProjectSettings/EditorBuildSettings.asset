@@ -48,4 +48,5 @@ EditorBuildSettings:
     path: Assets/Scenes/13_Friends.unity
     guid: d72d0866303fdb442b26bed383781464
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: a49d4af9e4967ef42b48ca4e2fe3662e, type: 2}
     com.unity.localization.settings: {fileID: 11400000, guid: 71ee66e5b1ac6564299db51179c9a60c, type: 2}

@@ -6,8 +6,8 @@ public class S_TutorialManager : MonoBehaviour
 {
     private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
 
-    public void ChangeToScene10()
+    public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(10);
+        sceneChanger.ChangetoScene(sceneIndex);
     }
 }
