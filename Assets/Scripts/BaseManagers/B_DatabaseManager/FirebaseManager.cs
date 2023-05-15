@@ -4,15 +4,14 @@ using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class FirebaseManager : MonoBehaviour
 {
-    public bool IsFirebaseReady { get; private set; }
-    public bool IsSignInOnProgress { get; private set; }
+    [SerializeField] private bool IsFirebaseReady { get; set; }
+    [SerializeField] private bool IsSignInOnProgress { get; set; }
 
-    public static FirebaseApp firebaseApp;
-    public static FirebaseAuth firebaseAuth;
+    [SerializeField] private static FirebaseApp firebaseApp;
+    [SerializeField] private static FirebaseAuth firebaseAuth;
     public static FirebaseUser User;
 
     private B_SceneChangeManager sceneChanger;
@@ -44,15 +43,20 @@ public class FirebaseManager : MonoBehaviour
     }
 
     #region 회원가입
-    public TMP_InputField emailSignUpField;
-    public TMP_InputField passwordSignUpField;
-    
-    public Button signUpButton;
-    public Button signUpPanelOnOffBtn;
-    public Button checkEmailOverlapBtn;
-    public Button checkPasswordOverlapBtn;
+    [SerializeField] private TMP_InputField emailSignUpField;
+    [SerializeField] private TMP_InputField passwordSignUpField;
 
-    public void SignUp()
+    public bool checkEmailOverlap() // 이메일 중복여부 체크
+    {
+        return true;
+    }
+
+    public bool checkPasswordOverlap()  // 비밀번호 조건 충족여부 체크
+    {
+        return true;
+    }
+
+    public void SignUp()    // 회원가입
     {
         firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailSignUpField.text, passwordSignUpField.text).ContinueWith(task =>
         {
@@ -75,9 +79,9 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region 로그인
-    public TMP_InputField emailLogInField;
-    public TMP_InputField passwordLogInField;
-    public Button signInButton;
+    [SerializeField] private TMP_InputField emailLogInField;
+    [SerializeField] private TMP_InputField passwordLogInField;
+    [SerializeField] private Button signInButton;
 
     public void SignIn()
     {

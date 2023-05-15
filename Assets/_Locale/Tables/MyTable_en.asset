@@ -50,6 +50,18 @@ MonoBehaviour:
     m_Localized: Language Setting
     m_Metadata:
       m_Items: []
+  - m_Id: 289280796766208
+    m_Localized: Check Email Overlap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 289797417578496
+    m_Localized: Check Password Condition
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290107804463104
+    m_Localized: SignUp
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

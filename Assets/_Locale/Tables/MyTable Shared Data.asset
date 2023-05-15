@@ -47,6 +47,18 @@ MonoBehaviour:
     m_Key: LanguageSetting_Button
     m_Metadata:
       m_Items: []
+  - m_Id: 289280796766208
+    m_Key: EmailOverlap
+    m_Metadata:
+      m_Items: []
+  - m_Id: 289797417578496
+    m_Key: PWConditionCheckBtn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 290107804463104
+    m_Key: SignUpBtn
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
