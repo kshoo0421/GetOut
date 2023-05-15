@@ -7,26 +7,19 @@ using UnityEditor.VersionControl;
 
 public class S_InitialManager : MonoBehaviour
 {
-    #region 공용 변수
-    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
-
+    #region Start - Awake - Update
     [SerializeField] private GameObject baseManagers;
     [SerializeField] private GameObject classManagers;
-
 
     TMP_InputField nextInputField;
     TMP_InputField currentInputField;
 
-   [SerializeField] private TMP_InputField[] signInInputFields; // 로그인
+    [SerializeField] private TMP_InputField[] signInInputFields; // 로그인
     private int currentSignInInputFieldIndex = 0; // 현재 포커스를 가지고 있는 InputField 인덱스
-    
+
     [SerializeField] private TMP_InputField[] signUpInputFields; // 회원가입
     private int currentSignUpInputFieldIndex = 0; // 현재 포커스를 가지고 있는 InputField 인덱스
 
-    [SerializeField] private GameObject LanguageSettingPanel;
-    #endregion
-
-    #region Start - Awake - Update
     private void Start()
     {
         // 첫 번째 InputField에 포커스 설정
@@ -72,6 +65,26 @@ public class S_InitialManager : MonoBehaviour
                 nextInputField.Select();
                 nextInputField.ActivateInputField();
             }
+        }
+    }
+    #endregion
+
+    #region 로그인 패널 관리
+    [SerializeField] private GameObject SignInPanel;
+
+    public void OpenSignInPanel()
+    {
+        if(SignInPanel.activeSelf == false) 
+        {
+            SignInPanel.SetActive(true);
+        }
+    }
+
+    public void CloseSignInPanel()
+    {
+        if (SignInPanel.activeSelf == true)
+        {
+            SignInPanel.SetActive(false);
         }
     }
     #endregion
@@ -153,6 +166,8 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region 씬 변경
+    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+
     public void ChangeToScene(int sceneIndex)
     {
         sceneChanger.ChangetoScene(sceneIndex);
@@ -160,6 +175,8 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region 언어 설정 패널 관리
+    [SerializeField] private GameObject LanguageSettingPanel;
+
     public void LanguageSettingPanelOpenAndClose()
     {
         Debug.Log(LanguageSettingPanel.activeSelf);
