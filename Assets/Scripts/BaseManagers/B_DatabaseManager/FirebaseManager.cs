@@ -11,13 +11,8 @@ public class FirebaseManager : MonoBehaviour
     public bool IsFirebaseReady { get; private set; }
     public bool IsSignInOnProgress { get; private set; }
 
-    public TMP_InputField emailField;
-    public TMP_InputField passwordField;
-    public Button signInButton;
-
     public static FirebaseApp firebaseApp;
     public static FirebaseAuth firebaseAuth;
-
     public static FirebaseUser User;
 
     private B_SceneChangeManager sceneChanger;
@@ -48,9 +43,18 @@ public class FirebaseManager : MonoBehaviour
         );
     }
 
+    #region 회원가입
+    public TMP_InputField emailSignUpField;
+    public TMP_InputField passwordSignUpField;
+    
+    public Button signUpButton;
+    public Button signUpPanelOnOffBtn;
+    public Button checkEmailOverlapBtn;
+    public Button checkPasswordOverlapBtn;
+
     public void SignUp()
     {
-        firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailField.text, passwordField.text).ContinueWith(task =>
+        firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailSignUpField.text, passwordSignUpField.text).ContinueWith(task =>
         {
             if(task.IsCanceled)
             {
@@ -68,6 +72,12 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError("회원가입 완료");
         });
     }
+    #endregion
+
+    #region 로그인
+    public TMP_InputField emailLogInField;
+    public TMP_InputField passwordLogInField;
+    public Button signInButton;
 
     public void SignIn()
     {
@@ -79,7 +89,7 @@ public class FirebaseManager : MonoBehaviour
         IsSignInOnProgress = true;
         signInButton.interactable = false;
 
-        firebaseAuth.SignInWithEmailAndPasswordAsync(emailField.text, passwordField.text).ContinueWithOnMainThread(
+        firebaseAuth.SignInWithEmailAndPasswordAsync(emailLogInField.text, passwordLogInField.text).ContinueWithOnMainThread(
             (task) =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
@@ -103,4 +113,5 @@ public class FirebaseManager : MonoBehaviour
                 }
             });
     }
+    #endregion
 }
