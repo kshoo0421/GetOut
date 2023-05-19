@@ -4,8 +4,8 @@ using UnityEngine.Localization.Settings;
 
 public class LanguageManager : MonoBehaviour
 {
-    bool isChanging;
 
+    bool isChanging;
     public void ChangeLocale(int index)
     {
         if (isChanging)

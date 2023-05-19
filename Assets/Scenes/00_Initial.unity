@@ -345,8 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6075321b46cd6544c88b1105cec01564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailSignUpField: {fileID: 0}
-  passwordSignUpField: {fileID: 0}
+  emailSignUpField: {fileID: 461500495}
+  passwordSignUpField: {fileID: 890345915}
   emailLogInField: {fileID: 1082149422}
   passwordLogInField: {fileID: 814025135}
   signInButton: {fileID: 525223013}
@@ -7040,7 +7040,6 @@ MonoBehaviour:
   signUpInputFields:
   - {fileID: 461500495}
   - {fileID: 890345915}
-  LanguageSettingPanel: {fileID: 1317118968}
   SignInPanel: {fileID: 1355920232}
   SignUpPanel: {fileID: 2033595541}
   signUpMessage: {fileID: 1932823236}
@@ -7049,6 +7048,7 @@ MonoBehaviour:
   signUpPanelOffBtn: {fileID: 258216870}
   checkEmailOverlapBtn: {fileID: 138131063}
   checkPasswordOverlapBtn: {fileID: 486946783}
+  LanguageSettingPanel: {fileID: 1317118968}
 --- !u!4 &1725792296
 Transform:
   m_ObjectHideFlags: 0

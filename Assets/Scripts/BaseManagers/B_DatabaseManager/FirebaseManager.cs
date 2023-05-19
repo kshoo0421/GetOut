@@ -7,12 +7,30 @@ using TMPro;
 
 public class FirebaseManager : MonoBehaviour
 {
-    [SerializeField] private bool IsFirebaseReady { get; set; }
-    [SerializeField] private bool IsSignInOnProgress { get; set; }
+    public static FirebaseUser User;
 
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static FirebaseManager instance;
+    private FirebaseManager() {}
+    public static FirebaseManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new FirebaseManager();
+            }
+            return instance;
+        }
+    }
+    #endregion
+
+    #region monobehavior
     [SerializeField] private static FirebaseApp firebaseApp;
     [SerializeField] private static FirebaseAuth firebaseAuth;
-    public static FirebaseUser User;
+
+    [SerializeField] private bool IsFirebaseReady { get; set; }
+    [SerializeField] private bool IsSignInOnProgress { get; set; }
 
     private B_SceneChangeManager sceneChanger;
 
@@ -21,7 +39,7 @@ public class FirebaseManager : MonoBehaviour
         sceneChanger = new B_SceneChangeManager();
         signInButton.interactable = false;
 
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(continuationAction: task =>
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
             {
                 var result = task.Result;
                 if (result != DependencyStatus.Available)
@@ -32,15 +50,14 @@ public class FirebaseManager : MonoBehaviour
                 else
                 {
                     IsFirebaseReady = true;
-
                     firebaseApp = FirebaseApp.DefaultInstance;
                     firebaseAuth = FirebaseAuth.DefaultInstance;
                 }
-
                 signInButton.interactable = IsFirebaseReady;
             }
         );
     }
+    #endregion
 
     #region È¸¿ø°¡ÀÔ
     [SerializeField] private TMP_InputField emailSignUpField;

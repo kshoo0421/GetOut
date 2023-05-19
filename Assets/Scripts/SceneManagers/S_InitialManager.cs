@@ -93,7 +93,7 @@ public class S_InitialManager : MonoBehaviour
     private bool isEmailOvelap = true;
     private bool isPasswordOvelap = true;
 
-    FirebaseManager firebaseManager = new FirebaseManager();
+    FirebaseManager firebaseManager = FirebaseManager.Instance;
 
     [SerializeField] private GameObject SignUpPanel;
     [SerializeField] private TMP_Text signUpMessage;

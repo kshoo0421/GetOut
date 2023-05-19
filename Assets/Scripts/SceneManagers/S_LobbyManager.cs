@@ -55,7 +55,6 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
         else
         {
             connectionInfoText.text = $"Offline : Conection Disabled - Try reconnecting...";
-
             PhotonNetwork.ConnectUsingSettings();
         }
     }
