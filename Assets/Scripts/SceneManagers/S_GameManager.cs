@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class S_GameManager : MonoBehaviour
 {
-    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
 
     public void ChangeToScene(int sceneIndex)
     {

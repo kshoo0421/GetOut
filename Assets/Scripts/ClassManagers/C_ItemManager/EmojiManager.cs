@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class EmojiManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static EmojiManager instance;
+    private EmojiManager() { }
+    public static EmojiManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new EmojiManager();
+            }
+            return instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

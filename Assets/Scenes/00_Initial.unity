@@ -345,11 +345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6075321b46cd6544c88b1105cec01564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailSignUpField: {fileID: 461500495}
-  passwordSignUpField: {fileID: 890345915}
-  emailLogInField: {fileID: 1082149422}
-  passwordLogInField: {fileID: 814025135}
-  signInButton: {fileID: 525223013}
 --- !u!1 &152153386
 GameObject:
   m_ObjectHideFlags: 0
@@ -2126,50 +2121,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!1 &604898734
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 604898735}
-  - component: {fileID: 604898736}
-  m_Layer: 0
-  m_Name: TMPManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &604898735
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604898734}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 621291393}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &604898736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604898734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 406123dd9add46c48b6bba5a530e14b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &616992996
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,8 +2328,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 604898735}
+  m_Children: []
   m_Father: {fileID: 1194974011}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2394,6 +2344,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3aef40234152541ab16721b0a98258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &633196225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 633196226}
+  m_Layer: 0
+  m_Name: TotalGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &633196226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633196225}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 938.3533, y: 503.55753, z: -7.565072}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &647117844
 GameObject:
   m_ObjectHideFlags: 0
@@ -7032,8 +7013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76287b3bd0c686847bc51d95d3d7bdf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseManagers: {fileID: 1216246955}
-  classManagers: {fileID: 1732011627}
+  totalGameManager: {fileID: 633196225}
   signInInputFields:
   - {fileID: 1082149422}
   - {fileID: 814025135}
@@ -7041,6 +7021,8 @@ MonoBehaviour:
   - {fileID: 461500495}
   - {fileID: 890345915}
   SignInPanel: {fileID: 1355920232}
+  emailLogInField: {fileID: 1082149422}
+  passwordLogInField: {fileID: 814025135}
   SignUpPanel: {fileID: 2033595541}
   signUpMessage: {fileID: 1932823236}
   signUpButton: {fileID: 168915143}
@@ -7048,7 +7030,10 @@ MonoBehaviour:
   signUpPanelOffBtn: {fileID: 258216870}
   checkEmailOverlapBtn: {fileID: 138131063}
   checkPasswordOverlapBtn: {fileID: 486946783}
+  emailSignUpField: {fileID: 461500495}
+  passwordSignUpField: {fileID: 890345915}
   LanguageSettingPanel: {fileID: 1317118968}
+  b_DatabaseManager: {fileID: 0}
 --- !u!4 &1725792296
 Transform:
   m_ObjectHideFlags: 0

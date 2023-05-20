@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B_OptionManager : MonoBehaviour, IBaseManager
+public class B_OptionManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static B_OptionManager instance;
+    private B_OptionManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static B_OptionManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new B_OptionManager();
+            }
+            return instance;
+        }
     }
+    #endregion
+
 }

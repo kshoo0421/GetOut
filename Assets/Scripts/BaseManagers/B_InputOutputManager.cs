@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B_InputOutputManager : MonoBehaviour, IBaseManager
+public class B_InputOutputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static B_InputOutputManager instance;
+    private B_InputOutputManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static B_InputOutputManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new B_InputOutputManager();
+            }
+            return instance;
+        }
     }
+    #endregion
+
 }

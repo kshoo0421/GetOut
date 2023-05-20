@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class ExtraTicketManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static ExtraTicketManager instance;
+    private ExtraTicketManager() { }
+    public static ExtraTicketManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new ExtraTicketManager();
+            }
+            return instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

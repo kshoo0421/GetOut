@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class ResolutionManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static ResolutionManager instance;
+    private ResolutionManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static ResolutionManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new ResolutionManager();
+            }
+            return instance;
+        }
     }
+    #endregion
 }

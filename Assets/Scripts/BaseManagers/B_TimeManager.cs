@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class B_TimeManager : MonoBehaviour, IBaseManager
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static B_TimeManager instance;
+    private B_TimeManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static B_TimeManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new B_TimeManager();
+            }
+            return instance;
+        }
     }
+    #endregion
+
 }

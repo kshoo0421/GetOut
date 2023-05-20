@@ -13,7 +13,7 @@ public class PlayerNameText : MonoBehaviour
         
         if(FirebaseManager.User != null)
         {
-            //Debug.Log($"{FirebaseManager.User.Email}");
+            Debug.Log($"{FirebaseManager.User.Email}");
             //nameText.text = $"Hi! {FirebaseManager.User.Email}";
         }
         else

@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class VisualEffectManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static VisualEffectManager instance;
+    private VisualEffectManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static VisualEffectManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new VisualEffectManager();
+            }
+            return instance;
+        }
     }
+    #endregion
 }

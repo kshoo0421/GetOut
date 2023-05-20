@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class C_ItemManager : MonoBehaviour, IClassManager
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static C_ItemManager instance;
+    private C_ItemManager() { }
+    public static C_ItemManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new C_ItemManager();
+            }
+            return instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

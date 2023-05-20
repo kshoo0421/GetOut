@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B_NetworkManager : MonoBehaviour, IBaseManager
+public class B_NetworkManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static B_NetworkManager instance;
+    private B_NetworkManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static B_NetworkManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new B_NetworkManager();
+            }
+            return instance;
+        }
     }
+    #endregion
+
 }

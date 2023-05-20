@@ -36,9 +36,7 @@ public class FirebaseManager : MonoBehaviour
 
     void Start()
     {
-        sceneChanger = new B_SceneChangeManager();
-        signInButton.interactable = false;
-
+        sceneChanger = B_SceneChangeManager.Instance;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
             {
                 var result = task.Result;
@@ -53,16 +51,13 @@ public class FirebaseManager : MonoBehaviour
                     firebaseApp = FirebaseApp.DefaultInstance;
                     firebaseAuth = FirebaseAuth.DefaultInstance;
                 }
-                signInButton.interactable = IsFirebaseReady;
             }
         );
     }
     #endregion
 
     #region 회원가입
-    [SerializeField] private TMP_InputField emailSignUpField;
-    [SerializeField] private TMP_InputField passwordSignUpField;
-
+  
     public bool checkEmailOverlap() // 이메일 중복여부 체크
     {
         return true;
@@ -73,9 +68,9 @@ public class FirebaseManager : MonoBehaviour
         return true;
     }
 
-    public void SignUp()    // 회원가입
+    public void SignUp(string emailText, string passwordText)    // 회원가입
     {
-        firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailSignUpField.text, passwordSignUpField.text).ContinueWith(task =>
+        firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailText, passwordText).ContinueWith(task =>
         {
             if(task.IsCanceled)
             {
@@ -96,28 +91,26 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region 로그인
-    [SerializeField] private TMP_InputField emailLogInField;
-    [SerializeField] private TMP_InputField passwordLogInField;
-    [SerializeField] private Button signInButton;
-
-    public void SignIn()
+    public bool checkSignIn()
     {
-        if(!IsFirebaseReady || IsSignInOnProgress || User != null)
+        if (!IsFirebaseReady || IsSignInOnProgress || User != null)
         {
-            return;
+            return false;
         }
+        return true;
+    }
 
+    public void SignIn(string emailText, string passwordText)
+    {
         IsSignInOnProgress = true;
-        signInButton.interactable = false;
-
-        firebaseAuth.SignInWithEmailAndPasswordAsync(emailLogInField.text, passwordLogInField.text).ContinueWithOnMainThread(
+        
+        firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
             (task) =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
 
                 IsSignInOnProgress = false;
-                signInButton.interactable = true;
-
+       
                 if (task.IsFaulted)
                 {
                     Debug.LogError(task.Exception);

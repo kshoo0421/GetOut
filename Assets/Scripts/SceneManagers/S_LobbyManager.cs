@@ -6,7 +6,7 @@ using TMPro;
 public class S_LobbyManager : MonoBehaviourPunCallbacks
 {
     #region ¾À º¯°æ
-    private B_SceneChangeManager sceneChanger = new B_SceneChangeManager();
+    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
 
     public void ChangeToScene(int sceneIndex)
     {

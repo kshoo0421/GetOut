@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class PhotonManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static PhotonManager instance;
+    private PhotonManager() { }
 
-    // Update is called once per frame
-    void Update()
+    public static PhotonManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new PhotonManager();
+            }
+            return instance;
+        }
     }
+    #endregion
+
 }

@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class C_MissionManager : MonoBehaviour, IClassManager
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static C_MissionManager instance;
+    private C_MissionManager() { }
+    public static C_MissionManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new C_MissionManager();
+            }
+            return instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

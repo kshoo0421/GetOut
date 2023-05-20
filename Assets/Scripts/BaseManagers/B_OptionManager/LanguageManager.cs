@@ -4,6 +4,22 @@ using UnityEngine.Localization.Settings;
 
 public class LanguageManager : MonoBehaviour
 {
+    #region ½Ì±ÛÅæ ±¸Çö
+    private static LanguageManager instance;
+    private LanguageManager() { }
+
+    public static LanguageManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new LanguageManager();
+            }
+            return instance;
+        }
+    }
+    #endregion
 
     bool isChanging;
     public void ChangeLocale(int index)

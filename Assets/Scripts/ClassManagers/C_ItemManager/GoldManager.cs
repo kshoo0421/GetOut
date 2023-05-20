@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class GoldManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static GoldManager instance;
+    private GoldManager() { }
+    public static GoldManager Instance
     {
-        
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GoldManager();
+            }
+            return instance;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }
