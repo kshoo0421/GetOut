@@ -9,13 +9,14 @@ public class TicketManager : MonoBehaviour
     private TicketManager() { }
     public static TicketManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new TicketManager();
-            }
-            return instance;
+            instance = GetComponent<TicketManager>();
         }
     }
     #endregion

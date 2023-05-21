@@ -9,13 +9,14 @@ public class C_DataManager : MonoBehaviour, IClassManager
     private C_DataManager() { }
     public static C_DataManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new C_DataManager();
-            }
-            return instance;
+            instance = GetComponent<C_DataManager>();
         }
     }
     #endregion

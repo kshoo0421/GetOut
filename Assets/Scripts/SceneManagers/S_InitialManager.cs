@@ -7,7 +7,11 @@ using UnityEditor.VersionControl;
 public class S_InitialManager : MonoBehaviour
 {
     #region Start - Awake - Update
-    [SerializeField] private GameObject totalGameManager;
+    [SerializeField] private GameObject totalGMObject;
+    private TotalGameManager totalGameManager;
+    private FirebaseManager firebaseManager;
+    private B_DatabaseManager b_DatabaseManager;
+    private B_SceneChangeManager b_SceneChangeManager;
 
     TMP_InputField nextInputField;
     TMP_InputField currentInputField;
@@ -18,25 +22,27 @@ public class S_InitialManager : MonoBehaviour
     [SerializeField] private TMP_InputField[] signUpInputFields; // 회원가입
     private int currentSignUpInputFieldIndex = 0; // 현재 포커스를 가지고 있는 InputField 인덱스
 
-    private FirebaseManager firebaseManager;
+    private void Awake()
+    {
+        DontDestroyOnLoad(totalGMObject);
+    }
 
     private void Start()
     {
-        firebaseManager = FirebaseManager.Instance;
         // 첫 번째 InputField에 포커스 설정
-        signInInputFields[0].Select(); 
-        signUpInputFields[0].Select(); 
-    }
+        signInInputFields[0].Select();
+        signUpInputFields[0].Select();
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(totalGameManager);
+        totalGameManager = TotalGameManager.Instance;
+        firebaseManager = totalGameManager.firebaseManager;
+        b_DatabaseManager = totalGameManager.b_DatabaseManager;
+        b_SceneChangeManager = totalGameManager.b_SceneChangeManager;
     }
 
     private void Update()
     {
         // 현재 포커스를 가지고 있는 InputField
-        if(SignUpPanel.activeSelf == true)
+        if (SignUpPanel.activeSelf == true)
         {
             currentInputField = signUpInputFields[currentSignInInputFieldIndex];
             // Tab 키를 눌렀을 때 다음 InputField로 포커스 이동
@@ -75,7 +81,7 @@ public class S_InitialManager : MonoBehaviour
 
     public void OpenSignInPanel()
     {
-        if(SignInPanel.activeSelf == false) 
+        if (SignInPanel.activeSelf == false)
         {
             SignInPanel.SetActive(true);
         }
@@ -92,12 +98,13 @@ public class S_InitialManager : MonoBehaviour
     // 로그인
     [SerializeField] private TMP_InputField emailLogInField;
     [SerializeField] private TMP_InputField passwordLogInField;
-   
+
     public void SignIn()
     {
-        if(firebaseManager.checkSignIn())
+        if (firebaseManager.checkSignIn())
         {
             firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
+            ChangeToScene(1);
         }
     }
     #endregion
@@ -120,7 +127,7 @@ public class S_InitialManager : MonoBehaviour
 
     public void OpenSignUpPanel()
     {
-        if(SignUpPanel.activeSelf == false)
+        if (SignUpPanel.activeSelf == false)
             SignUpPanel.SetActive(true);
     }
 
@@ -160,12 +167,12 @@ public class S_InitialManager : MonoBehaviour
 
     public void PressSignUpButton()
     {
-        if(isEmailOvelap == true)
+        if (isEmailOvelap == true)
         {
             signUpMessage.text = "You should check email address";
             return;
         }
-        else if(isPasswordOvelap == true)
+        else if (isPasswordOvelap == true)
         {
             signUpMessage.text = "You should check password";
             return;
@@ -180,21 +187,21 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region 씬 변경
-    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
 
     public void ChangeToScene(int sceneIndex)
     {
-        sceneChanger.ChangetoScene(sceneIndex);
+        b_SceneChangeManager.ChangetoScene(sceneIndex);
     }
     #endregion
 
     #region 언어 설정 패널 관리
+    private LanguageManager languageManager = LanguageManager.Instance;
     [SerializeField] private GameObject LanguageSettingPanel;
 
     public void LanguageSettingPanelOpenAndClose()
     {
         Debug.Log(LanguageSettingPanel.activeSelf);
-        if(LanguageSettingPanel.activeSelf)
+        if (LanguageSettingPanel.activeSelf)
         {
             LanguageSettingPanel.SetActive(false);
         }
@@ -203,10 +210,14 @@ public class S_InitialManager : MonoBehaviour
             LanguageSettingPanel.SetActive(true);
         }
     }
+
+    public void ChangeLocale(int index)
+    {
+        languageManager.ChangeLocale(index);
+    }
     #endregion
 
     #region 테스트
-    [SerializeField] private B_DatabaseManager b_DatabaseManager;
     public void MakeResultData()    // 데이터베이스 테스트용
     {
         ResultData resultData = new ResultData();
@@ -315,7 +326,7 @@ public class S_InitialManager : MonoBehaviour
         resultData.player4Mission.high.missionNum = 1;
         resultData.player4Mission.high.isAchieved = false;
 
-        b_DatabaseManager.SaveData(resultData);
+        firebaseManager.SaveData(resultData);
     }
     #endregion
 }

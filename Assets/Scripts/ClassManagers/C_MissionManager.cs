@@ -9,13 +9,14 @@ public class C_MissionManager : MonoBehaviour, IClassManager
     private C_MissionManager() { }
     public static C_MissionManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new C_MissionManager();
-            }
-            return instance;
+            instance = GetComponent<C_MissionManager>();
         }
     }
     #endregion

@@ -10,13 +10,14 @@ public class PhotonManager : MonoBehaviour
 
     public static PhotonManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new PhotonManager();
-            }
-            return instance;
+            instance = GetComponent<PhotonManager>();
         }
     }
     #endregion

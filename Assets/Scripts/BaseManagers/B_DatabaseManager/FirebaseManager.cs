@@ -4,6 +4,8 @@ using Firebase.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Firebase.Database;
+using Unity.VisualScripting;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -14,13 +16,15 @@ public class FirebaseManager : MonoBehaviour
     private FirebaseManager() {}
     public static FirebaseManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new FirebaseManager();
-            }
-            return instance;
+            instance = GetComponent<FirebaseManager>();
+            InitializeFM();
         }
     }
     #endregion
@@ -29,12 +33,14 @@ public class FirebaseManager : MonoBehaviour
     [SerializeField] private static FirebaseApp firebaseApp;
     [SerializeField] private static FirebaseAuth firebaseAuth;
 
-    [SerializeField] private bool IsFirebaseReady { get; set; }
-    [SerializeField] private bool IsSignInOnProgress { get; set; }
+    [SerializeField] private static bool IsFirebaseReady { get; set; }
+    [SerializeField] private static bool IsSignInOnProgress { get; set; }
 
-    private B_SceneChangeManager sceneChanger;
+    private static B_SceneChangeManager sceneChanger;
+    private static DatabaseReference reference;
 
-    void Start()
+    //    void Start()
+    void InitializeFM()
     {
         sceneChanger = B_SceneChangeManager.Instance;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
@@ -50,6 +56,7 @@ public class FirebaseManager : MonoBehaviour
                     IsFirebaseReady = true;
                     firebaseApp = FirebaseApp.DefaultInstance;
                     firebaseAuth = FirebaseAuth.DefaultInstance;
+                    reference = FirebaseDatabase.DefaultInstance.RootReference;
                 }
             }
         );
@@ -126,6 +133,14 @@ public class FirebaseManager : MonoBehaviour
                     sceneChanger.ChangetoScene(1);
                 }
             });
+    }
+    #endregion
+
+    #region 데이터베이스
+    public async void SaveData(ResultData resultData)
+    {
+        string json = JsonUtility.ToJson(resultData);
+        await reference.Child("Test").SetValueAsync(json);
     }
     #endregion
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class B_SceneChangeManager : MonoBehaviour, IBaseManager
+public class B_SceneChangeManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ ±¸Çö
     private static B_SceneChangeManager instance;
@@ -11,13 +11,14 @@ public class B_SceneChangeManager : MonoBehaviour, IBaseManager
 
     public static B_SceneChangeManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_SceneChangeManager();
-            }
-            return instance;
+            instance = GetComponent<B_SceneChangeManager>();
         }
     }
     #endregion
@@ -25,6 +26,5 @@ public class B_SceneChangeManager : MonoBehaviour, IBaseManager
     public void ChangetoScene(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
-        Debug.Log("¾À " + sceneIndex + "À¸·Î ÀÌµ¿");
     }
 }

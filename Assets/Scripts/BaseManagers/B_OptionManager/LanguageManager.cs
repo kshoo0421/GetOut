@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -10,13 +11,14 @@ public class LanguageManager : MonoBehaviour
 
     public static LanguageManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new LanguageManager();
-            }
-            return instance;
+            instance = GetComponent<LanguageManager>();
         }
     }
     #endregion

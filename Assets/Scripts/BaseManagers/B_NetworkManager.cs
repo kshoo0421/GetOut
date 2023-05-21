@@ -10,13 +10,14 @@ public class B_NetworkManager : MonoBehaviour
 
     public static B_NetworkManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_NetworkManager();
-            }
-            return instance;
+            instance = GetComponent<B_NetworkManager>();
         }
     }
     #endregion

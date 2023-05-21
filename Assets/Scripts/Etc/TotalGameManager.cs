@@ -11,13 +11,14 @@ public class TotalGameManager : MonoBehaviour
 
     public static TotalGameManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new TotalGameManager();
-            }
-            return instance;
+            instance = GetComponent<TotalGameManager>();
         }
     }
     #endregion
@@ -50,8 +51,12 @@ public class TotalGameManager : MonoBehaviour
     public TicketManager ticketManager;
     #endregion
 
-    #region 
+    #region 매니저 세팅
     private void Start()
+    {
+        SetManagers();
+    }
+    private void SetManagers()
     {
         firebaseManager = FirebaseManager.Instance;
         photonManager = PhotonManager.Instance;
@@ -78,6 +83,4 @@ public class TotalGameManager : MonoBehaviour
         ticketManager = TicketManager.Instance;
     }
     #endregion
-
-
 }

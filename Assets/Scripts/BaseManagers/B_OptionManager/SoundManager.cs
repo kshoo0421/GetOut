@@ -10,13 +10,14 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new SoundManager();
-            }
-            return instance;
+            instance = GetComponent<SoundManager>();
         }
     }
     #endregion

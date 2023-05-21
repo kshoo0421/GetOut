@@ -9,13 +9,14 @@ public class GoldManager : MonoBehaviour
     private GoldManager() { }
     public static GoldManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new GoldManager();
-            }
-            return instance;
+            instance = GetComponent<GoldManager>();
         }
     }
     #endregion

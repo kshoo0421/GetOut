@@ -10,13 +10,14 @@ public class VisualEffectManager : MonoBehaviour
 
     public static VisualEffectManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new VisualEffectManager();
-            }
-            return instance;
+            instance = GetComponent<VisualEffectManager>();
         }
     }
     #endregion

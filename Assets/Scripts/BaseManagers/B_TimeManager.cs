@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class B_TimeManager : MonoBehaviour, IBaseManager
+public class B_TimeManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ ±¸Çö
     private static B_TimeManager instance;
@@ -10,13 +10,14 @@ public class B_TimeManager : MonoBehaviour, IBaseManager
 
     public static B_TimeManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_TimeManager();
-            }
-            return instance;
+            instance = GetComponent<B_TimeManager>();
         }
     }
     #endregion

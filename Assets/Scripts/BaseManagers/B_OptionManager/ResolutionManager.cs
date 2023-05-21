@@ -10,13 +10,14 @@ public class ResolutionManager : MonoBehaviour
 
     public static ResolutionManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new ResolutionManager();
-            }
-            return instance;
+            instance = GetComponent<ResolutionManager>();
         }
     }
     #endregion

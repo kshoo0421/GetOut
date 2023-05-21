@@ -9,13 +9,14 @@ public class ExtraTicketManager : MonoBehaviour
     private ExtraTicketManager() { }
     public static ExtraTicketManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new ExtraTicketManager();
-            }
-            return instance;
+            instance = GetComponent<ExtraTicketManager>();
         }
     }
     #endregion

@@ -10,13 +10,14 @@ public class B_InputOutputManager : MonoBehaviour
 
     public static B_InputOutputManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_InputOutputManager();
-            }
-            return instance;
+            instance = GetComponent<B_InputOutputManager>();
         }
     }
     #endregion

@@ -10,13 +10,14 @@ public class B_OptionManager : MonoBehaviour
 
     public static B_OptionManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_OptionManager();
-            }
-            return instance;
+            instance = GetComponent<B_OptionManager>();
         }
     }
     #endregion

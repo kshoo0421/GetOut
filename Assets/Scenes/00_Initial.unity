@@ -2018,8 +2018,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 147028923}
-        m_TargetAssemblyTypeName: FirebaseManager, Assembly-CSharp
+      - m_Target: {fileID: 1725792295}
+        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
         m_MethodName: SignIn
         m_Mode: 1
         m_Arguments:
@@ -2344,6 +2344,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3aef40234152541ab16721b0a98258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &625757305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 625757306}
+  - component: {fileID: 625757307}
+  m_Layer: 0
+  m_Name: B_SceneChangeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &625757306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625757305}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216246956}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &625757307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625757305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d4a08ef7645d14ea019e699c2082d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &633196225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,6 +2397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 633196226}
+  - component: {fileID: 633196227}
   m_Layer: 0
   m_Name: TotalGameManager
   m_TagString: Untagged
@@ -2371,10 +2416,43 @@ Transform:
   m_LocalPosition: {x: 938.3533, y: 503.55753, z: -7.565072}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1216246956}
+  - {fileID: 1732011628}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &633196227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633196225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b448863a50700c419d4e1961c091f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firebaseManager: {fileID: 0}
+  photonManager: {fileID: 0}
+  languageManager: {fileID: 0}
+  resolutionManager: {fileID: 0}
+  soundManager: {fileID: 0}
+  visualEffectManager: {fileID: 0}
+  b_DatabaseManager: {fileID: 0}
+  b_InputOutputManager: {fileID: 0}
+  b_NetworkManager: {fileID: 0}
+  b_OptionManager: {fileID: 0}
+  b_SceneChangeManager: {fileID: 0}
+  b_TimeManager: {fileID: 0}
+  c_DataManager: {fileID: 0}
+  c_ItemManager: {fileID: 0}
+  c_MissionManager: {fileID: 0}
+  emojiManager: {fileID: 0}
+  extraTicketManager: {fileID: 0}
+  goldManager: {fileID: 0}
+  ticketManager: {fileID: 0}
 --- !u!1 &647117844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3965,7 +4043,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1082149420
 GameObject:
@@ -4731,8 +4809,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216246955}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -938.3533, y: -503.55753, z: 7.565072}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4741,8 +4819,9 @@ Transform:
   - {fileID: 1710923702}
   - {fileID: 1194974011}
   - {fileID: 1729161669}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  - {fileID: 625757306}
+  m_Father: {fileID: 633196226}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1262816143
 GameObject:
@@ -6382,8 +6461,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 621291394}
-        m_TargetAssemblyTypeName: LanguageManager, Assembly-CSharp
+      - m_Target: {fileID: 1725792295}
+        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
         m_MethodName: ChangeLocale
         m_Mode: 3
         m_Arguments:
@@ -7013,7 +7092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76287b3bd0c686847bc51d95d3d7bdf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalGameManager: {fileID: 633196225}
+  totalGMObject: {fileID: 633196225}
   signInInputFields:
   - {fileID: 1082149422}
   - {fileID: 814025135}
@@ -7033,7 +7112,6 @@ MonoBehaviour:
   emailSignUpField: {fileID: 461500495}
   passwordSignUpField: {fileID: 890345915}
   LanguageSettingPanel: {fileID: 1317118968}
-  b_DatabaseManager: {fileID: 0}
 --- !u!4 &1725792296
 Transform:
   m_ObjectHideFlags: 0
@@ -7116,16 +7194,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732011627}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -938.3533, y: -503.55753, z: 7.565072}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 854424189}
   - {fileID: 1262816144}
   - {fileID: 2005286927}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 633196226}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1740197967
 GameObject:
@@ -7211,8 +7289,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 621291394}
-        m_TargetAssemblyTypeName: LanguageManager, Assembly-CSharp
+      - m_Target: {fileID: 1725792295}
+        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
         m_MethodName: ChangeLocale
         m_Mode: 3
         m_Arguments:
@@ -8315,7 +8393,7 @@ RectTransform:
   - {fileID: 1317118969}
   - {fileID: 2033595542}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

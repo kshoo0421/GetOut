@@ -13,27 +13,15 @@ public class B_DatabaseManager : MonoBehaviour
 
     public static B_DatabaseManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new B_DatabaseManager();
-            }
-            return instance;
+            instance = GetComponent<B_DatabaseManager>();
         }
     }
     #endregion
-
-    DatabaseReference reference;
-    void Start()
-    {
-        // Get the root reference location of the database.
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-    }
-
-    public async void SaveData(ResultData resultData)
-    {
-        string json = JsonUtility.ToJson(resultData);
-        await reference.Child("Test").SetValueAsync(json);
-    }
 }

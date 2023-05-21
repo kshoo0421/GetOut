@@ -9,13 +9,14 @@ public class C_ItemManager : MonoBehaviour, IClassManager
     private C_ItemManager() { }
     public static C_ItemManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new C_ItemManager();
-            }
-            return instance;
+            instance = GetComponent<C_ItemManager>();
         }
     }
     #endregion

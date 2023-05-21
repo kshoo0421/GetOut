@@ -9,13 +9,14 @@ public class EmojiManager : MonoBehaviour
     private EmojiManager() { }
     public static EmojiManager Instance
     {
-        get
+        get { return instance; }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new EmojiManager();
-            }
-            return instance;
+            instance = GetComponent<EmojiManager>();
         }
     }
     #endregion
