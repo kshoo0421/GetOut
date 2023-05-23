@@ -2,14 +2,12 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using Firebase.Database;
-using Unity.VisualScripting;
+using System.Threading.Tasks;
 
 public class FirebaseManager : MonoBehaviour
 {
-    public static FirebaseUser User;
+    private static FirebaseUser? User;
 
     #region 싱글톤 생성용
     private static FirebaseManager instance;
@@ -36,13 +34,10 @@ public class FirebaseManager : MonoBehaviour
     [SerializeField] private static bool IsFirebaseReady { get; set; }
     [SerializeField] private static bool IsSignInOnProgress { get; set; }
 
-    private static B_SceneChangeManager sceneChanger;
     private static DatabaseReference reference;
 
-    //    void Start()
     void InitializeFM()
     {
-        sceneChanger = B_SceneChangeManager.Instance;
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
             {
                 var result = task.Result;
@@ -64,7 +59,6 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region 회원가입
-  
     public bool checkEmailOverlap() // 이메일 중복여부 체크
     {
         return true;
@@ -107,11 +101,11 @@ public class FirebaseManager : MonoBehaviour
         return true;
     }
 
-    public void SignIn(string emailText, string passwordText)
+    public async Task SignIn(string emailText, string passwordText)
     {
         IsSignInOnProgress = true;
         
-        firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
+        await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
             (task) =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
@@ -129,10 +123,17 @@ public class FirebaseManager : MonoBehaviour
                 else
                 {
                     User = task.Result.User;
-                    Debug.Log(User.Email);
-                    sceneChanger.ChangetoScene(1);
                 }
             });
+    }
+    #endregion
+
+    #region User 정보 가져오기
+    public FirebaseUser GetCurUser()
+    {
+        if(User != FirebaseAuth.DefaultInstance.CurrentUser)
+            User = FirebaseAuth.DefaultInstance.CurrentUser;
+        return User;
     }
     #endregion
 

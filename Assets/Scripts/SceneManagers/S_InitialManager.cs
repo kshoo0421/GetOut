@@ -3,6 +3,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEditor.VersionControl;
+using Unity.VisualScripting.ReorderableList;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class S_InitialManager : MonoBehaviour
 {
@@ -99,11 +101,19 @@ public class S_InitialManager : MonoBehaviour
     [SerializeField] private TMP_InputField emailLogInField;
     [SerializeField] private TMP_InputField passwordLogInField;
 
-    public void SignIn()
+    public async void SignIn()
     {
         if (firebaseManager.checkSignIn())
         {
-            firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
+            await firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
+
+            if (firebaseManager.GetCurUser() == null)
+                Debug.Log("null");
+            else
+            {
+                Debug.Log(firebaseManager.GetCurUser().Email);
+                Debug.Log("로그인 성공");
+            }
             ChangeToScene(1);
         }
     }

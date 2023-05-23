@@ -1,7 +1,9 @@
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Firebase.Auth;
 
 public class S_LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -16,9 +18,17 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
 
     #region 파이어베이스 및 포톤 활용
     private readonly string gameVersion = "1";
+    private TotalGameManager totalGameManager;
+    private FirebaseManager firebaseManager;
 
     public TMP_Text connectionInfoText;
     public Button joinButton;
+
+    private void Awake()
+    {
+        totalGameManager = TotalGameManager.Instance;
+        firebaseManager = FirebaseManager.Instance;
+    }
 
     private void Start()
     {
@@ -27,6 +37,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
 
         joinButton.interactable = false;
         connectionInfoText.text = "Connecting To Master Server...";
+        TestFunc();
     }
 
     public override void OnConnectedToMaster()
@@ -69,6 +80,24 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     {
         connectionInfoText.text = "Connected with Room.";
         PhotonNetwork.LoadLevel("06_Game");
+    }
+    #endregion
+
+    #region 테스트
+    public TMP_Text nameText;
+    private FirebaseUser user;
+    public void TestFunc()
+    {
+        Debug.Log("Test");
+        if (firebaseManager.GetCurUser() != null)
+        {
+            Debug.Log(firebaseManager.GetCurUser().Email);
+            nameText.text = $"Hi! {firebaseManager.GetCurUser().Email}";
+        }
+        else
+        {
+            nameText.text = "ERROR : AuthManager.User == null";
+        }
     }
     #endregion
 }
