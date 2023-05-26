@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class E_LobbyChatManager : MonoBehaviour, IExtraManager
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static E_LobbyChatManager instance;
+    private E_LobbyChatManager() { }
+    public static E_LobbyChatManager Instance
     {
-        
+        get { return instance; }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = GetComponent<E_LobbyChatManager>();
+        }
     }
+    #endregion
 }

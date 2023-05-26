@@ -49,6 +49,13 @@ public class TotalGameManager : MonoBehaviour
     public ExtraTicketManager extraTicketManager;
     public GoldManager goldManager;
     public TicketManager ticketManager;
+    // 기타 매니저
+    public E_AdManager e_AdManager;
+    public E_CustumMatchingChatManager e_CustumMatchingChatManager;
+    public E_EventManger e_EventManger;
+    public E_LobbyChatManager e_LobbyChatManager;
+    public E_PaymentManager e_PaymentManager;
+    public GoogleAdMobManager googleAdMobManager;
     #endregion
 
     #region 매니저 세팅
@@ -81,6 +88,13 @@ public class TotalGameManager : MonoBehaviour
         extraTicketManager = ExtraTicketManager.Instance;
         goldManager = GoldManager.Instance;
         ticketManager = TicketManager.Instance;
+
+        e_AdManager = E_AdManager.Instance;
+        e_CustumMatchingChatManager = E_CustumMatchingChatManager.Instance;
+        e_EventManger = E_EventManger.Instance;
+        e_LobbyChatManager = E_LobbyChatManager.Instance;
+        e_PaymentManager = E_PaymentManager.Instance;
+        googleAdMobManager = GoogleAdMobManager.Instance;
     }
     #endregion
 }

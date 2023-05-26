@@ -1,13 +1,13 @@
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
-using UnityEngine;
 using Firebase.Database;
+using UnityEngine;
 using System.Threading.Tasks;
 
 public class FirebaseManager : MonoBehaviour
 {
-    private static FirebaseUser? User;
+    private static FirebaseUser User;
 
     #region ½Ì±ÛÅæ »ý¼º¿ë
     private static FirebaseManager instance;
@@ -51,7 +51,10 @@ public class FirebaseManager : MonoBehaviour
                     IsFirebaseReady = true;
                     firebaseApp = FirebaseApp.DefaultInstance;
                     firebaseAuth = FirebaseAuth.DefaultInstance;
+
+//                    FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://getout-38c84-default-rtdb.firebaseio.com/");
                     reference = FirebaseDatabase.DefaultInstance.RootReference;
+
                 }
             }
         );
@@ -141,7 +144,7 @@ public class FirebaseManager : MonoBehaviour
     public async void SaveData(ResultData resultData)
     {
         string json = JsonUtility.ToJson(resultData);
-        await reference.Child("Test").SetValueAsync(json);
+        await reference.Child("WriteTest").SetRawJsonValueAsync(json);
     }
     #endregion
 }

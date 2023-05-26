@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class E_CustumMatchingChatManager : MonoBehaviour, IExtraManager
 {
-    // Start is called before the first frame update
-    void Start()
+    #region ½Ì±ÛÅæ »ý¼º¿ë
+    private static E_CustumMatchingChatManager instance;
+    private E_CustumMatchingChatManager() { }
+    public static E_CustumMatchingChatManager Instance
     {
-        
+        get { return instance; }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = GetComponent<E_CustumMatchingChatManager>();
+        }
     }
+    #endregion
 }
