@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_PaymentManager : MonoBehaviour, IExtraManager
+public class E_PaymentManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ »ý¼º¿ë
     private static E_PaymentManager instance;

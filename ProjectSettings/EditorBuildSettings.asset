@@ -6,46 +6,49 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/00_Initial.unity
+    path: Assets/Scenes/00_DontDestroy.unity
+    guid: 64b24bdeba7fe8f4ca1032c30af00e37
+  - enabled: 1
+    path: Assets/Scenes/01_Initial.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/01_Lobby.unity
+    path: Assets/Scenes/02_Lobby.unity
     guid: 4cf37af23b1027244b3cf4ef3c84257a
   - enabled: 1
-    path: Assets/Scenes/02_WaitingRoom.unity
+    path: Assets/Scenes/03_WaitingRoom.unity
     guid: 30eb6edb10b2c124d92dd7098ab0f613
   - enabled: 1
-    path: Assets/Scenes/03_CustomMatching.unity
+    path: Assets/Scenes/04_CustomMatching.unity
     guid: be143d159431a50428c454e1698449c7
   - enabled: 1
-    path: Assets/Scenes/04_RandomMatching.unity
+    path: Assets/Scenes/05_RandomMatching.unity
     guid: 10bec00744b832140b0ab876ebfd48a4
   - enabled: 1
-    path: Assets/Scenes/05_StartGame.unity
+    path: Assets/Scenes/06_StartGame.unity
     guid: 00f3c2121bc88664d9e8de1d273a0486
   - enabled: 1
-    path: Assets/Scenes/06_Game.unity
+    path: Assets/Scenes/07_Game.unity
     guid: ab32d7616bf1f7d429c5b3046fa0b9d8
   - enabled: 1
-    path: Assets/Scenes/07_RecordRoom.unity
+    path: Assets/Scenes/08_RecordRoom.unity
     guid: a03a4bc1ea2dd2b4993a037b785635f8
   - enabled: 1
-    path: Assets/Scenes/08_GameRecords.unity
+    path: Assets/Scenes/09_GameRecords.unity
     guid: 35c275e6864a705449222e1fb8b70675
   - enabled: 1
-    path: Assets/Scenes/09_Shop.unity
+    path: Assets/Scenes/10_Shop.unity
     guid: ab42330404aecef4c9ec075732e30b21
   - enabled: 1
-    path: Assets/Scenes/10_Guide.unity
+    path: Assets/Scenes/11_Guide.unity
     guid: 8def1ed97b5154f4eb161ca03c8ac2f0
   - enabled: 1
-    path: Assets/Scenes/11_Tutorial.unity
+    path: Assets/Scenes/12_Tutorial.unity
     guid: 2fb4abb8330f02a448df0f908090078d
   - enabled: 1
-    path: Assets/Scenes/12_RuleRoom.unity
+    path: Assets/Scenes/13_RuleRoom.unity
     guid: 57e64067f39da49419cedde284bac593
   - enabled: 1
-    path: Assets/Scenes/13_Friends.unity
+    path: Assets/Scenes/14_Friends.unity
     guid: d72d0866303fdb442b26bed383781464
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: a49d4af9e4967ef42b48ca4e2fe3662e, type: 2}

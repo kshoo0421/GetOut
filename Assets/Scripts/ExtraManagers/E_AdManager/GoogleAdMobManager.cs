@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using GoogleMobileAds;
 using GoogleMobileAds.Api;
-using System;
+using System.Collections.Generic;
 
 public class GoogleAdMobManager : MonoBehaviour
 {
@@ -25,38 +22,72 @@ public class GoogleAdMobManager : MonoBehaviour
         }
     }
     #endregion
-
-    public bool isTestMode;
-    public TMP_Text LogText;
-    public Button FrontAdsBtn, RewardAdsBtn;
-
-    void Start()
+    public static bool isTestMode = false;
+ 
+    private void Start()
     {
-        MobileAds.RaiseAdEventsOnUnityMainThread = true;
-        MobileAds.Initialize((InitializationStatus initStatus) =>
-        {
-            // This callback is called once the MobileAds SDK is initialized.
-        });
+        var requestConfiguration = new RequestConfiguration
+            .Builder()
+            .SetTestDeviceIds(new List<string>() { "b74d8931364799ec" }) // test Device ID
+            .build();
+
+        MobileAds.SetRequestConfiguration(requestConfiguration);
+
+        LoadBannerAd();
+        LoadRewardedAd();
     }
 
-    AdRequest GetAdRequest()
+    public bool CanShowAd()
+    {
+        if (rewardedAd == null) return false;
+        return rewardedAd.CanShowAd();
+    }
+
+    private AdRequest GetAdRequest()
     {
         return new AdRequest.Builder().Build();
     }
 
+    #region ¹è³Ê ±¤°í
+#if UNITY_ANDROID
+    private const string bannerTestID = "ca-app-pub-3940256099942544/6300978111";
+    private const string bannerID = "ca-app-pub-5086433509319711/7826487033";
+#elif UNITY_IPHONE
+    private const string bannerTestID = "ca-app-pub-3940256099942544/2934735716";
+    private const string bannerID = "ca-app-pub-5086433509319711/9283038937";
+#else
+    private const string bannerTestID = "unused";
+    private const string bannerID = "unused";
+#endif
 
+    private BannerView bannerAd;
+
+    private void LoadBannerAd()
+    {
+        bannerAd = new BannerView(isTestMode ? bannerTestID : bannerID,
+            AdSize.SmartBanner, AdPosition.Bottom);
+        bannerAd.LoadAd(GetAdRequest());
+        ToggleBannerAd(false);
+    }
+
+    public void ToggleBannerAd(bool b)
+    {
+        if (b) bannerAd.Show();
+        else bannerAd.Hide();
+    }
+    #endregion
 
     #region ¸®¿öµå ±¤°í
 #if UNITY_ANDROID
-    private string _adUnitId = "ca-app-pub-3940256099942544/5224354917";    // Å×½ºÆ®¿ë
-    //private string _adUnitId = "ca-app-pub-5086433509319711/6109871255";  // Âð
+    private string rewardedTestID = "ca-app-pub-3940256099942544/5224354917";
+    private string rewardedID = "ca-app-pub-5086433509319711/4281105640";
 #elif UNITY_IPHONE
-    private string _adUnitId = "ca-app-pub-3940256099942544/1712485313";    // Å×½ºÆ®¿ë
-    private string _adUnitId = "ca-app-pub-5086433509319711/5903300775";    // Âð
+    private string rewardedTestID = "ca-app-pub-3940256099942544/1712485313";
+    private string rewardedID = "ca-app-pub-5086433509319711/5903300775";
 #else
-    private string _adUnitId = "unused";
+    private string rewardedTestID = "unused";
+    private string rewardedID = "unused";
 #endif
-
     private RewardedAd rewardedAd;
 
     public void LoadRewardedAd()
@@ -67,12 +98,12 @@ public class GoogleAdMobManager : MonoBehaviour
             rewardedAd = null;
         }
 
-        Debug.Log("Loading the rewarded ad.");
-
-        AdRequest adRequest = new AdRequest.Builder().Build();
+        AdRequest.Builder builder = new AdRequest.Builder();
+        AdRequest adRequest = builder.Build();
         adRequest.Keywords.Add("unity-admob-sample");
 
-        RewardedAd.Load(_adUnitId, adRequest,
+        // send the request to load the ad.
+        RewardedAd.Load(isTestMode ? rewardedTestID : rewardedID, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
                 // if error is not null, the load request failed.
@@ -90,7 +121,7 @@ public class GoogleAdMobManager : MonoBehaviour
             });
 
         // send the request to load the ad.
-        RewardedAd.Load(_adUnitId, adRequest, (RewardedAd ad, LoadAdError error) =>
+        RewardedAd.Load(isTestMode ? rewardedTestID : rewardedID, adRequest, (RewardedAd ad, LoadAdError error) =>
         {
             // If the operation failed, an error is returned.
             if (error != null || ad == null)
@@ -110,89 +141,22 @@ public class GoogleAdMobManager : MonoBehaviour
             ad.SetServerSideVerificationOptions(options);
 
         });
-        Debug.Log("Load Clear");
     }
 
     public void ShowRewardedAd()
     {
         const string rewardMsg =
-            "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
+        "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
         if (rewardedAd != null && rewardedAd.CanShowAd())
         {
             rewardedAd.Show((Reward reward) =>
             {
                 // TODO: Reward the user.
-                Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+                Debug.Log(string.Format(rewardMsg, reward.Type, reward.Amount));
             });
         }
-    }
-
-    private void RegisterEventHandlers(RewardedAd ad)
-    {
-        // Raised when the ad is estimated to have earned money.
-        ad.OnAdPaid += (AdValue adValue) =>
-        {
-            Debug.Log(String.Format("Rewarded ad paid {0} {1}.",
-                adValue.Value,
-                adValue.CurrencyCode));
-        };
-        // Raised when an impression is recorded for an ad.
-        ad.OnAdImpressionRecorded += () =>
-        {
-            Debug.Log("Rewarded ad recorded an impression.");
-        };
-        // Raised when a click is recorded for an ad.
-        ad.OnAdClicked += () =>
-        {
-            Debug.Log("Rewarded ad was clicked.");
-        };
-        // Raised when an ad opened full screen content.
-        ad.OnAdFullScreenContentOpened += () =>
-        {
-            Debug.Log("Rewarded ad full screen content opened.");
-        };
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Rewarded ad full screen content closed.");
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-        };
-        Debug.Log("Show Clear");
-    }
-
-    public void DestroyFunc()
-    {
-        rewardedAd.Destroy();
-        RegisterReloadHandler(rewardedAd);
-        Debug.Log("Destroy Clear");
-    }
-
-    private void RegisterReloadHandler(RewardedAd ad)
-    {
-        // Raised when the ad closed full screen content.
-        ad.OnAdFullScreenContentClosed += () =>
-    {
-            Debug.Log("Rewarded Ad full screen content closed.");
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-        // Raised when the ad failed to open full screen content.
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-
-            // Reload the ad so that we can show another as soon as possible.
-            LoadRewardedAd();
-        };
-        Debug.Log("Reload Clear");
+        LoadRewardedAd();
     }
     #endregion
 }

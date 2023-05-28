@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_LobbyChatManager : MonoBehaviour, IExtraManager
+public class E_LobbyChatManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ »ý¼º¿ë
     private static E_LobbyChatManager instance;

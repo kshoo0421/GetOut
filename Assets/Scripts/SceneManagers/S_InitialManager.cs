@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class S_InitialManager : MonoBehaviour
 {
     #region Start - Awake - Update
-    [SerializeField] private GameObject totalGMObject;
     private TotalGameManager totalGameManager;
     private FirebaseManager firebaseManager;
     private B_DatabaseManager b_DatabaseManager;
@@ -22,11 +21,7 @@ public class S_InitialManager : MonoBehaviour
     [SerializeField] private TMP_InputField[] signUpInputFields; // 회원가입
     private int currentSignUpInputFieldIndex = 0; // 현재 포커스를 가지고 있는 InputField 인덱스
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(totalGMObject);
-    }
-
+   
     private void Start()
     {
         // 첫 번째 InputField에 포커스 설정
@@ -131,7 +126,7 @@ public class S_InitialManager : MonoBehaviour
                 Debug.Log(firebaseManager.GetCurUser().Email);
                 Debug.Log("로그인 성공");
             }
-            ChangeToScene(1);
+            ChangeToScene(2);
         }
     }
     #endregion

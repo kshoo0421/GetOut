@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_CustumMatchingChatManager : MonoBehaviour, IExtraManager
+public class E_CustumMatchingChatManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ »ý¼º¿ë
     private static E_CustumMatchingChatManager instance;

@@ -1,17 +1,29 @@
+using GoogleMobileAds.Api;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class S_ShopManager : MonoBehaviour
 {
     #region monobehaviour
-    TotalGameManager totalGameManager;
-    GoogleAdMobManager googleAdMobManager;
+    private TotalGameManager totalGameManager;
+    private GoogleAdMobManager googleAdMobManager;
+    [SerializeField] private Button RewardAdsBtn;
 
     private void Awake()
     {
         totalGameManager = TotalGameManager.Instance;
+    }
+
+    private void Start()
+    {
         googleAdMobManager = totalGameManager.googleAdMobManager;
+    }
+
+    private void Update()
+    {
+        RewardAdsBtn.interactable = googleAdMobManager.CanShowAd();
     }
     #endregion
 
@@ -25,11 +37,16 @@ public class S_ShopManager : MonoBehaviour
     #endregion
 
     #region ±¤°í ¼³Á¤
+    public void ToggleBannerAd(bool b)
+    {
+        Debug.Log(b);
+        googleAdMobManager.ToggleBannerAd(b);
+    }
+
     public void ShowRewardedAd()
     {
         googleAdMobManager.LoadRewardedAd();
         googleAdMobManager.ShowRewardedAd();
-        googleAdMobManager.DestroyFunc();
     }
     #endregion
 }

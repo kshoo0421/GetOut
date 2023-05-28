@@ -11,14 +11,23 @@ public class TotalGameManager : MonoBehaviour
 
     public static TotalGameManager Instance
     {
-        get { return instance; }
+        get 
+        {
+            if (instance == null) return null;
+            return instance; 
+        }
     }
 
     private void Awake()
     {
         if (instance == null)
         {
-            instance = GetComponent<TotalGameManager>();
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
     }
     #endregion

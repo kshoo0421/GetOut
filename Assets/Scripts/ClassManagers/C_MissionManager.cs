@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class C_MissionManager : MonoBehaviour, IClassManager
+public class C_MissionManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ »ý¼º¿ë
     private static C_MissionManager instance;

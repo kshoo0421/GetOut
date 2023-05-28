@@ -27,7 +27,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         totalGameManager = TotalGameManager.Instance;
-        firebaseManager = FirebaseManager.Instance;
+        firebaseManager = totalGameManager.firebaseManager;
     }
 
     private void Start()
@@ -81,9 +81,15 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
         connectionInfoText.text = "Connected with Room.";
         PhotonNetwork.LoadLevel("06_Game");
     }
+
+    public void SignOut()
+    {
+        firebaseManager.SignOut();
+        sceneChanger.ChangetoScene(1);
+    }
     #endregion
 
-    #region 테스트
+    #region 테스트1
     public TMP_Text nameText;
     private FirebaseUser user;
     public void TestFunc()
@@ -101,7 +107,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region 테스트
+    #region 테스트2
     public void MakeResultData()    // 데이터베이스 테스트용
     {
         ResultData resultData = new ResultData();
@@ -213,5 +219,4 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
         firebaseManager.SaveData(resultData);
     }
     #endregion
-
 }

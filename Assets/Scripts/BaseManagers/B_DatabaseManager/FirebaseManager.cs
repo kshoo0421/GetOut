@@ -131,6 +131,13 @@ public class FirebaseManager : MonoBehaviour
     }
     #endregion
 
+    #region 로그아웃
+    public void SignOut()
+    {
+        firebaseAuth.SignOut();
+    }
+    #endregion
+
     #region User 정보 가져오기
     public FirebaseUser GetCurUser()
     {
