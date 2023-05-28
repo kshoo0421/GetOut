@@ -76,6 +76,24 @@ public class S_InitialManager : MonoBehaviour
     }
     #endregion
 
+    #region 키보드 열기
+    private TouchScreenKeyboard keyboard;
+
+    public void OpenKeyboard()
+    {
+        keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+    }
+
+    public void CloseKeyboard()
+    {
+        if (keyboard != null)
+        {
+            keyboard.active = false;
+            keyboard = null;
+        }
+    }
+    #endregion
+
     #region 로그인
     // 로그인 패널 관리
     [SerializeField] private GameObject SignInPanel;
