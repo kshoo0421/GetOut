@@ -1,24 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class VisualEffectManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static VisualEffectManager instance;
-    private VisualEffectManager() { }
+    #region Field
+    static VisualEffectManager instance;
+    #endregion
 
-    public static VisualEffectManager Instance
+    #region Singleton
+    VisualEffectManager() { }
+
+    public static VisualEffectManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        get { return instance; }
+        if (instance == null) instance = GetComponent<VisualEffectManager>();
     }
+    #endregion
 
-    private void Awake()
+    #region Monoviour
+    void Awake()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<VisualEffectManager>();
-        }
+        SetSingleton();    
     }
     #endregion
 }

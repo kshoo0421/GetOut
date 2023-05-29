@@ -1,8 +1,6 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using GoogleMobileAds.Api;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GoogleAdMobManager : MonoBehaviour
 {
@@ -23,7 +21,7 @@ public class GoogleAdMobManager : MonoBehaviour
     }
     #endregion
     public static bool isTestMode = false;
- 
+
     private void Start()
     {
         var requestConfiguration = new RequestConfiguration

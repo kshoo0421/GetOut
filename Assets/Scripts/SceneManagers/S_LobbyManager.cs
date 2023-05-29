@@ -1,36 +1,47 @@
+using Firebase.Auth;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Firebase.Auth;
 
 public class S_LobbyManager : MonoBehaviourPunCallbacks
 {
-    #region 씬 변경
-    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
+    #region Field
+    /* Managers */
+    TotalGameManager totalGameManager;
+    B_SceneChangeManager sceneChanger;
 
-    public void ChangeToScene(int sceneIndex)
+    /* Photon */
+    readonly string gameVersion = "1";
+    FirebaseManager firebaseManager;
+    TMP_Text connectionInfoText;
+    Button joinButton;
+    #endregion
+
+    #region monobehaviour
+    void Start()
     {
-        sceneChanger.ChangetoScene(sceneIndex);
+        SetManagers();
+        SetPhoton();
     }
     #endregion
 
-    #region 파이어베이스 및 포톤 활용
-    private readonly string gameVersion = "1";
-    private TotalGameManager totalGameManager;
-    private FirebaseManager firebaseManager;
-
-    public TMP_Text connectionInfoText;
-    public Button joinButton;
-
-    private void Awake()
+    #region Set Managers
+    void SetManagers()
     {
         totalGameManager = TotalGameManager.Instance;
+        sceneChanger = totalGameManager.b_SceneChangeManager;
         firebaseManager = totalGameManager.firebaseManager;
     }
+    #endregion
 
-    private void Start()
+    #region Change Scene  
+    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    #endregion
+
+    #region Photon
+    void SetPhoton()
     {
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
@@ -58,7 +69,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     {
         joinButton.interactable = false;
 
-        if(PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)
         {
             connectionInfoText.text = "Connecting to Random Room...";
             PhotonNetwork.JoinRandomRoom();
@@ -89,9 +100,8 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region 테스트1
+    #region test1
     public TMP_Text nameText;
-    private FirebaseUser user;
     public void TestFunc()
     {
         Debug.Log("Test");
@@ -107,7 +117,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region 테스트2
+    #region test2
     public void MakeResultData()    // 데이터베이스 테스트용
     {
         ResultData resultData = new ResultData();

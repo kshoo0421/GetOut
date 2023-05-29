@@ -40,10 +40,10 @@ namespace GoogleMobileAds.Editor
 
             var settings = (GoogleMobileAdsSettings)target;
 
-            if(settings == null)
+            if (settings == null)
             {
-              UnityEngine.Debug.LogError("GoogleMobileAdsSettings is null.");
-              return;
+                UnityEngine.Debug.LogError("GoogleMobileAdsSettings is null.");
+                return;
             }
 
             EditorGUILayout.LabelField("Google Mobile Ads App ID", EditorStyles.boldLabel);
@@ -67,7 +67,8 @@ namespace GoogleMobileAds.Editor
 
             EditorGUILayout.PropertyField(_optimizeInitialization,
                                           new GUIContent("Optimize initialization"));
-            if (settings.OptimizeInitialization) {
+            if (settings.OptimizeInitialization)
+            {
                 EditorGUILayout.HelpBox(
                         "Initialization will be offloaded to a background thread.",
                         MessageType.Info);
@@ -76,7 +77,8 @@ namespace GoogleMobileAds.Editor
             EditorGUILayout.PropertyField(_optimizeAdLoading,
                                           new GUIContent("Optimize ad loading"));
 
-            if (settings.OptimizeAdLoading) {
+            if (settings.OptimizeAdLoading)
+            {
                 EditorGUILayout.HelpBox(
                         "Ad loading tasks will be offloaded to a background thread.",
                         MessageType.Info);
@@ -93,7 +95,8 @@ namespace GoogleMobileAds.Editor
             EditorGUILayout.PropertyField(_delayAppMeasurement,
                                           new GUIContent("Delay app measurement"));
 
-            if (settings.DelayAppMeasurementInit) {
+            if (settings.DelayAppMeasurementInit)
+            {
                 EditorGUILayout.HelpBox(
                         "Delays app measurement until you explicitly initialize the Mobile Ads SDK or load an ad.",
                         MessageType.Info);

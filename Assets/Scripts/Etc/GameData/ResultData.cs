@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public struct ResultData  
+public struct ResultData
 {
     // 기본 게임 정보 - 해당 판 고유 숫자
     public string GAME_KEY;

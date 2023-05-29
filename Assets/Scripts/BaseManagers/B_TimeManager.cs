@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class B_TimeManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static B_TimeManager instance;
-    private B_TimeManager() { }
+    #region Field
+    /* Singleton */
+    static B_TimeManager instance;
+    #endregion
 
-    public static B_TimeManager Instance
-    {
-        get { return instance; }
-    }
+    #region Singleton
+    B_TimeManager() { }
+    public static B_TimeManager Instance { get { return instance; } }
 
-    private void Awake()
+    void SetSingleton()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<B_TimeManager>();
-        }
+        if (instance == null) instance = GetComponent<B_TimeManager>();
     }
     #endregion
 
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();
+    }
+    #endregion
 }

@@ -1,59 +1,31 @@
-using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TotalGameManager : MonoBehaviour
 {
-    #region 싱글톤 구현
-    private static TotalGameManager instance;
-    private TotalGameManager() { }
+    #region Field
+    /* Singleton */
+    static TotalGameManager instance;
 
-    public static TotalGameManager Instance
-    {
-        get 
-        {
-            if (instance == null) return null;
-            return instance; 
-        }
-    }
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    #endregion
-
-    #region 매니저들 구현
+    /* Managers */
+    // 베이스 매니저 - B_OptionManager, B_DatabaseManager, B_NetworkManager
     public FirebaseManager firebaseManager;
-    
     public PhotonManager photonManager;
-    
     public LanguageManager languageManager;
     public ResolutionManager resolutionManager;
     public SoundManager soundManager;
     public VisualEffectManager visualEffectManager;
-    // 베이스매니저
+    // 베이스 매니저
     public B_DatabaseManager b_DatabaseManager;
     public B_InputOutputManager b_InputOutputManager;
     public B_NetworkManager b_NetworkManager;
     public B_OptionManager b_OptionManager;
     public B_SceneChangeManager b_SceneChangeManager;
     public B_TimeManager b_TimeManager;
-    
     // 클래스 매니저
     public C_DataManager c_DataManager;
     public C_ItemManager c_ItemManager;
     public C_MissionManager c_MissionManager;
-    // 클래스매니저 - C_ItemManager
+    // 클래스 매니저 - C_ItemManager
     public EmojiManager emojiManager;
     public ExtraTicketManager extraTicketManager;
     public GoldManager goldManager;
@@ -67,11 +39,46 @@ public class TotalGameManager : MonoBehaviour
     public GoogleAdMobManager googleAdMobManager;
     #endregion
 
-    #region 매니저 세팅
-    private void Start()
+    #region Singleton
+    TotalGameManager() { }
+
+    public static TotalGameManager Instance
+    {
+        get
+        {
+            if (instance == null) return null;
+            return instance;
+        }
+    }
+
+    void SetSingleton()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    #endregion
+
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();
+    }
+    
+    void Start()
     {
         SetManagers();
     }
+    #endregion
+
+
+    #region Set Managers
     private void SetManagers()
     {
         firebaseManager = FirebaseManager.Instance;

@@ -1,27 +1,25 @@
 using UnityEngine;
-using Firebase;
-using Firebase.Database;
-using System.Threading.Tasks;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
-using UnityEngine.AddressableAssets;
 
 public class B_DatabaseManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static B_DatabaseManager instance;
-    private B_DatabaseManager() { }
+    #region Field
+    static B_DatabaseManager instance;
+    #endregion
 
-    public static B_DatabaseManager Instance
+    #region Singleton
+    B_DatabaseManager() { }
+    public static B_DatabaseManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        get { return instance; }
+        if (instance == null) instance = GetComponent<B_DatabaseManager>();
     }
+    #endregion
 
+    #region Monobehaviour
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<B_DatabaseManager>();
-        }
+        SetSingleton();
     }
     #endregion
 }

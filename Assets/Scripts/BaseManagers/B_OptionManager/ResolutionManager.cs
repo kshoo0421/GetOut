@@ -1,24 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ResolutionManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static ResolutionManager instance;
-    private ResolutionManager() { }
+    #region Field
+    /* Singleton */
+    static ResolutionManager instance;
+    #endregion
 
-    public static ResolutionManager Instance
-    {
-        get { return instance; }
-    }
+    #region Singleton
+    ResolutionManager() { }
 
-    private void Awake()
+    public static ResolutionManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
         if (instance == null)
         {
             instance = GetComponent<ResolutionManager>();
         }
+    }
+    #endregion
+
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();    
     }
     #endregion
 }

@@ -1,19 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static SoundManager instance;
-    private SoundManager() { }
+    #region Field
+    /* Singleton */
+    static SoundManager instance;
+    #endregion
 
-    public static SoundManager Instance
-    {
-        get { return instance; }
-    }
+    #region Singleton
+    SoundManager() { }
 
-    private void Awake()
+    public static SoundManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
         if (instance == null)
         {
@@ -22,5 +21,10 @@ public class SoundManager : MonoBehaviour
     }
     #endregion
 
-
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();    
+    }
+    #endregion
 }

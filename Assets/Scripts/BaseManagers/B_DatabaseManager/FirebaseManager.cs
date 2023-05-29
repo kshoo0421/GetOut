@@ -1,23 +1,32 @@
 using Firebase;
 using Firebase.Auth;
-using Firebase.Extensions;
 using Firebase.Database;
-using UnityEngine;
+using Firebase.Extensions;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class FirebaseManager : MonoBehaviour
 {
-    private static FirebaseUser User;
+    #region Field
+    static FirebaseUser User;
+    /* Singleton */
+    static FirebaseManager instance;
 
-    #region 싱글톤 생성용
-    private static FirebaseManager instance;
-    private FirebaseManager() {}
-    public static FirebaseManager Instance
-    {
-        get { return instance; }
-    }
+    /* Base Set */
+    [SerializeField] static FirebaseApp firebaseApp;
+    [SerializeField] static FirebaseAuth firebaseAuth;
 
-    private void Awake()
+    [SerializeField] static bool IsFirebaseReady { get; set; }
+    [SerializeField] static bool IsSignInOnProgress { get; set; }
+    /* database */
+    static DatabaseReference reference;
+    #endregion
+
+    #region Singleton
+    FirebaseManager() { }
+    public static FirebaseManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
         if (instance == null)
         {
@@ -25,49 +34,46 @@ public class FirebaseManager : MonoBehaviour
             InitializeFM();
         }
     }
-    #endregion
-
-    #region monobehavior
-    [SerializeField] private static FirebaseApp firebaseApp;
-    [SerializeField] private static FirebaseAuth firebaseAuth;
-
-    [SerializeField] private static bool IsFirebaseReady { get; set; }
-    [SerializeField] private static bool IsSignInOnProgress { get; set; }
-
-    private static DatabaseReference reference;
 
     void InitializeFM()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
+        {
+            var result = task.Result;
+            if (result != DependencyStatus.Available)
             {
-                var result = task.Result;
-                if (result != DependencyStatus.Available)
-                {
-                    Debug.LogError(message: result.ToString());
-                    IsFirebaseReady = false;
-                }
-                else
-                {
-                    IsFirebaseReady = true;
-                    firebaseApp = FirebaseApp.DefaultInstance;
-                    firebaseAuth = FirebaseAuth.DefaultInstance;
-
-//                    FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://getout-38c84-default-rtdb.firebaseio.com/");
-                    reference = FirebaseDatabase.DefaultInstance.RootReference;
-
-                }
+                Debug.LogError(message: result.ToString());
+                IsFirebaseReady = false;
             }
+            else
+            {
+                IsFirebaseReady = true;
+                firebaseApp = FirebaseApp.DefaultInstance;
+                firebaseAuth = FirebaseAuth.DefaultInstance;
+
+                reference = FirebaseDatabase.DefaultInstance.RootReference;
+
+            }
+        }
         );
     }
     #endregion
 
-    #region 회원가입
-    public bool checkEmailOverlap() // 이메일 중복여부 체크
+    #region Monobehavior
+    void Awake()
+    {
+        SetSingleton();    
+    }
+
+    #endregion
+
+    #region SignUp
+    public bool checkEmailOverlap() // 이메일 중복여부 체크, 구현 필요
     {
         return true;
     }
 
-    public bool checkPasswordOverlap()  // 비밀번호 조건 충족여부 체크
+    public bool checkPasswordOverlap()  // 비밀번호 조건 충족여부 체크, 구현 필요
     {
         return true;
     }
@@ -76,12 +82,12 @@ public class FirebaseManager : MonoBehaviour
     {
         firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailText, passwordText).ContinueWith(task =>
         {
-            if(task.IsCanceled)
+            if (task.IsCanceled)
             {
                 Debug.LogError("회원가입 취소");
                 return;
             }
-            if(task.IsFaulted)
+            if (task.IsFaulted)
             {
                 // 회원가입 실패 이유 => 이메일이 비정상 / 비밀번호가 너무 간단 / 이미 가입된 이메일 등등...
                 Debug.LogError("회원가입 실패");
@@ -94,7 +100,7 @@ public class FirebaseManager : MonoBehaviour
     }
     #endregion
 
-    #region 로그인
+    #region SignIn
     public bool checkSignIn()
     {
         if (!IsFirebaseReady || IsSignInOnProgress || User != null)
@@ -107,14 +113,14 @@ public class FirebaseManager : MonoBehaviour
     public async Task SignIn(string emailText, string passwordText)
     {
         IsSignInOnProgress = true;
-        
+
         await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
             (task) =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
 
                 IsSignInOnProgress = false;
-       
+
                 if (task.IsFaulted)
                 {
                     Debug.LogError(task.Exception);
@@ -131,23 +137,20 @@ public class FirebaseManager : MonoBehaviour
     }
     #endregion
 
-    #region 로그아웃
-    public void SignOut()
-    {
-        firebaseAuth.SignOut();
-    }
+    #region SignOut
+    public void SignOut() => firebaseAuth.SignOut();
     #endregion
 
-    #region User 정보 가져오기
+    #region Get User Information
     public FirebaseUser GetCurUser()
     {
-        if(User != FirebaseAuth.DefaultInstance.CurrentUser)
+        if (User != FirebaseAuth.DefaultInstance.CurrentUser)
             User = FirebaseAuth.DefaultInstance.CurrentUser;
         return User;
     }
     #endregion
 
-    #region 데이터베이스
+    #region Database
     public async void SaveData(ResultData resultData)
     {
         string json = JsonUtility.ToJson(resultData);

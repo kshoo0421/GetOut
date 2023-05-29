@@ -1,24 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PhotonManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static PhotonManager instance;
-    private PhotonManager() { }
+    #region Field
+    static PhotonManager instance;
 
-    public static PhotonManager Instance
+    #endregion
+
+    #region Singleton
+    PhotonManager() { }
+
+    public static PhotonManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        get { return instance; }
+        if (instance == null) instance = GetComponent<PhotonManager>();
     }
+    #endregion
 
-    private void Awake()
+    #region Monobehaviour
+    void Awake()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<PhotonManager>();
-        }
+        SetSingleton();    
     }
     #endregion
 

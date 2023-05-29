@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class E_AdManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ »ý¼º¿ë
-    private static E_AdManager instance;
-    private E_AdManager() { }
-    public static E_AdManager Instance
-    {
-        get { return instance; }
-    }
+    #region Field
+    /* Singleton */
+    static E_AdManager instance;
+    #endregion
 
-    private void Awake()
+    #region Singleton
+    E_AdManager() { }
+    public static E_AdManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<E_AdManager>();
-        }
+        if (instance == null) instance = GetComponent<E_AdManager>();
+    }
+    #endregion
+
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();
     }
     #endregion
 }

@@ -1,47 +1,47 @@
-using GoogleMobileAds.Api;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class S_ShopManager : MonoBehaviour
 {
+    #region Field
+    /* Managers */
+    TotalGameManager totalGameManager;
+    GoogleAdMobManager googleAdMobManager;
+    B_SceneChangeManager sceneChanger;
+
+    /* Ads */
+    [SerializeField] Button RewardAdsBtn;
+    #endregion
+
     #region monobehaviour
-    private TotalGameManager totalGameManager;
-    private GoogleAdMobManager googleAdMobManager;
-    [SerializeField] private Button RewardAdsBtn;
-
-    private void Awake()
-    {
-        totalGameManager = TotalGameManager.Instance;
-    }
-
     private void Start()
     {
-        googleAdMobManager = totalGameManager.googleAdMobManager;
+        SetManagers();
     }
 
     private void Update()
     {
-        RewardAdsBtn.interactable = googleAdMobManager.CanShowAd();
+        CheckRewardAdsBtn();
     }
     #endregion
 
-    #region 씬 변경
-    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
-
-    public void ChangeToScene(int sceneIndex)
+    #region Set Managers
+    void SetManagers()
     {
-        sceneChanger.ChangetoScene(sceneIndex);
+        totalGameManager = TotalGameManager.Instance;
+        googleAdMobManager = totalGameManager.googleAdMobManager;
+        sceneChanger = totalGameManager.b_SceneChangeManager;
     }
     #endregion
 
-    #region 광고 설정
-    public void ToggleBannerAd(bool b)
-    {
-        Debug.Log(b);
-        googleAdMobManager.ToggleBannerAd(b);
-    }
+    #region Change Scene
+    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    #endregion
+
+    #region Ads
+    void CheckRewardAdsBtn() => RewardAdsBtn.interactable = googleAdMobManager.CanShowAd(); // 리워드 광고를 틀 수 있으면 활성화
+
+    public void ToggleBannerAd(bool b) => googleAdMobManager.ToggleBannerAd(b); // 배너 광고 설정/해제
 
     public void ShowRewardedAd()
     {

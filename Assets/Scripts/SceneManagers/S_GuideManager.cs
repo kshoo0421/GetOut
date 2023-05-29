@@ -1,13 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class S_GuideManager : MonoBehaviour
 {
-    private B_SceneChangeManager sceneChanger = B_SceneChangeManager.Instance;
+    #region Field
+    /* Managers */
+    TotalGameManager totalGameManager;
+    B_SceneChangeManager sceneChanger;
+    #endregion
 
-    public void ChangeToScene(int sceneIndex)
+    #region monobehaviour
+    void Start()
     {
-        sceneChanger.ChangetoScene(sceneIndex);
+        SetManagers();
     }
+    #endregion
+
+    #region Set Managers
+    void SetManagers()
+    {
+        totalGameManager = TotalGameManager.Instance;
+        sceneChanger = totalGameManager.b_SceneChangeManager;
+    }
+    #endregion
+
+    #region Change Scene
+    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    #endregion
+
 }

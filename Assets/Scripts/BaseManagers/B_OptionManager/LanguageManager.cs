@@ -4,25 +4,32 @@ using UnityEngine.Localization.Settings;
 
 public class LanguageManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static LanguageManager instance;
-    private LanguageManager() { }
+    #region Field
+    /* Singleton */
+    static LanguageManager instance;
+    /* Change Locale */
+    bool isChanging;
+    #endregion
 
-    public static LanguageManager Instance
-    {
-        get { return instance; }
-    }
+    #region Singleton
+    LanguageManager() { }
 
-    private void Awake()
+    public static LanguageManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<LanguageManager>();
-        }
+        if (instance == null) instance = GetComponent<LanguageManager>();
     }
     #endregion
 
-    bool isChanging;
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();    
+    }
+    #endregion
+
+    #region Change Locale
     public void ChangeLocale(int index)
     {
         if (isChanging)
@@ -40,4 +47,5 @@ public class LanguageManager : MonoBehaviour
 
         isChanging = false;
     }
+    #endregion
 }

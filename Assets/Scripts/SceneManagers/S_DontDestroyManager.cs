@@ -2,17 +2,28 @@ using UnityEngine;
 
 public class S_DontDestroyManager : MonoBehaviour
 {
-    private TotalGameManager totalGameManager;
-    private B_SceneChangeManager sceneChanger;
+    #region Field
+    /* Managers */
+    TotalGameManager totalGameManager;
+    B_SceneChangeManager sceneChanger;
+    #endregion
 
-    private void Start()
+    #region monobehaviour
+    void Start()
+    {
+        SetManagers();
+    }
+    #endregion
+
+    #region Set Managers
+    void SetManagers()
     {
         totalGameManager = TotalGameManager.Instance;
-    }
-
-    public void ChangeToScene(int index)
-    {
         sceneChanger = totalGameManager.b_SceneChangeManager;
-        sceneChanger.ChangetoScene(index);
     }
+    #endregion
+
+    #region Change Scene
+    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    #endregion
 }

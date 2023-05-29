@@ -1,18 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class S_EndGameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    #region Field
+    /* Managers */
+    TotalGameManager totalGameManager;
+    B_SceneChangeManager sceneChanger;
+    #endregion
+
+    #region monobehaviour
     void Start()
     {
-        
+        SetManagers();
     }
+    #endregion
 
-    // Update is called once per frame
-    void Update()
+    #region Set Managers
+    void SetManagers()
     {
-        
+        totalGameManager = TotalGameManager.Instance;
+        sceneChanger = totalGameManager.b_SceneChangeManager;
     }
+    #endregion
+
+    #region Change Scene  
+    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    #endregion
+
 }

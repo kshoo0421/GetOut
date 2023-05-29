@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class E_CustumMatchingChatManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ »ý¼º¿ë
-    private static E_CustumMatchingChatManager instance;
-    private E_CustumMatchingChatManager() { }
-    public static E_CustumMatchingChatManager Instance
-    {
-        get { return instance; }
-    }
+    #region Field
+    /* Singleton */
+    static E_CustumMatchingChatManager instance;
+    #endregion
 
-    private void Awake()
+    #region Singleton
+    E_CustumMatchingChatManager() { }
+    public static E_CustumMatchingChatManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<E_CustumMatchingChatManager>();
-        }
+        if (instance == null) instance = GetComponent<E_CustumMatchingChatManager>();
+    }
+    #endregion
+
+    #region Monobehaviour
+    void Awake()
+    {
+        SetSingleton();    
     }
     #endregion
 }

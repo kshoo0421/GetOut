@@ -1,24 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class B_InputOutputManager : MonoBehaviour
 {
-    #region ½Ì±ÛÅæ ±¸Çö
-    private static B_InputOutputManager instance;
-    private B_InputOutputManager() { }
+    #region Field
+    static B_InputOutputManager instance;
+    #endregion
 
-    public static B_InputOutputManager Instance
+    #region Singleton
+    B_InputOutputManager() { }
+    public static B_InputOutputManager Instance { get { return instance; } }
+
+    void SetSingleton()
     {
-        get { return instance; }
+        if (instance == null) instance = GetComponent<B_InputOutputManager>();
     }
+    #endregion
 
-    private void Awake()
+    #region Monobehaviour
+    void Awake()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<B_InputOutputManager>();
-        }
+        SetSingleton();
     }
     #endregion
 
