@@ -9,10 +9,10 @@ public class S_DontDestroyManager : MonoBehaviour
     #endregion
 
     #region monobehaviour
-    void Start()
-    {
-        SetManagers();
-    }
+    //void Awake()
+    //{
+    //    SetManagers();
+    //}
     #endregion
 
     #region Set Managers
@@ -24,6 +24,10 @@ public class S_DontDestroyManager : MonoBehaviour
     #endregion
 
     #region Change Scene
-    public void ChangeToScene(int sceneIndex) => sceneChanger.ChangetoScene(sceneIndex);
+    public void ChangeToScene(int sceneIndex)
+    {
+        SetManagers();
+        sceneChanger.ChangetoScene(sceneIndex);
+    }
     #endregion
 }

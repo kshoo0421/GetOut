@@ -1,29 +1,22 @@
-using Firebase.Auth;
-using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class S_LobbyManager : MonoBehaviourPunCallbacks
+public class S_LobbyManager : MonoBehaviour
 {
     #region Field
     /* Managers */
     TotalGameManager totalGameManager;
     B_SceneChangeManager sceneChanger;
-
-    /* Photon */
-    readonly string gameVersion = "1";
+    PhotonManager photonManager;
     FirebaseManager firebaseManager;
-    TMP_Text connectionInfoText;
-    Button joinButton;
     #endregion
 
     #region monobehaviour
     void Start()
     {
         SetManagers();
-        SetPhoton();
+        TestFunc();
     }
     #endregion
 
@@ -33,6 +26,7 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
         totalGameManager = TotalGameManager.Instance;
         sceneChanger = totalGameManager.b_SceneChangeManager;
         firebaseManager = totalGameManager.firebaseManager;
+        photonManager = totalGameManager.photonManager;
     }
     #endregion
 
@@ -41,58 +35,18 @@ public class S_LobbyManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Photon
-    void SetPhoton()
-    {
-        PhotonNetwork.GameVersion = gameVersion;
-        PhotonNetwork.ConnectUsingSettings();
+    public void OnConnectedToMaster() => photonManager.OnConnectedToMaster();
 
-        joinButton.interactable = false;
-        connectionInfoText.text = "Connecting To Master Server...";
-        TestFunc();
-    }
+    public void OnDisconnected(DisconnectCause cause) => photonManager.OnDisconnected(cause);
 
-    public override void OnConnectedToMaster()
-    {
-        joinButton.interactable = true;
-        connectionInfoText.text = "Online : Connected To Master Server";
-    }
+    public void Connect() => photonManager.Connect();
 
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        joinButton.interactable = false;
-        connectionInfoText.text = $"Offline : Conection Disabled {cause.ToString()} - Try reconnecting...";
+    public void OnJoinRandomFailed(short returnCode, string message) => photonManager.OnJoinRandomFailed(returnCode, message);
 
-        PhotonNetwork.ConnectUsingSettings();
-    }
+    public void OnJoinedRoom() => photonManager.OnJoinedRoom();
+    #endregion
 
-    public void Connect()
-    {
-        joinButton.interactable = false;
-
-        if (PhotonNetwork.IsConnected)
-        {
-            connectionInfoText.text = "Connecting to Random Room...";
-            PhotonNetwork.JoinRandomRoom();
-        }
-        else
-        {
-            connectionInfoText.text = $"Offline : Conection Disabled - Try reconnecting...";
-            PhotonNetwork.ConnectUsingSettings();
-        }
-    }
-
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        connectionInfoText.text = "There is no empty room, Creating new Room.";
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 2 });
-    }
-
-    public override void OnJoinedRoom()
-    {
-        connectionInfoText.text = "Connected with Room.";
-        PhotonNetwork.LoadLevel("06_Game");
-    }
-
+    #region Sign Out
     public void SignOut()
     {
         firebaseManager.SignOut();

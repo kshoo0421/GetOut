@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "767643581180",
+    "firebase_url": "https://getout-38c84-default-rtdb.firebaseio.com",
     "project_id": "getout-38c84",
     "storage_bucket": "getout-38c84.appspot.com"
   },
@@ -29,10 +30,18 @@
             {
               "client_id": "767643581180-9muhlvf0jmdivkbhrfae5epka2dtj1li.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "767643581180-voclrrt3gsvan1gjm5p8rtbp8309j7ag.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kshoo0421.getout"
+              }
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-5086433509319711~2240932524"
     }
   ],
   "configuration_version": "1"

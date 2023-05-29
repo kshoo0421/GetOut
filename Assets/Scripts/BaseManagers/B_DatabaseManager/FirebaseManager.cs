@@ -13,13 +13,14 @@ public class FirebaseManager : MonoBehaviour
     static FirebaseManager instance;
 
     /* Base Set */
-    [SerializeField] static FirebaseApp firebaseApp;
-    [SerializeField] static FirebaseAuth firebaseAuth;
+    static FirebaseApp firebaseApp;
+    static FirebaseAuth firebaseAuth;
+    static FirebaseDatabase firebaseDatabase;
+    static DatabaseReference reference;
 
     [SerializeField] static bool IsFirebaseReady { get; set; }
     [SerializeField] static bool IsSignInOnProgress { get; set; }
     /* database */
-    static DatabaseReference reference;
     #endregion
 
     #region Singleton
@@ -31,6 +32,7 @@ public class FirebaseManager : MonoBehaviour
         if (instance == null)
         {
             instance = GetComponent<FirebaseManager>();
+            firebaseApp = FirebaseApp.Create();
             InitializeFM();
         }
     }
@@ -50,8 +52,15 @@ public class FirebaseManager : MonoBehaviour
                 IsFirebaseReady = true;
                 firebaseApp = FirebaseApp.DefaultInstance;
                 firebaseAuth = FirebaseAuth.DefaultInstance;
-
-                reference = FirebaseDatabase.DefaultInstance.RootReference;
+                firebaseDatabase = FirebaseDatabase.DefaultInstance;
+                reference = firebaseDatabase.GetReference("https://getout-38c84-default-rtdb.firebaseio.com/");
+                reference.GetValueAsync().ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        DataSnapshot snapshot = task.Result;
+                    }
+                });
 
             }
         }
@@ -62,7 +71,7 @@ public class FirebaseManager : MonoBehaviour
     #region Monobehavior
     void Awake()
     {
-        SetSingleton();    
+        SetSingleton();
     }
 
     #endregion
