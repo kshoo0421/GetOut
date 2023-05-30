@@ -69,14 +69,9 @@ public class TotalGameManager : MonoBehaviour
     void Awake()
     {
         SetSingleton();
-    }
-    
-    void Start()
-    {
         SetManagers();
     }
     #endregion
-
 
     #region Set Managers
     private void SetManagers()

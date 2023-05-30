@@ -46,13 +46,15 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region MonoBehaviour
-    private void Start()
+
+
+    void Start()
     {
         SetManagers();
         SelectInputField();
     }
 
-    private void Update()
+    void Update()
     {
         FocusUpdate();
     }
@@ -155,7 +157,7 @@ public class S_InitialManager : MonoBehaviour
                 Debug.Log(firebaseManager.GetCurUser().Email);
                 Debug.Log("로그인 성공");
             }
-            ChangeToScene(2);
+            ChangeToScene(1);
         }
     }
     #endregion

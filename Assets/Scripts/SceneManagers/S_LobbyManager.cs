@@ -1,5 +1,6 @@
 using Photon.Realtime;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_LobbyManager : MonoBehaviour
@@ -75,112 +76,112 @@ public class S_LobbyManager : MonoBehaviour
     public void MakeResultData()    // 데이터베이스 테스트용
     {
         ResultData resultData = new ResultData();
-        resultData.GAME_KEY = "123456789";
+        resultData.gameIndex = firebaseManager.GetGameIndex();
 
         resultData.finalResult.first = 2;
         resultData.finalResult.second = 1;
         resultData.finalResult.third = 4;
         resultData.finalResult.fourth = 3;
 
-        resultData.turn1.player1.isGet = true;
-        resultData.turn1.player1.value = 50;
-        resultData.turn1.player2.isGet = true;
-        resultData.turn1.player2.value = 50;
-        resultData.turn1.player3.isGet = true;
-        resultData.turn1.player3.value = 50;
-        resultData.turn1.player4.isGet = true;
-        resultData.turn1.player4.value = 50;
+        resultData.turns.turn1.player1.isGet = true;
+        resultData.turns.turn1.player1.value = 50;
+        resultData.turns.turn1.player2.isGet = true;
+        resultData.turns.turn1.player2.value = 50;
+        resultData.turns.turn1.player3.isGet = true;
+        resultData.turns.turn1.player3.value = 50;
+        resultData.turns.turn1.player4.isGet = true;
+        resultData.turns.turn1.player4.value = 50;
 
-        resultData.turn2.player1.isGet = true;
-        resultData.turn2.player1.value = 50;
-        resultData.turn2.player2.isGet = true;
-        resultData.turn2.player2.value = 50;
-        resultData.turn2.player3.isGet = true;
-        resultData.turn2.player3.value = 50;
-        resultData.turn2.player4.isGet = true;
-        resultData.turn2.player4.value = 50;
+        resultData.turns.turn2.player1.isGet = true;
+        resultData.turns.turn2.player1.value = 50;
+        resultData.turns.turn2.player2.isGet = true;
+        resultData.turns.turn2.player2.value = 50;
+        resultData.turns.turn2.player3.isGet = true;
+        resultData.turns.turn2.player3.value = 50;
+        resultData.turns.turn2.player4.isGet = true;
+        resultData.turns.turn2.player4.value = 50;
 
-        resultData.turn3.player1.isGet = true;
-        resultData.turn3.player1.value = 50;
-        resultData.turn3.player2.isGet = true;
-        resultData.turn3.player2.value = 50;
-        resultData.turn3.player3.isGet = true;
-        resultData.turn3.player3.value = 50;
-        resultData.turn3.player4.isGet = true;
-        resultData.turn3.player4.value = 50;
+        resultData.turns.turn3.player1.isGet = true;
+        resultData.turns.turn3.player1.value = 50;
+        resultData.turns.turn3.player2.isGet = true;
+        resultData.turns.turn3.player2.value = 50;
+        resultData.turns.turn3.player3.isGet = true;
+        resultData.turns.turn3.player3.value = 50;
+        resultData.turns.turn3.player4.isGet = true;
+        resultData.turns.turn3.player4.value = 50;
 
-        resultData.turn4.player1.isGet = true;
-        resultData.turn4.player1.value = 50;
-        resultData.turn4.player2.isGet = true;
-        resultData.turn4.player2.value = 50;
-        resultData.turn4.player3.isGet = true;
-        resultData.turn4.player3.value = 50;
-        resultData.turn4.player4.isGet = true;
-        resultData.turn4.player4.value = 50;
+        resultData.turns.turn4.player1.isGet = true;
+        resultData.turns.turn4.player1.value = 50;
+        resultData.turns.turn4.player2.isGet = true;
+        resultData.turns.turn4.player2.value = 50;
+        resultData.turns.turn4.player3.isGet = true;
+        resultData.turns.turn4.player3.value = 50;
+        resultData.turns.turn4.player4.isGet = true;
+        resultData.turns.turn4.player4.value = 50;
 
-        resultData.turn5.player1.isGet = true;
-        resultData.turn5.player1.value = 50;
-        resultData.turn5.player2.isGet = true;
-        resultData.turn5.player2.value = 50;
-        resultData.turn5.player3.isGet = true;
-        resultData.turn5.player3.value = 50;
-        resultData.turn5.player4.isGet = true;
-        resultData.turn5.player4.value = 50;
+        resultData.turns.turn5.player1.isGet = true;
+        resultData.turns.turn5.player1.value = 50;
+        resultData.turns.turn5.player2.isGet = true;
+        resultData.turns.turn5.player2.value = 50;
+        resultData.turns.turn5.player3.isGet = true;
+        resultData.turns.turn5.player3.value = 50;
+        resultData.turns.turn5.player4.isGet = true;
+        resultData.turns.turn5.player4.value = 50;
 
-        resultData.turn6.player1.isGet = true;
-        resultData.turn6.player1.value = 50;
-        resultData.turn6.player2.isGet = true;
-        resultData.turn6.player2.value = 50;
-        resultData.turn6.player3.isGet = true;
-        resultData.turn6.player3.value = 50;
-        resultData.turn6.player4.isGet = true;
-        resultData.turn6.player4.value = 50;
+        resultData.turns.turn6.player1.isGet = true;
+        resultData.turns.turn6.player1.value = 50;
+        resultData.turns.turn6.player2.isGet = true;
+        resultData.turns.turn6.player2.value = 50;
+        resultData.turns.turn6.player3.isGet = true;
+        resultData.turns.turn6.player3.value = 50;
+        resultData.turns.turn6.player4.isGet = true;
+        resultData.turns.turn6.player4.value = 50;
 
-        resultData.player1.playerName = "User1";
-        resultData.player1.playerId = "Test1";
-        resultData.player1.curGold = 200;
+        resultData.players.player1.playerName = "User1";
+        resultData.players.player1.playerId = "Test1";
+        resultData.players.player1.curGold = 200;
 
-        resultData.player1.playerName = "User2";
-        resultData.player1.playerId = "Test2";
-        resultData.player1.curGold = 200;
+        resultData.players.player1.playerName = "User2";
+        resultData.players.player1.playerId = "Test2";
+        resultData.players.player1.curGold = 200;
 
-        resultData.player1.playerName = "User3";
-        resultData.player1.playerId = "Test3";
-        resultData.player1.curGold = 200;
+        resultData.players.player1.playerName = "User3";
+        resultData.players.player1.playerId = "Test3";
+        resultData.players.player1.curGold = 200;
 
-        resultData.player1.playerName = "User4";
-        resultData.player1.playerId = "Test4";
-        resultData.player1.curGold = 200;
+        resultData.players.player1.playerName = "User4";
+        resultData.players.player1.playerId = "Test4";
+        resultData.players.player1.curGold = 200;
 
-        resultData.player1Mission.low.missionNum = 1;
-        resultData.player1Mission.low.isAchieved = true;
-        resultData.player1Mission.mid.missionNum = 1;
-        resultData.player1Mission.mid.isAchieved = true;
-        resultData.player1Mission.high.missionNum = 1;
-        resultData.player1Mission.high.isAchieved = false;
+        resultData.missions.player1Mission.low.missionNum = 1;
+        resultData.missions.player1Mission.low.isAchieved = true;
+        resultData.missions.player1Mission.mid.missionNum = 1;
+        resultData.missions.player1Mission.mid.isAchieved = true;
+        resultData.missions.player1Mission.high.missionNum = 1;
+        resultData.missions.player1Mission.high.isAchieved = false;
 
-        resultData.player2Mission.low.missionNum = 1;
-        resultData.player2Mission.low.isAchieved = true;
-        resultData.player2Mission.mid.missionNum = 1;
-        resultData.player2Mission.mid.isAchieved = true;
-        resultData.player2Mission.high.missionNum = 1;
-        resultData.player2Mission.high.isAchieved = false;
+        resultData.missions.player2Mission.low.missionNum = 1;
+        resultData.missions.player2Mission.low.isAchieved = true;
+        resultData.missions.player2Mission.mid.missionNum = 1;
+        resultData.missions.player2Mission.mid.isAchieved = true;
+        resultData.missions.player2Mission.high.missionNum = 1;
+        resultData.missions.player2Mission.high.isAchieved = false;
 
-        resultData.player3Mission.low.missionNum = 1;
-        resultData.player3Mission.low.isAchieved = true;
-        resultData.player3Mission.mid.missionNum = 1;
-        resultData.player3Mission.mid.isAchieved = true;
-        resultData.player3Mission.high.missionNum = 1;
-        resultData.player3Mission.high.isAchieved = false;
+        resultData.missions.player3Mission.low.missionNum = 1;
+        resultData.missions.player3Mission.low.isAchieved = true;
+        resultData.missions.player3Mission.mid.missionNum = 1;
+        resultData.missions.player3Mission.mid.isAchieved = true;
+        resultData.missions.player3Mission.high.missionNum = 1;
+        resultData.missions.player3Mission.high.isAchieved = false;
 
-        resultData.player4Mission.low.missionNum = 1;
-        resultData.player4Mission.low.isAchieved = true;
-        resultData.player4Mission.mid.missionNum = 1;
-        resultData.player4Mission.mid.isAchieved = true;
-        resultData.player4Mission.high.missionNum = 1;
-        resultData.player4Mission.high.isAchieved = false;
+        resultData.missions.player4Mission.low.missionNum = 1;
+        resultData.missions.player4Mission.low.isAchieved = true;
+        resultData.missions.player4Mission.mid.missionNum = 1;
+        resultData.missions.player4Mission.mid.isAchieved = true;
+        resultData.missions.player4Mission.high.missionNum = 1;
+        resultData.missions.player4Mission.high.isAchieved = false;
 
-        firebaseManager.SaveData(resultData);
+        firebaseManager.SaveResultData(resultData, resultData.gameIndex);
     }
     #endregion
 }

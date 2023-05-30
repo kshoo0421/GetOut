@@ -2,6 +2,8 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -32,7 +34,7 @@ public class FirebaseManager : MonoBehaviour
         if (instance == null)
         {
             instance = GetComponent<FirebaseManager>();
-            firebaseApp = FirebaseApp.Create();
+            FirebaseApp.Create();
             InitializeFM();
         }
     }
@@ -53,14 +55,14 @@ public class FirebaseManager : MonoBehaviour
                 firebaseApp = FirebaseApp.DefaultInstance;
                 firebaseAuth = FirebaseAuth.DefaultInstance;
                 firebaseDatabase = FirebaseDatabase.DefaultInstance;
-                reference = firebaseDatabase.GetReference("https://getout-38c84-default-rtdb.firebaseio.com/");
+                reference = firebaseDatabase.GetReference("/");
                 reference.GetValueAsync().ContinueWith(task =>
                 {
                     if (task.IsCompleted)
                     {
                         DataSnapshot snapshot = task.Result;
                     }
-                });
+                }); 
 
             }
         }
@@ -160,10 +162,72 @@ public class FirebaseManager : MonoBehaviour
     #endregion
 
     #region Database
-    public async void SaveData(ResultData resultData)
+    public long GetGameIndex()
+    {
+        long data = -1;
+        reference.Child("WriteTest").Child("gameIndex").GetValueAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if (snapshot != null && snapshot.Exists)
+                {
+                    data = (long)snapshot.Value;
+                    UpdateGameIndex(data + 1);
+                    Debug.Log("람다 안 : " + data);
+                }
+                else
+                {
+                    Debug.Log("No data found at the specified path.");
+                }
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogError("Failed to retrieve data: " + task.Exception);
+            }
+        });
+        Debug.Log("람다 밖 : " + data);
+        return data;
+    }
+
+    void UpdateGameIndex(long newData)
+    {
+        // 업데이트할 데이터 생성
+        var updateData = new Dictionary<string, object>
+        {
+            { "gameIndex", newData }
+        };
+
+        // 데이터 업데이트
+        reference.Child("WriteTest").UpdateChildrenAsync(updateData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Long data updated successfully.");
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogError("Failed to update data: " + task.Exception);
+            }
+        });
+    }
+
+    public async void SaveResultData(ResultData resultData, long gameKey)
     {
         string json = JsonUtility.ToJson(resultData);
-        await reference.Child("WriteTest").SetRawJsonValueAsync(json);
+        reference.Child("WriteTest").Child("GamePlayData" + gameKey).Push();
+        await reference.Child("WriteTest").Child("GamePlayData" + gameKey).SetRawJsonValueAsync(json).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Data saved successfully!");
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogError("Failed to save data: " + task.Exception);
+            }
+        }
+        );
     }
     #endregion
 }
