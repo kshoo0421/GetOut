@@ -4,7 +4,7 @@ public class S_StartGameManager : MonoBehaviour
 {
     #region Field
     /* Managers */
-    TotalGameManager totalGameManager;
+    B_TotalGameManager totalGameManager;
     B_SceneChangeManager sceneChanger;
     #endregion
 
@@ -18,7 +18,7 @@ public class S_StartGameManager : MonoBehaviour
     #region Set Managers
     void SetManagers()
     {
-        totalGameManager = TotalGameManager.Instance;
+        totalGameManager = B_TotalGameManager.Instance;
         sceneChanger = totalGameManager.b_SceneChangeManager;
     }
     #endregion

@@ -7,10 +7,10 @@ public class S_LobbyManager : MonoBehaviour
 {
     #region Field
     /* Managers */
-    TotalGameManager totalGameManager;
+    B_TotalGameManager totalGameManager;
     B_SceneChangeManager sceneChanger;
-    PhotonManager photonManager;
-    FirebaseManager firebaseManager;
+    B_PhotonManager photonManager;
+    B_FirebaseManager firebaseManager;
     #endregion
 
     #region monobehaviour
@@ -24,7 +24,7 @@ public class S_LobbyManager : MonoBehaviour
     #region Set Managers
     void SetManagers()
     {
-        totalGameManager = TotalGameManager.Instance;
+        totalGameManager = B_TotalGameManager.Instance;
         sceneChanger = totalGameManager.b_SceneChangeManager;
         firebaseManager = totalGameManager.firebaseManager;
         photonManager = totalGameManager.photonManager;
@@ -51,7 +51,7 @@ public class S_LobbyManager : MonoBehaviour
     public void SignOut()
     {
         firebaseManager.SignOut();
-        sceneChanger.ChangetoScene(1);
+        sceneChanger.ChangetoScene(0);
     }
     #endregion
 
@@ -76,6 +76,7 @@ public class S_LobbyManager : MonoBehaviour
     public void MakeResultData()    // 데이터베이스 테스트용
     {
         ResultData resultData = new ResultData();
+        firebaseManager.SetGameIndex();
         resultData.gameIndex = firebaseManager.GetGameIndex();
 
         resultData.finalResult.first = 2;
@@ -180,6 +181,7 @@ public class S_LobbyManager : MonoBehaviour
         resultData.missions.player4Mission.mid.isAchieved = true;
         resultData.missions.player4Mission.high.missionNum = 1;
         resultData.missions.player4Mission.high.isAchieved = false;
+
 
         firebaseManager.SaveResultData(resultData, resultData.gameIndex);
     }

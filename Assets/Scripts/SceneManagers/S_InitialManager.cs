@@ -6,10 +6,11 @@ public class S_InitialManager : MonoBehaviour
 {
     #region Field
     /* Managers */
-    TotalGameManager totalGameManager;
-    FirebaseManager firebaseManager;
+    B_TotalGameManager totalGameManager;
+    B_FirebaseManager firebaseManager;
     B_SceneChangeManager b_SceneChangeManager;
     LanguageManager languageManager;
+    SoundManager soundManager;
 
     /* Select InputField */ 
     TMP_InputField nextInputField;
@@ -43,15 +44,21 @@ public class S_InitialManager : MonoBehaviour
     [SerializeField] TMP_InputField emailSignUpField;
     [SerializeField] TMP_InputField passwordSignUpField;
 
+
+    /* SoundEffect */
+    [SerializeField] AudioSource[] soundEffects;
+
+    /* BGM */
+    
     #endregion
 
     #region MonoBehaviour
-
 
     void Start()
     {
         SetManagers();
         SelectInputField();
+        //InitializeSEVolume();
     }
 
     void Update()
@@ -63,10 +70,11 @@ public class S_InitialManager : MonoBehaviour
     #region Set Managers
     void SetManagers()
     {
-        totalGameManager = TotalGameManager.Instance;
+        totalGameManager = B_TotalGameManager.Instance;
         firebaseManager = totalGameManager.firebaseManager;
         b_SceneChangeManager = totalGameManager.b_SceneChangeManager;
         languageManager = totalGameManager.languageManager;
+        soundManager = totalGameManager.soundManager;
     }
     #endregion
 
@@ -78,44 +86,83 @@ public class S_InitialManager : MonoBehaviour
         signUpInputFields[0].Select();
     }
 
+    void SetEnterKey()
+    {
+        signInInputFields[0].onEndEdit.AddListener(EnterSignInID);
+        signUpInputFields[0].onEndEdit.AddListener(EnterSignUpID);
+
+        signInInputFields[1].onEndEdit.AddListener(EnterSignInPW);
+        signUpInputFields[1].onEndEdit.AddListener(EnterSignUpPW);
+    }
+
+    void EnterSignInID(string text)
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignInFieldTab();
+    }
+
+    void EnterSignUpID(string text)
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignUpFieldTab();
+    }
+
+
+    void EnterSignInPW(string text)
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            SignIn();
+        }
+    }
+
+    void EnterSignUpPW(string text)
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignUp();
+    }
+    
     void FocusUpdate()
     {
         // 현재 포커스를 가지고 있는 InputField
-        if (SignUpPanel.activeSelf == true)
-        {
-            currentInputField = signUpInputFields[currentSignInInputFieldIndex];
-            // Tab 키를 눌렀을 때 다음 InputField로 포커스 이동
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                // 현재 InputField의 다음 순서 InputField로 포커스 이동
-                currentSignUpInputFieldIndex = (currentSignUpInputFieldIndex + 1) % signUpInputFields.Length;
-                nextInputField = signUpInputFields[currentSignUpInputFieldIndex];
-
-                // 다음 InputField에 포커스 설정
-                nextInputField.Select();
-                nextInputField.ActivateInputField();
-            }
-        }
-        else
-        {
-            currentInputField = signInInputFields[currentSignInInputFieldIndex];
-            // Tab 키를 눌렀을 때 다음 InputField로 포커스 이동
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                // 현재 InputField의 다음 순서 InputField로 포커스 이동
-                currentSignInInputFieldIndex = (currentSignInInputFieldIndex + 1) % signInInputFields.Length;
-                nextInputField = signInInputFields[currentSignInInputFieldIndex];
-
-                // 다음 InputField에 포커스 설정
-                nextInputField.Select();
-                nextInputField.ActivateInputField();
-            }
-        }
+        if (SignUpPanel.activeSelf == true) SignUpFieldFocus();   
+        else SignInFieldFocus();
     }
-    #endregion
+
+    void SignUpFieldFocus()
+    {
+        currentInputField = signUpInputFields[currentSignInInputFieldIndex];
+        if (Input.GetKeyDown(KeyCode.Tab)) SignUpFieldTab();
+    }
+
+    void SignUpFieldTab()
+    { 
+        // 현재 InputField의 다음 순서 InputField로 포커스 이동
+        currentSignUpInputFieldIndex = (currentSignUpInputFieldIndex + 1) % signUpInputFields.Length;
+        nextInputField = signUpInputFields[currentSignUpInputFieldIndex];
+
+        // 다음 InputField에 포커스 설정
+        nextInputField.Select();
+        nextInputField.ActivateInputField();
+    }
+
+    void SignInFieldFocus()
+    {
+        currentInputField = signInInputFields[currentSignInInputFieldIndex];
+        if (Input.GetKeyDown(KeyCode.Tab)) SignInFieldTab();
+    }
+
+    void SignInFieldTab()
+    {
+        // 현재 InputField의 다음 순서 InputField로 포커스 이동
+        currentSignInInputFieldIndex = (currentSignInInputFieldIndex + 1) % signInInputFields.Length;
+        nextInputField = signInInputFields[currentSignInInputFieldIndex];
+
+        // 다음 InputField에 포커스 설정
+        nextInputField.Select();
+        nextInputField.ActivateInputField();
+    }
+        #endregion
 
     #region Open Keyboard
-    public void OpenKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+        public void OpenKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
 
     public void CloseKeyboard()
     {
@@ -146,6 +193,7 @@ public class S_InitialManager : MonoBehaviour
 
     public async void SignIn()
     {
+        Debug.Log("Sign In");
         if (firebaseManager.checkSignIn())
         {
             await firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
@@ -201,8 +249,9 @@ public class S_InitialManager : MonoBehaviour
         }
     }
 
-    public void PressSignUpButton()
+    public async void SignUp()
     {
+        Debug.Log("Sign Up");
         if (isEmailOvelap == true)
         {
             signUpMessage.text = "You should check email address";
@@ -215,7 +264,7 @@ public class S_InitialManager : MonoBehaviour
         }
         else
         {
-            firebaseManager.SignIn(emailSignUpField.text, passwordSignUpField.text);
+            await firebaseManager.SignIn(emailSignUpField.text, passwordSignUpField.text);
             signUpMessage.text = "Sign Up Done";
         }
         return;
@@ -246,5 +295,25 @@ public class S_InitialManager : MonoBehaviour
     {
         languageManager.ChangeLocale(index);
     }
+    #endregion
+
+    #region Set Sound
+    //void InitializeSEVolume()
+    //{
+    //    float curSEVolume = soundManager.curSEVolume;
+    //    foreach (AudioSource i in soundEffects)
+    //        i.volume = curSEVolume;
+    //}
+
+    //public void SetSEVolume(float curSEVolume)
+    //{
+    //    soundManager.curSEVolume = curSEVolume;
+    //    foreach (AudioSource i in soundEffects)
+    //    {
+    //        i.volume = curSEVolume;
+    //    }
+    //}
+
+
     #endregion
 }

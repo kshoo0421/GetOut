@@ -5,7 +5,7 @@ public class S_ShopManager : MonoBehaviour
 {
     #region Field
     /* Managers */
-    TotalGameManager totalGameManager;
+    B_TotalGameManager totalGameManager;
     GoogleAdMobManager googleAdMobManager;
     B_SceneChangeManager sceneChanger;
 
@@ -28,7 +28,7 @@ public class S_ShopManager : MonoBehaviour
     #region Set Managers
     void SetManagers()
     {
-        totalGameManager = TotalGameManager.Instance;
+        totalGameManager = B_TotalGameManager.Instance;
         googleAdMobManager = totalGameManager.googleAdMobManager;
         sceneChanger = totalGameManager.b_SceneChangeManager;
     }
