@@ -15,7 +15,7 @@ public class BehaviorSingleton<T> : MonoBehaviour where T : Component
                 var go = new GameObject(typeof(T).ToString());
                 _instance = go.AddComponent<T>();
             }
-            return _instance; 
+            return _instance;
         }
     }    
 }

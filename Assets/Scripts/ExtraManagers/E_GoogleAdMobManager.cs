@@ -2,27 +2,14 @@ using GoogleMobileAds.Api;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_GoogleAdMobManager : MonoBehaviour
+public class E_GoogleAdMobManager : BehaviorSingleton<E_GoogleAdMobManager>
 {
-    #region ½Ì±ÛÅæ »ý¼º¿ë
-    private static E_GoogleAdMobManager instance;
-    private E_GoogleAdMobManager() { }
-    public static E_GoogleAdMobManager Instance
-    {
-        get { return instance; }
-    }
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = GetComponent<E_GoogleAdMobManager>();
-        }
-    }
-    #endregion
+    #region Field
     public static bool isTestMode = false;
+    #endregion
 
-    private void Start()
+    #region Monobehaviour
+    void Start()
     {
         var requestConfiguration = new RequestConfiguration
             .Builder()
@@ -34,38 +21,39 @@ public class E_GoogleAdMobManager : MonoBehaviour
         LoadBannerAd();
         LoadRewardedAd();
     }
+    #endregion
 
+    #region check
     public bool CanShowAd()
     {
         if (rewardedAd == null) return false;
         return rewardedAd.CanShowAd();
     }
 
-    private AdRequest GetAdRequest()
+    AdRequest GetAdRequest()
     {
         return new AdRequest.Builder().Build();
     }
+    #endregion
 
     #region ¹è³Ê ±¤°í
 #if UNITY_ANDROID
-    private const string bannerTestID = "ca-app-pub-3940256099942544/6300978111";
-    private const string bannerID = "ca-app-pub-5086433509319711/7826487033";
+    const string bannerTestID = "ca-app-pub-3940256099942544/6300978111";
+    const string bannerID = "ca-app-pub-5086433509319711/7826487033";
 #elif UNITY_IPHONE
-    private const string bannerTestID = "ca-app-pub-3940256099942544/2934735716";
-    private const string bannerID = "ca-app-pub-5086433509319711/9283038937";
+    const string bannerTestID = "ca-app-pub-3940256099942544/2934735716";
+    const string bannerID = "ca-app-pub-5086433509319711/9283038937";
 #else
-    private const string bannerTestID = "unused";
-    private const string bannerID = "unused";
+    const string bannerTestID = "unused";
+    const string bannerID = "unused";
 #endif
 
-    private BannerView bannerAd;
+    BannerView bannerAd;
 
-    private void LoadBannerAd()
+    void LoadBannerAd()
     {
         AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
-
-        bannerAd = new BannerView(isTestMode ? bannerTestID : bannerID,
-             adaptiveSize, AdPosition.Bottom);
+        bannerAd = new BannerView(isTestMode ? bannerTestID : bannerID, adaptiveSize, AdPosition.Bottom);
         bannerAd.LoadAd(GetAdRequest());
         ToggleBannerAd(false);
     }
@@ -79,16 +67,16 @@ public class E_GoogleAdMobManager : MonoBehaviour
 
     #region ¸®¿öµå ±¤°í
 #if UNITY_ANDROID
-    private string rewardedTestID = "ca-app-pub-3940256099942544/5224354917";
-    private string rewardedID = "ca-app-pub-5086433509319711/4281105640";
+    string rewardedTestID = "ca-app-pub-3940256099942544/5224354917";
+    string rewardedID = "ca-app-pub-5086433509319711/4281105640";
 #elif UNITY_IPHONE
-    private string rewardedTestID = "ca-app-pub-3940256099942544/1712485313";
-    private string rewardedID = "ca-app-pub-5086433509319711/5903300775";
+    string rewardedTestID = "ca-app-pub-3940256099942544/1712485313";
+    string rewardedID = "ca-app-pub-5086433509319711/5903300775";
 #else
-    private string rewardedTestID = "unused";
-    private string rewardedID = "unused";
+    string rewardedTestID = "unused";
+    string rewardedID = "unused";
 #endif
-    private RewardedAd rewardedAd;
+    RewardedAd rewardedAd;
 
     public void LoadRewardedAd()
     {

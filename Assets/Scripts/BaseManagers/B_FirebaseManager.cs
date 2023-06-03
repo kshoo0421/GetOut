@@ -6,12 +6,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class B_FirebaseManager : MonoBehaviour
+public class B_FirebaseManager : BehaviorSingleton<B_FirebaseManager>
 {   
     #region Field
     static FirebaseUser User;
-    /* Singleton */
-    static B_FirebaseManager instance;
 
     /* Base Set */
     static FirebaseApp firebaseApp;
@@ -25,21 +23,21 @@ public class B_FirebaseManager : MonoBehaviour
     long gameIndex = 0;
 
     #endregion
-
-    #region Singleton
-    B_FirebaseManager() { }
-    public static B_FirebaseManager Instance { get { return instance; } }
-
-    void SetSingleton()
+    
+    #region Monobehavior
+    void Awake()
     {
-        if (instance == null)
-        {
-            instance = GetComponent<B_FirebaseManager>();
-            FirebaseApp.Create();
-            InitializeFM();
-        }
+        FirebaseApp.Create();
+        InitializeFM();
     }
 
+    void OnDestroy()
+    {
+        SignOut();
+    }
+    #endregion
+   
+    #region Initialize  
     void InitializeFM()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
@@ -68,18 +66,6 @@ public class B_FirebaseManager : MonoBehaviour
             Debug.Log("Firebase Set ¿Ï·á");
         }
         );
-    }
-    #endregion
-
-    #region Monobehavior
-    void Awake()
-    {
-        SetSingleton();
-    }
-
-    void OnDestroy()
-    {
-        SignOut();
     }
     #endregion
 

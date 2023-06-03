@@ -2,31 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
-public class LanguageManager : MonoBehaviour
+public class LanguageManager : BehaviorSingleton<LanguageManager>
 {
     #region Field
-    /* Singleton */
-    static LanguageManager instance;
     /* Change Locale */
     bool isChanging;
-    #endregion
-
-    #region Singleton
-    LanguageManager() { }
-
-    public static LanguageManager Instance { get { return instance; } }
-
-    void SetSingleton()
-    {
-        if (instance == null) instance = GetComponent<LanguageManager>();
-    }
-    #endregion
-
-    #region Monobehaviour
-    void Awake()
-    {
-        SetSingleton();    
-    }
     #endregion
 
     #region Change Locale
