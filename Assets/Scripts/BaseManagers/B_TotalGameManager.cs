@@ -27,12 +27,11 @@ public class B_TotalGameManager : MonoBehaviour
     public GoldManager goldManager;
     public TicketManager ticketManager;
     // 기타 매니저
-    public E_AdManager e_AdManager;
     public E_CustumMatchingChatManager e_CustumMatchingChatManager;
     public E_EventManger e_EventManger;
     public E_LobbyChatManager e_LobbyChatManager;
-    public E_PaymentManager e_PaymentManager;
-    public GoogleAdMobManager googleAdMobManager;
+    public E_GoogleAdMobManager e_GoogleAdMobManager;
+    public E_GooglePayManager e_GooglePayManager;
     #endregion
 
     #region Singleton
@@ -72,6 +71,7 @@ public class B_TotalGameManager : MonoBehaviour
     #region Set Managers
     private void SetManagers()
     {
+        Debug.Log("Set Manager 시작");
         languageManager = LanguageManager.Instance;
         resolutionManager = ResolutionManager.Instance;
         soundManager = SoundManager.Instance;
@@ -91,12 +91,11 @@ public class B_TotalGameManager : MonoBehaviour
         goldManager = GoldManager.Instance;
         ticketManager = TicketManager.Instance;
 
-        e_AdManager = E_AdManager.Instance;
         e_CustumMatchingChatManager = E_CustumMatchingChatManager.Instance;
         e_EventManger = E_EventManger.Instance;
         e_LobbyChatManager = E_LobbyChatManager.Instance;
-        e_PaymentManager = E_PaymentManager.Instance;
-        googleAdMobManager = GoogleAdMobManager.Instance;
+        e_GooglePayManager = E_GooglePayManager.Instance;
+        e_GoogleAdMobManager = E_GoogleAdMobManager.Instance;
         Debug.Log("total 완");
     }
     #endregion

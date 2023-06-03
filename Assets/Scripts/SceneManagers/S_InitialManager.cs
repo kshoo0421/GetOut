@@ -53,7 +53,6 @@ public class S_InitialManager : MonoBehaviour
     #endregion
 
     #region MonoBehaviour
-
     void Start()
     {
         SetManagers();
@@ -313,7 +312,5 @@ public class S_InitialManager : MonoBehaviour
     //        i.volume = curSEVolume;
     //    }
     //}
-
-
     #endregion
 }

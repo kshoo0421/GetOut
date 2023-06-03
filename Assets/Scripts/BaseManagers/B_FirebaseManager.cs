@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class B_FirebaseManager : MonoBehaviour
-{
+{   
     #region Field
     static FirebaseUser User;
     /* Singleton */

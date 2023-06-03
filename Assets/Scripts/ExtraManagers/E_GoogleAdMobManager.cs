@@ -2,12 +2,12 @@ using GoogleMobileAds.Api;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoogleAdMobManager : MonoBehaviour
+public class E_GoogleAdMobManager : MonoBehaviour
 {
     #region ½Ì±ÛÅæ »ý¼º¿ë
-    private static GoogleAdMobManager instance;
-    private GoogleAdMobManager() { }
-    public static GoogleAdMobManager Instance
+    private static E_GoogleAdMobManager instance;
+    private E_GoogleAdMobManager() { }
+    public static E_GoogleAdMobManager Instance
     {
         get { return instance; }
     }
@@ -16,7 +16,7 @@ public class GoogleAdMobManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = GetComponent<GoogleAdMobManager>();
+            instance = GetComponent<E_GoogleAdMobManager>();
         }
     }
     #endregion
@@ -62,8 +62,10 @@ public class GoogleAdMobManager : MonoBehaviour
 
     private void LoadBannerAd()
     {
+        AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
+
         bannerAd = new BannerView(isTestMode ? bannerTestID : bannerID,
-            AdSize.SmartBanner, AdPosition.Bottom);
+             adaptiveSize, AdPosition.Bottom);
         bannerAd.LoadAd(GetAdRequest());
         ToggleBannerAd(false);
     }
