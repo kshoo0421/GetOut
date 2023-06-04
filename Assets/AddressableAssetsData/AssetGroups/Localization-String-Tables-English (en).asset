@@ -18,7 +18,90 @@ MonoBehaviour:
   m_GUID: 7ee6f73fc5f7ef841ade21ed25fc0f3c
   m_SerializeEntries:
   - m_GUID: 1405e2fe8dda9c04c842b283e633d66f
-    m_Address: MyTable_en
+    m_Address: Scene0_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: e090e237f6a087347b99e759240e8f3c
+    m_Address: DontUse_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+  - m_GUID: 88a8f328448c7284f995670ac2aea47c
+    m_Address: Scene2_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: f99808b1943ed1347a2e65efab6fd989
+    m_Address: Scene1_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: fa594b02a928478438bb452e56589f0b
+    m_Address: Scene3_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: b55b7443a8aac604ca09ea46c7565996
+    m_Address: Scene4_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 7181140bc64b38542b425ef71c25a807
+    m_Address: Scene5_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 9a11589f56e7ec14d8b4824f43d241e5
+    m_Address: Scene6_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: b03a6a04a6d7a7942b682cce7ebb2bf4
+    m_Address: Scene7_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 0a17aeb7c1b28b54bb3a4d26ff7c5c85
+    m_Address: Scene8_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: a8f7124a21864864ba8cd4a89b75d955
+    m_Address: Scene9_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 44192e373adfb234cb3c84c48a4cc3c6
+    m_Address: Scene10_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: c858f731efedec747b850ef7c0048a6d
+    m_Address: Scene11_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 43006be4de6894743ad34fde5852ab6a
+    m_Address: Scene12_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
+    - Preload
+  - m_GUID: 91c55dcfe7480584499d0530c1cbc4d6
+    m_Address: Scene13_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en

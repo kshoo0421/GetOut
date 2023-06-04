@@ -9,8 +9,8 @@ public class S_InitialManager : MonoBehaviour
     B_TotalGameManager totalGameManager;
     B_FirebaseManager firebaseManager;
     B_SceneChangeManager b_SceneChangeManager;
-    LanguageManager languageManager;
-    SoundManager soundManager;
+    O_LanguageManager languageManager;
+    O_SoundManager soundManager;
 
     /* Select InputField */ 
     TMP_InputField nextInputField;
@@ -70,10 +70,10 @@ public class S_InitialManager : MonoBehaviour
     void SetManagers()
     {
         totalGameManager = B_TotalGameManager.Instance;
-        firebaseManager = totalGameManager.firebaseManager;
+        firebaseManager = totalGameManager.b_FirebaseManager;
         b_SceneChangeManager = totalGameManager.b_SceneChangeManager;
-        languageManager = totalGameManager.languageManager;
-        soundManager = totalGameManager.soundManager;
+        languageManager = totalGameManager.o_LanguageManager;
+        soundManager = totalGameManager.o_SoundManager;
     }
     #endregion
 
@@ -312,5 +312,58 @@ public class S_InitialManager : MonoBehaviour
     //        i.volume = curSEVolume;
     //    }
     //}
+    #endregion
+
+    #region Option
+    [SerializeField] GameObject OptionPanel;
+    public void ToggleOptionPanel()
+    {
+        if (OptionPanel.activeSelf)
+        {
+            OptionPanel.SetActive(false);
+        }
+        else
+        {
+            OptionPanel.SetActive(true);
+        }
+    }
+
+    [SerializeField] GameObject[] InOptionPanels; // 0 : Sound; 1 : Language; 2 : Resolution
+    
+    public void SelectOptionPanel(int panelNum)
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            if (i == panelNum)
+            {
+                InOptionPanels[i].SetActive(true);
+            }
+            else
+            {
+                InOptionPanels[i].SetActive(false);
+            }
+        }
+    }
+    #endregion
+
+    #region Quit Game
+    [SerializeField] GameObject QuitPanel;
+
+    public void ToggleQuitPanel()
+    { 
+        if(QuitPanel.activeSelf)
+        {
+            QuitPanel.SetActive(false);
+        }
+        else
+        {
+            QuitPanel.SetActive(true);
+        }
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
     #endregion
 }

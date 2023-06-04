@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BehaviorSingleton<T> : MonoBehaviour where T : Component
@@ -13,7 +11,8 @@ public class BehaviorSingleton<T> : MonoBehaviour where T : Component
             if (_instance == null)
             {
                 var go = new GameObject(typeof(T).ToString());
-                _instance = go.AddComponent<T>();
+                _instance = go.AddComponent<T>(); 
+                DontDestroyOnLoad(go);
             }
             return _instance;
         }

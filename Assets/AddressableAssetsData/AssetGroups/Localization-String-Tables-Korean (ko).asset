@@ -18,7 +18,90 @@ MonoBehaviour:
   m_GUID: ecf94fae9fe58834abdfd6ea4bc1b704
   m_SerializeEntries:
   - m_GUID: e077c23902609124a8b2af71faa8d868
-    m_Address: MyTable_ko
+    m_Address: Scene0_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: e74d742762009de4c8083a1a3292e23a
+    m_Address: DontUse_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+  - m_GUID: 8dc7e22da6cddc44b8260d09eb65f43e
+    m_Address: Scene2_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 55137ca6497a0b741aa973a5424aa622
+    m_Address: Scene1_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 221a071ca5eddea4da9a8c8cfadf50d9
+    m_Address: Scene3_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 7f1a5ca6d6a6ce54cbd79ef6eec2c544
+    m_Address: Scene4_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 5f8eb561cbbbb8344b5bfe8de502c05f
+    m_Address: Scene5_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 7566e79ec0be993419ac29075669adfd
+    m_Address: Scene6_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 1365fda35ee38f84485a1e2657405c96
+    m_Address: Scene7_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: a697c2ea262e33342b48800840240bfd
+    m_Address: Scene8_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 15c245716bd2ceb4dab505166d247e90
+    m_Address: Scene9_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: d2a5ce525b27aeb4e9f3a8b527c2dbde
+    m_Address: Scene10_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 95dba90ee3a6c674a88f883edc64ac06
+    m_Address: Scene11_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: babaf1d3b98413c419980bc36839227b
+    m_Address: Scene12_ko
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ko
+    - Preload
+  - m_GUID: 246260e90b7abb947bf7de75a6f60b4f
+    m_Address: Scene13_ko
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ko

@@ -150,14 +150,27 @@ public class B_FirebaseManager : BehaviorSingleton<B_FirebaseManager>
     #region Get User Information
     public FirebaseUser GetCurUser()
     {
-        if (firebaseAuth != null && firebaseAuth.CurrentUser != null)
-        {   
+        if (firebaseAuth != null && FirebaseAuth.DefaultInstance.CurrentUser != null)
+        {
             if (User != FirebaseAuth.DefaultInstance.CurrentUser)
                 User = FirebaseAuth.DefaultInstance.CurrentUser;
             return User;
         }
         return null;
-}
+    }
+
+    public string GetCurUserString()
+    {
+        string result = "null";
+        if (firebaseAuth != null && firebaseAuth.CurrentUser != null)
+        {
+            if (User != FirebaseAuth.DefaultInstance.CurrentUser)
+                User = FirebaseAuth.DefaultInstance.CurrentUser;
+            result = User.ToString();
+        }
+        return result;
+    }
+
     #endregion
 
     #region Database - GameData

@@ -1,6 +1,6 @@
+using Firebase.Auth;
 using Photon.Realtime;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_LobbyManager : MonoBehaviour
@@ -11,6 +11,8 @@ public class S_LobbyManager : MonoBehaviour
     B_SceneChangeManager sceneChanger;
     B_PhotonManager photonManager;
     B_FirebaseManager firebaseManager;
+    /* Check Sign In*/
+    FirebaseUser curUser;
     #endregion
 
     #region monobehaviour
@@ -26,8 +28,8 @@ public class S_LobbyManager : MonoBehaviour
     {
         totalGameManager = B_TotalGameManager.Instance;
         sceneChanger = totalGameManager.b_SceneChangeManager;
-        firebaseManager = totalGameManager.firebaseManager;
-        photonManager = totalGameManager.photonManager;
+        firebaseManager = totalGameManager.b_FirebaseManager;
+        photonManager = totalGameManager.b_PhotonManager;
     }
     #endregion
 
@@ -56,7 +58,7 @@ public class S_LobbyManager : MonoBehaviour
     #endregion
 
     #region test1
-    public TMP_Text nameText;
+    [SerializeField] TMP_Text nameText;
     public void TestFunc()
     {
         Debug.Log("Test");
@@ -67,6 +69,7 @@ public class S_LobbyManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("ERROR : AuthManager.User == null");
             nameText.text = "ERROR : AuthManager.User == null";
         }
     }

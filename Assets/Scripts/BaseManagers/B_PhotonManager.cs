@@ -27,12 +27,8 @@ public class B_PhotonManager : MonoBehaviourPunCallbacks
     #region Monobehaviour
     void Awake()
     {
-        SetSingleton();    
-    }
-
-    void Start()
-    {
-        SetPhoton();    
+        SetSingleton();
+        SetPhoton();
     }
 
     void Update() => StatusString = PhotonNetwork.NetworkClientState.ToString();

@@ -5,15 +5,15 @@ public class B_TotalGameManager : BehaviorSingleton<B_TotalGameManager>
     #region Field
     /* Managers */
     // B_OptionManager
-    public LanguageManager languageManager;
-    public ResolutionManager resolutionManager;
-    public SoundManager soundManager;
-    public VisualEffectManager visualEffectManager;
+    public O_LanguageManager o_LanguageManager;
+    public O_ResolutionManager o_ResolutionManager;
+    public O_SoundManager o_SoundManager;
+    public O_VisualEffectManager o_VisualEffectManager;
     // 베이스 매니저
     public B_OptionManager b_OptionManager;
     public B_SceneChangeManager b_SceneChangeManager;
-    public B_FirebaseManager firebaseManager;
-    public B_PhotonManager photonManager;
+    public B_FirebaseManager b_FirebaseManager;
+    public B_PhotonManager b_PhotonManager;
     // 클래스 매니저
     public C_DataManager c_DataManager;
     public C_ItemManager c_ItemManager;
@@ -36,13 +36,13 @@ public class B_TotalGameManager : BehaviorSingleton<B_TotalGameManager>
     #region Set Managers
     private void SetManagers()
     {
-        languageManager = LanguageManager.Instance;
-        resolutionManager = ResolutionManager.Instance;
-        soundManager = SoundManager.Instance;
-        visualEffectManager = VisualEffectManager.Instance;
+        o_LanguageManager = O_LanguageManager.Instance;
+        o_ResolutionManager = O_ResolutionManager.Instance;
+        o_SoundManager = O_SoundManager.Instance;
+        o_VisualEffectManager = O_VisualEffectManager.Instance;
 
-        firebaseManager = B_FirebaseManager.Instance;
-        photonManager = B_PhotonManager.Instance;
+        b_FirebaseManager = B_FirebaseManager.Instance;
+        b_PhotonManager = B_PhotonManager.Instance;
         b_OptionManager = B_OptionManager.Instance;
         b_SceneChangeManager = B_SceneChangeManager.Instance;
 
