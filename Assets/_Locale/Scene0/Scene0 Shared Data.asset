@@ -119,6 +119,10 @@ MonoBehaviour:
     m_Key: No
     m_Metadata:
       m_Items: []
+  - m_Id: 7995556386521088
+    m_Key: Do you really want to quit this game?
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -711,7 +711,7 @@ GameObject:
   - component: {fileID: 1618969287}
   - component: {fileID: 1618969286}
   m_Layer: 0
-  m_Name: S_RuleRoomManager
+  m_Name: 12_RuleRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

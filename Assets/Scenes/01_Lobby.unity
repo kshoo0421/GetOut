@@ -1983,7 +1983,7 @@ GameObject:
   - component: {fileID: 1308618163}
   - component: {fileID: 1308618162}
   m_Layer: 0
-  m_Name: S_LobbyManager
+  m_Name: 01_Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

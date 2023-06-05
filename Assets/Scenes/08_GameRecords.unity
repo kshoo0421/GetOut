@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 1108958169}
   - component: {fileID: 1108958168}
   m_Layer: 0
-  m_Name: S_GameRecordsManager
+  m_Name: 08_GameRecords
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
