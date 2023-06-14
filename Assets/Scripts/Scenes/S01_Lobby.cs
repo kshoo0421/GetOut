@@ -1,16 +1,11 @@
+using UnityEngine;
 using Firebase.Auth;
 using Photon.Realtime;
 using TMPro;
-using UnityEngine;
 
-public class S01_Lobby : MonoBehaviour
+public class S01_Lobby : Scenes
 {
     #region Field
-    /* Managers */
-    OptionManager optionManager;
-    PhotonManager photonManager;
-    FirebaseManager firebaseManager;
-    GoogleAdMobManager googleAdMobManager;
     /* Check Sign In*/
     FirebaseUser curUser;
     #endregion
@@ -22,20 +17,6 @@ public class S01_Lobby : MonoBehaviour
         googleAdMobManager.ToggleBannerAd();
         TestFunc();
     }
-    #endregion
-
-    #region Set Managers
-    void SetManagers()
-    {
-        optionManager = OptionManager.Instance;
-        firebaseManager = FirebaseManager.Instance;
-        photonManager = PhotonManager.Instance;
-        googleAdMobManager = GoogleAdMobManager.Instance;
-    }
-    #endregion
-
-    #region Change Scene  
-    public void ChangeToScene(int sceneIndex) => optionManager.ChangetoScene(sceneIndex);
     #endregion
 
     #region Photon
@@ -54,7 +35,7 @@ public class S01_Lobby : MonoBehaviour
     public void SignOut()
     {
         firebaseManager.SignOut();
-        optionManager.ChangetoScene(0);
+        ChangeToScene(0);
     }
     #endregion
 

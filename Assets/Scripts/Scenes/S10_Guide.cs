@@ -1,13 +1,7 @@
 using UnityEngine;
 
-public class S10_Guide : MonoBehaviour
+public class S10_Guide : Scenes
 {
-    #region Field
-    /* Managers */
-    OptionManager optionManager;
-    GoogleAdMobManager googleAdMobManager;
-    #endregion
-
     #region monobehaviour
     void Start()
     {
@@ -15,17 +9,4 @@ public class S10_Guide : MonoBehaviour
         googleAdMobManager.ToggleBannerAd();
     }
     #endregion
-
-    #region Set Managers
-    void SetManagers()
-    {
-        optionManager = OptionManager.Instance;
-        googleAdMobManager = GoogleAdMobManager.Instance;
-    }
-    #endregion
-
-    #region Change Scene
-    public void ChangeToScene(int sceneIndex) => optionManager.ChangetoScene(sceneIndex);
-    #endregion
-
 }

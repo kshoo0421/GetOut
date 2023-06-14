@@ -2,14 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S09_Shop : MonoBehaviour
+public class S09_Shop : Scenes
 {
     #region Field
-    /* Managers */
-    OptionManager optionManager;
-    GoogleAdMobManager googleAdMobManager;
-    E_GooglePayManager googlePayManager;
-
     /* Ads */
     [SerializeField] Button[] AdsBtns;  // 0 : ¹è³Ê ±¤°í, 
     [SerializeField] Button RewardAdsBtn;
@@ -31,20 +26,6 @@ public class S09_Shop : MonoBehaviour
         CanShowAd();
         googleAdMobManager.ListenToAdEvents();
     }
-    #endregion
-
-    #region Set Managers
-    void SetManagers()
-    {
-        optionManager = OptionManager.Instance;
-
-        googleAdMobManager = GoogleAdMobManager.Instance;
-        googlePayManager = E_GooglePayManager.Instance;
-    }
-    #endregion
-
-    #region Change Scene
-    public void ChangeToScene(int sceneIndex) => optionManager.ChangetoScene(sceneIndex);
     #endregion
 
     #region Ads

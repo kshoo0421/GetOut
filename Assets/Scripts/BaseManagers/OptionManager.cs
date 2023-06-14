@@ -40,11 +40,4 @@ public class OptionManager : BehaviorSingleton<OptionManager>
         isChanging = false;
     }
     #endregion
-
-    #region Change Scene
-    public void ChangetoScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
-    }
-    #endregion
 }

@@ -1,15 +1,10 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class S00_Initial : MonoBehaviour
+public class S00_Initial : Scenes
 {
     #region Field
-    /* Managers */
-    FirebaseManager firebaseManager;
-    OptionManager optionManager;
-    GoogleAdMobManager googleAdMobManager;
-
     /* Select InputField */ 
     TMP_InputField nextInputField;
     TMP_InputField currentInputField;
@@ -42,7 +37,6 @@ public class S00_Initial : MonoBehaviour
     [SerializeField] TMP_InputField emailSignUpField;
     [SerializeField] TMP_InputField passwordSignUpField;
 
-
     /* SoundEffect */
     [SerializeField] AudioSource[] soundEffects;
 
@@ -61,16 +55,6 @@ public class S00_Initial : MonoBehaviour
     void Update()
     {
         FocusUpdate();
-    }
-    #endregion
-
-    #region Set Managers
-    void SetManagers()
-    {
-        firebaseManager = FirebaseManager.Instance;
-        optionManager = OptionManager.Instance;
-        optionManager = OptionManager.Instance;  
-        googleAdMobManager = GoogleAdMobManager.Instance;
     }
     #endregion
 
@@ -266,11 +250,7 @@ public class S00_Initial : MonoBehaviour
         return;
     }
     #endregion
-
-    #region Change Scene
-    public void ChangeToScene(int sceneIndex) => optionManager.ChangetoScene(sceneIndex);
-    #endregion
-
+   
     #region Set Language
     [SerializeField] GameObject LanguageSettingPanel;
 
