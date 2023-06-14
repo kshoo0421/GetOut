@@ -5,29 +5,33 @@ using Photon.Realtime;
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
     #region Field
-    /* Singleton */ 
-    static PhotonManager instance;
-    
+    /* Singleton */
+    private static PhotonManager _instance;
+
     /* Photon Functions */
     public static string StatusString, RoomString, NickNameString;
     readonly string gameVersion = "1";
     #endregion
 
     #region Singleton
-    PhotonManager() { }
-
-    public static PhotonManager Instance { get { return instance; } }
-
-    void SetSingleton()
+    public static PhotonManager Instance
     {
-        if (instance == null) instance = GetComponent<PhotonManager>();
+        get
+        {
+            if (_instance == null)
+            {
+                var go = new GameObject(typeof(PhotonManager).ToString());
+                _instance = go.AddComponent<PhotonManager>();
+                DontDestroyOnLoad(go);
+            }
+            return _instance;
+        }
     }
     #endregion
 
     #region Monobehaviour
     void Awake()
     {
-        SetSingleton();
         SetPhoton();
     }
 
@@ -59,13 +63,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby() => Debug.Log("로비접속완료");
 
-    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomString, new RoomOptions { MaxPlayers = 4 });
+    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomString, new RoomOptions { MaxPlayers = 4 }, null);
 
     public void JoinRoom() => PhotonNetwork.JoinRoom(RoomString);
 
     public void JoinOrCreateRoom() => PhotonNetwork.JoinOrCreateRoom(RoomString, new RoomOptions { MaxPlayers = 4 }, null);
 
-    public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
+    // public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
 
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
 
@@ -78,6 +82,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message) => Debug.Log("방참가실패");
 
     public override void OnJoinRandomFailed(short returnCode, string message) => Debug.Log("방랜덤참가실패");
+
+    public void RandomMatch() => PhotonNetwork.JoinRandomOrCreateRoom();
 
     [ContextMenu("정보")]
     public void Info()
@@ -102,4 +108,5 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         }
     }
     #endregion
+
 }

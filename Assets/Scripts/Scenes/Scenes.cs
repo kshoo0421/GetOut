@@ -25,4 +25,18 @@ public class Scenes : MonoBehaviour
         photonManager = PhotonManager.Instance;
     }
     #endregion
+
+    #region Open Keyboard
+    TouchScreenKeyboard keyboard;
+    public void OpenKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+
+    public void CloseKeyboard()
+    {
+        if (keyboard != null)
+        {
+            keyboard.active = false;
+            keyboard = null;
+        }
+    }
+    #endregion
 }

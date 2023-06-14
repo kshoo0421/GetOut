@@ -30,6 +30,46 @@ MonoBehaviour:
     m_Localized: Custom Match
     m_Metadata:
       m_Items: []
+  - m_Id: 3537254729494528
+    m_Localized: Current State
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3542818708631552
+    m_Localized: Player 4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3543269348847616
+    m_Localized: Player 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3543328371093504
+    m_Localized: Player 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3543384121782272
+    m_Localized: Player 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3544772558041088
+    m_Localized: Player 1 Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3545111923372032
+    m_Localized: Player 2 Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3545230613786624
+    m_Localized: Player 3 Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3545403796598784
+    m_Localized: Player 4 Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3553105230802944
+    m_Localized: Room Num
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

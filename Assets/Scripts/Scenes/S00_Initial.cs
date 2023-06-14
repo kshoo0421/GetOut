@@ -13,8 +13,6 @@ public class S00_Initial : Scenes
     int currentSignInInputFieldIndex = 0; // 현재 포커스 로그인 인덱스
     int currentSignUpInputFieldIndex = 0; // 현재 포커스 회원가입 인덱스
 
-    /* Open Keyboard */
-    TouchScreenKeyboard keyboard;
 
     /* Sign In */
     [SerializeField] GameObject SignInPanel;
@@ -141,18 +139,7 @@ public class S00_Initial : Scenes
     }
         #endregion
 
-    #region Open Keyboard
-        public void OpenKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
 
-    public void CloseKeyboard()
-    {
-        if (keyboard != null)
-        {
-            keyboard.active = false;
-            keyboard = null;
-        }
-    }
-    #endregion
 
     #region Sign In
     public void OpenSignInPanel()

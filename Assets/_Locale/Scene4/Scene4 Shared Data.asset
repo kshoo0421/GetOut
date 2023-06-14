@@ -27,6 +27,10 @@ MonoBehaviour:
     m_Key: Random Match
     m_Metadata:
       m_Items: []
+  - m_Id: 3535568568954880
+    m_Key: Current State
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

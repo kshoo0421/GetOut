@@ -30,6 +30,10 @@ MonoBehaviour:
     m_Localized: Random Match
     m_Metadata:
       m_Items: []
+  - m_Id: 3535568568954880
+    m_Localized: Current State
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

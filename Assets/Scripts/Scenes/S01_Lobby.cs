@@ -63,6 +63,7 @@ public class S01_Lobby : Scenes
         ResultData resultData = new ResultData();
         firebaseManager.SetGameIndex();
         resultData.gameIndex = firebaseManager.GetGameIndex();
+        Debug.Log(resultData.gameIndex);
 
         resultData.finalResult.first = 2;
         resultData.finalResult.second = 1;

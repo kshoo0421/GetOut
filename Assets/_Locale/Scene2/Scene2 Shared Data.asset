@@ -31,6 +31,10 @@ MonoBehaviour:
     m_Key: Waiting Room
     m_Metadata:
       m_Items: []
+  - m_Id: 3586363482025984
+    m_Key: Create Room
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

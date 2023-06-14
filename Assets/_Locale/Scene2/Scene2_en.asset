@@ -34,6 +34,10 @@ MonoBehaviour:
     m_Localized: Waiting Room
     m_Metadata:
       m_Items: []
+  - m_Id: 3586363482025984
+    m_Localized: Create Room
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
