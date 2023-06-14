@@ -9,6 +9,7 @@ public class Scenes : MonoBehaviour
     protected ItemManager itemManager;
     protected OptionManager optionManager;
     protected PhotonManager photonManager;
+    protected PaymentManager paymentManager;
     #endregion
 
     #region Change Scene
@@ -23,6 +24,7 @@ public class Scenes : MonoBehaviour
         itemManager = ItemManager.Instance;
         optionManager = OptionManager.Instance;
         photonManager = PhotonManager.Instance;
+        paymentManager = PaymentManager.Instance;
     }
     #endregion
 

@@ -9,4 +9,16 @@ public class S06_Game : Scenes
         googleAdMobManager.ToggleBannerAd();
     }
     #endregion
+
+    #region Back to Waiting Room
+    public void BackToCustom()
+    {
+        ChangeToScene(3);
+    }
+
+    public void BackToRandom()
+    {
+        ChangeToScene(4);
+    }
+    #endregion
 }

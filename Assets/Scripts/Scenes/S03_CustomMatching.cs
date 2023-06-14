@@ -1,14 +1,17 @@
 using UnityEngine;
 using TMPro;
-using Photon.Pun;
 
 public class S03_CustomMatching : Scenes
 {
     #region Field
+    int curUserNum;
+
     [SerializeField] TMP_Text roomNumber; // room number
     [SerializeField] TMP_Text curState; // current state
     [SerializeField] TMP_Text[] playerNames;
+    [SerializeField] TMP_Text[] playerOX;
     #endregion
+
     #region monobehaviour
     void Start()
     { 
@@ -17,6 +20,7 @@ public class S03_CustomMatching : Scenes
         roomNumber.text = PhotonManager.RoomString;
     }
     #endregion
+
 
     #region Exit Custom Matching
     public void ExitCustomMatching()

@@ -41,4 +41,24 @@ public class S09_Shop : Scenes
     public void ShowRewardedAd() => googleAdMobManager.ShowRewardedAd();
 
     #endregion
+
+    #region Purchase
+    public string targetProductId;
+
+    public void HandleClick()
+    {
+        if(targetProductId == PaymentManager.ProductCharacterSkin
+            || targetProductId == PaymentManager.ProductSubscription)
+        {
+            if(paymentManager.HadPurchased(targetProductId))
+            {
+                Debug.Log("이미 구매한 상품");
+                return;
+            }
+        }
+
+        paymentManager.Purchase(targetProductId);
+    }
+
+    #endregion
 }

@@ -8,7 +8,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
 {
     #region Field
     /* 테스트 유무 */
-    public static bool isTestMode = false;
+    public static bool isTestMode = true;
     /* banner open-close */
     public bool isBannerOpen = false;
 

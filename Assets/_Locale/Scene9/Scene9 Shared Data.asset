@@ -39,6 +39,10 @@ MonoBehaviour:
     m_Key: Shop
     m_Metadata:
       m_Items: []
+  - m_Id: 3624543632703488
+    m_Key: Purchase
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
