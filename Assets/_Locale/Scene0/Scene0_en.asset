@@ -99,7 +99,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7642457423691776
-    m_Localized: Sound
+    m_Localized: Sound Effect Volume
     m_Metadata:
       m_Items: []
   - m_Id: 7642826174316544
@@ -124,6 +124,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7995556386521088
     m_Localized: Do you really want to quit this game?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11502818648342528
+    m_Localized: BGM Volume
     m_Metadata:
       m_Items: []
   references:

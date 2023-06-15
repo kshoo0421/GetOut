@@ -35,11 +35,6 @@ public class S00_Initial : Scenes
     [SerializeField] TMP_InputField emailSignUpField;
     [SerializeField] TMP_InputField passwordSignUpField;
 
-    /* SoundEffect */
-    [SerializeField] AudioSource[] soundEffects;
-
-    /* BGM */
-    
     #endregion
 
     #region MonoBehaviour
@@ -47,7 +42,7 @@ public class S00_Initial : Scenes
     {
         SetManagers();
         SelectInputField();
-        //InitializeSEVolume();
+        optionManager.InitializeVolume();
     }
 
     void Update()
@@ -64,39 +59,6 @@ public class S00_Initial : Scenes
         signUpInputFields[0].Select();
     }
 
-    void SetEnterKey()
-    {
-        signInInputFields[0].onEndEdit.AddListener(EnterSignInID);
-        signUpInputFields[0].onEndEdit.AddListener(EnterSignUpID);
-
-        signInInputFields[1].onEndEdit.AddListener(EnterSignInPW);
-        signUpInputFields[1].onEndEdit.AddListener(EnterSignUpPW);
-    }
-
-    void EnterSignInID(string text)
-    {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignInFieldTab();
-    }
-
-    void EnterSignUpID(string text)
-    {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignUpFieldTab();
-    }
-
-
-    void EnterSignInPW(string text)
-    {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            SignIn();
-        }
-    }
-
-    void EnterSignUpPW(string text)
-    {
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) SignUp();
-    }
-    
     void FocusUpdate()
     {
         // 현재 포커스를 가지고 있는 InputField
@@ -138,8 +100,6 @@ public class S00_Initial : Scenes
         nextInputField.ActivateInputField();
     }
         #endregion
-
-
 
     #region Sign In
     public void OpenSignInPanel()
@@ -257,77 +217,6 @@ public class S00_Initial : Scenes
     public void ChangeLocale(int index)
     {
         optionManager.ChangeLocale(index);
-    }
-    #endregion
-
-    #region Set Sound
-    //void InitializeSEVolume()
-    //{
-    //    float curSEVolume = soundManager.curSEVolume;
-    //    foreach (AudioSource i in soundEffects)
-    //        i.volume = curSEVolume;
-    //}
-
-    //public void SetSEVolume(float curSEVolume)
-    //{
-    //    soundManager.curSEVolume = curSEVolume;
-    //    foreach (AudioSource i in soundEffects)
-    //    {
-    //        i.volume = curSEVolume;
-    //    }
-    //}
-    #endregion
-
-    #region Option
-    [SerializeField] GameObject OptionPanel;
-    public void ToggleOptionPanel()
-    {
-        if (OptionPanel.activeSelf)
-        {
-            OptionPanel.SetActive(false);
-        }
-        else
-        {
-            OptionPanel.SetActive(true);
-        }
-    }
-
-    [SerializeField] GameObject[] InOptionPanels; // 0 : Sound; 1 : Language; 2 : Resolution
-    
-    public void SelectOptionPanel(int panelNum)
-    {
-        for(int i = 0; i < 3; i++)
-        {
-            if (i == panelNum)
-            {
-                InOptionPanels[i].SetActive(true);
-            }
-            else
-            {
-                InOptionPanels[i].SetActive(false);
-            }
-        }
-    }
-    #endregion
-
-    #region Quit Game
-    [SerializeField] GameObject QuitPanel;
-
-    public void ToggleQuitPanel()
-    { 
-        if(QuitPanel.activeSelf)
-        {
-            QuitPanel.SetActive(false);
-        }
-        else
-        {
-            QuitPanel.SetActive(true);
-        }
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
     #endregion
 }
