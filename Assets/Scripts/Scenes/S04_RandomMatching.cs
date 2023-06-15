@@ -12,8 +12,7 @@ public class S04_RandomMatching : Scenes
     #region monobehaviour
     void Start()
     {
-        SetManagers();
-        googleAdMobManager.ToggleBannerAd();
+        InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
     #endregion

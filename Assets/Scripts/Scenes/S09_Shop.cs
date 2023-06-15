@@ -17,7 +17,7 @@ public class S09_Shop : Scenes
     #region monobehaviour
     void Start()
     {
-        SetManagers();
+        InitialSet();
         SetAd();
     }
 
@@ -31,7 +31,6 @@ public class S09_Shop : Scenes
     #region Ads
     void SetAd()
     {
-        googleAdMobManager.ToggleBannerAd();
         googleAdMobManager.LoadRewardedAd();
     }
     void CanShowAd() => RewardAdsBtn.interactable = googleAdMobManager.CanShowAd(); // 리워드 광고를 틀 수 있으면 활성화

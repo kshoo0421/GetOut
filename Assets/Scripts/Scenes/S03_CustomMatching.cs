@@ -15,12 +15,10 @@ public class S03_CustomMatching : Scenes
     #region monobehaviour
     void Start()
     { 
-        SetManagers();
-        googleAdMobManager.ToggleBannerAd();
+        InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
     #endregion
-
 
     #region Exit Custom Matching
     public void ExitCustomMatching()

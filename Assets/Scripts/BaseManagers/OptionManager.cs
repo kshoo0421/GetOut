@@ -40,6 +40,4 @@ public class OptionManager : BehaviorSingleton<OptionManager>
         isChanging = false;
     }
     #endregion
-
-
 }

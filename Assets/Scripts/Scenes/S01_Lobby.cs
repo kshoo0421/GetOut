@@ -13,8 +13,7 @@ public class S01_Lobby : Scenes
     #region monobehaviour
     void Start()
     {
-        SetManagers();
-        googleAdMobManager.ToggleBannerAd();
+        InitialSet();
         TestFunc();
     }
     #endregion

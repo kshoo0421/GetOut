@@ -40,9 +40,8 @@ public class S00_Initial : Scenes
     #region MonoBehaviour
     void Start()
     {
-        SetManagers();
+        InitialSet();
         SelectInputField();
-        optionManager.InitializeVolume();
     }
 
     void Update()
@@ -195,28 +194,6 @@ public class S00_Initial : Scenes
             signUpMessage.text = "Sign Up Done";
         }
         return;
-    }
-    #endregion
-   
-    #region Set Language
-    [SerializeField] GameObject LanguageSettingPanel;
-
-    public void LanguageSettingPanelOpenAndClose()
-    {
-        Debug.Log(LanguageSettingPanel.activeSelf);
-        if (LanguageSettingPanel.activeSelf)
-        {
-            LanguageSettingPanel.SetActive(false);
-        }
-        else
-        {
-            LanguageSettingPanel.SetActive(true);
-        }
-    }
-
-    public void ChangeLocale(int index)
-    {
-        optionManager.ChangeLocale(index);
     }
     #endregion
 }
