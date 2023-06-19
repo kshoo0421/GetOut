@@ -39,7 +39,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         SetPhoton();
     }
 
-    void Update() => StatusString = PhotonNetwork.NetworkClientState.ToString();
+    // void Update() => StatusString = PhotonNetwork.NetworkClientState.ToString();
 
     #endregion
 

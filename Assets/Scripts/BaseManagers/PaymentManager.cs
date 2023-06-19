@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Purchasing;
 
-public class PaymentManager : MonoBehaviour, IStoreListener
+public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
 {
     #region Field
     /* strings - ID*/
@@ -22,29 +22,8 @@ public class PaymentManager : MonoBehaviour, IStoreListener
     private IExtensionProvider storeExtensionProvider;  // 여러 플랫폼을 위한 확장 처리를 제공
     #endregion
 
-    #region Singleton 
-    private static PaymentManager _instance;
-
-    public static PaymentManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                var go = new GameObject(typeof(PaymentManager).ToString());
-                _instance = go.AddComponent<PaymentManager>();
-                DontDestroyOnLoad(go);
-            }
-            return _instance;
-        }
-    }
-    #endregion
-
     #region Monobehaviour
-    void Awake()
-    {
-        InitUnityIAP();
-    }
+    void Awake() => InitUnityIAP();
     #endregion
 
     #region Initialize

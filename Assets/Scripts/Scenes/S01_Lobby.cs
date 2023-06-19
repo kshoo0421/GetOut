@@ -63,7 +63,7 @@ public class S01_Lobby : Scenes
 
     void ResultDataSave()
     {
-        ResultData resultData = new ResultData();
+        ResultData resultData = FirebaseManager.resultData;
 
         resultData.finalResult.first = 2;
         resultData.finalResult.second = 1;
@@ -168,7 +168,8 @@ public class S01_Lobby : Scenes
         resultData.missions.player4Mission.high.missionNum = 1;
         resultData.missions.player4Mission.high.isAchieved = false;
 
-        firebaseManager.SaveResultData(resultData);
+        FirebaseManager.resultData = resultData;
+        firebaseManager.SaveResultData();
     }
 
     void UserDataSave()

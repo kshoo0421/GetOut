@@ -2,7 +2,6 @@ using GoogleMobileAds.Api;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
 {
@@ -17,7 +16,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     #region Monobehaviour
     void Awake()
     {
-        switch(PlayerPrefs.GetInt("isBannerOpen"))
+        switch(PrefsBundle.isBannerOpen)
         {
             case 0:
                 isBannerOpen = false;
@@ -139,45 +138,21 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     {
         if (_bannerView != null)
         {
-            Debug.Log("Destroying banner ad.");
             _bannerView.Destroy();
             _bannerView = null;
         }
     }
     public void ToggleBannerAd()
     {
-        if (isBannerOpen)
-        {
-            _bannerView.Show();
-        }
-        else
-        {
-            _bannerView.Hide();
-        }
+        if (isBannerOpen) _bannerView.Show();
+        else _bannerView.Hide();
     }
 
     public void ToggleBannerAd(bool b)
     {
         isBannerOpen = b;
-
-        if (b)
-        {
-            PlayerPrefs.SetInt("isBannerOpen", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("isBannerOpen", 1);
-        }
-        PlayerPrefs.Save();
-
-        if (b)
-        {
-            _bannerView.Show();
-        }
-        else
-        {
-            _bannerView.Hide();
-        }
+        PrefsBundle.Instance.SetInt(IntPrefs.isBannerOpen, b ? 1 : 0);
+        ToggleBannerAd();
     }
 
     #endregion

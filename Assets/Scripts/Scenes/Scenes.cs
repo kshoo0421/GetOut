@@ -9,7 +9,6 @@ public class Scenes : MonoBehaviour
     /* Managers */
     protected FirebaseManager firebaseManager;
     protected GoogleAdMobManager googleAdMobManager;
-    protected ItemManager itemManager;
     protected OptionManager optionManager;
     protected PhotonManager photonManager;
     protected PaymentManager paymentManager;
@@ -24,7 +23,6 @@ public class Scenes : MonoBehaviour
     float seVolume, bgmVolume;
     bool isSEMute = false, isBGMMute = false;
     [SerializeField] TMP_Text[] Mute_TMP;
-
     
     /* Quit */
     [SerializeField] GameObject QuitPanel;
@@ -38,10 +36,7 @@ public class Scenes : MonoBehaviour
     {
         SetManagers();
         InitializeVolume();
-        if(SceneManager.GetActiveScene().buildIndex != 0)
-        {
-            googleAdMobManager.ToggleBannerAd();
-        }
+        if (SceneManager.GetActiveScene().buildIndex != 0) googleAdMobManager.ToggleBannerAd(PrefsBundle.isBannerOpen == 1);
     }
 
     #region Set Managers
@@ -49,7 +44,6 @@ public class Scenes : MonoBehaviour
     {
         firebaseManager = FirebaseManager.Instance;
         googleAdMobManager = GoogleAdMobManager.Instance;
-        itemManager = ItemManager.Instance;
         optionManager = OptionManager.Instance;
         photonManager = PhotonManager.Instance;
         paymentManager = PaymentManager.Instance;
@@ -88,22 +82,22 @@ public class Scenes : MonoBehaviour
     #region Option - Sound
     void InitializeVolume() // Initialize
     {
-        if (PlayerPrefs.GetInt("isVolumeFirst") == 0)
+        if (PrefsBundle.isVolumeFirst == 0)
         {
             seVolume = 1.0f;
             bgmVolume = 1.0f;
-            PlayerPrefs.SetInt("isVolumeFirst", 1);
+            PrefsBundle.Instance.SetInt(IntPrefs.isVolumeFirst, 1);
         }
         else
         {
-            isSEMute = PlayerPrefs.GetInt("isSEMute") == 1 ? true : false;
-            isBGMMute = PlayerPrefs.GetInt("isBGMMute") == 1 ? true : false;
+            isSEMute = (PrefsBundle.isSEMute == 1) ? true : false;
+            isBGMMute = (PrefsBundle.isBGMMute == 1) ? true : false;
 
             MakeSEMute(isSEMute);
             MakeBGMMute(isBGMMute);
 
-            seVolume = PlayerPrefs.GetFloat("SEVolume");
-            bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            seVolume = PrefsBundle.SEVolume;
+            bgmVolume = PrefsBundle.BGMVolume;
         }
         ApplySEVolume();
         ApplyBGMVolume();
@@ -113,7 +107,7 @@ public class Scenes : MonoBehaviour
     {
         if (value == 0) return; // Destroy 시 초기화 방지
         seVolume = value;
-        PlayerPrefs.SetFloat("SEVolume", seVolume);
+        PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, seVolume);
         ApplySEVolume();
     }
     
@@ -122,7 +116,7 @@ public class Scenes : MonoBehaviour
     void MakeSEMute(bool b)
     {
         isSEMute = b;
-        PlayerPrefs.SetInt("isSEMute", b ? 1 : 0);
+        PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
         Mute_TMP[0].text = b ? "O" : "X";
         for (int i = 0; i < soundEffects.Length; i++) soundEffects[i].mute = b;
     }
@@ -140,7 +134,7 @@ public class Scenes : MonoBehaviour
     {
         if (value == 0) return; // Destroy 시 초기화 방지
         bgmVolume = value;
-        PlayerPrefs.SetFloat("BGMVolume", bgmVolume);
+        PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, bgmVolume);
         ApplyBGMVolume();
     }
 
@@ -149,7 +143,7 @@ public class Scenes : MonoBehaviour
     void MakeBGMMute(bool b)
     {
         isBGMMute = b;
-        PlayerPrefs.SetInt("isBGMMute", b ? 1 : 0);
+        PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
         Mute_TMP[1].text = b ? "O" : "X";
         BGM.bgm.mute = b;
     }

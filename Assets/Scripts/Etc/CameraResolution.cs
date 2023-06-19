@@ -1,20 +1,20 @@
 using UnityEngine;
 
-public class CameraResolution : MonoBehaviour
+public class CameraResolution : BehaviorSingleton<CameraResolution>
 {
     #region Monobehaviour
     void Awake()
     {
-        SetCameraResolution();
+        SetCameraResolution(9f, 16f);
     }
     #endregion
 
     #region Set Camera Resolution
-    void SetCameraResolution()
+    public void SetCameraResolution(float width, float height)
     {
         Camera camera = GetComponent<Camera>();
         Rect rect = camera.rect;
-        float scaleheight = ((float)Screen.width / Screen.height) / ((float)9 / 16);    // (가로 / 세로)
+        float scaleheight = ((float)Screen.width / Screen.height) / (width / height);    // (가로 / 세로)
         float scalewidth = 1f / scaleheight;
         if (scaleheight < 1)
         {

@@ -4,7 +4,6 @@ using Firebase.Database;
 using Firebase.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FirebaseManager : BehaviorSingleton<FirebaseManager>
@@ -21,9 +20,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     [SerializeField] static bool IsFirebaseReady { get; set; }
     [SerializeField] static bool IsSignInOnProgress { get; set; }
     /* database */
-    public static long gameIndex = 0;
+    public static ResultData resultData;
     public static UserData userData;
-
     #endregion
     
     #region Monobehavior
@@ -33,10 +31,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         InitializeFM();
     }
 
-    void OnDestroy()
-    {
-        SignOut();
-    }
+    void OnDestroy() => SignOut();
     #endregion
    
     #region Initialize  
@@ -56,14 +51,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 firebaseApp = FirebaseApp.DefaultInstance;
                 firebaseAuth = FirebaseAuth.DefaultInstance;
                 firebaseDatabase = FirebaseDatabase.DefaultInstance;
-                reference = firebaseDatabase.GetReference("/");
-                reference.GetValueAsync().ContinueWith(task =>
-                {
-                    if (task.IsCompleted)
-                    {
-                        DataSnapshot snapshot = task.Result;
-                    }
-                });
+                reference = firebaseDatabase.GetReference("/"); // Default
             }
             Debug.Log("Firebase Set 완료");
         }
@@ -158,33 +146,20 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     {
         if (firebaseAuth.CurrentUser != User)
         {
-            bool signedIn = User != firebaseAuth.CurrentUser && firebaseAuth.CurrentUser != null;
-            if (!signedIn && User != null)
-            {
-                Debug.Log("Signed out " + User.UserId);
-                return null;
-            }
+            bool signedIn = (User != firebaseAuth.CurrentUser) && (firebaseAuth.CurrentUser != null);
+            if (!signedIn && User != null) return null;
             User = firebaseAuth.CurrentUser;
-            if (signedIn)
-            {
-                Debug.Log("Signed in " + User.UserId);
-            }
         }
         return User;
-    }
-
-    public string GetCurUserString()
-    {
-        string result = "null";
-        if (User != null)
-        {
-            result = GetCurUser().ToString();
-        }
-        return result;
     }
     #endregion
 
     #region Database - GameData 
+    public void InitializeResultData()
+    {
+        resultData = new ResultData();
+    }
+
     public Task SetGameIndex()
     {
         return reference.Child("GamePlayData").Child("gameIndex").GetValueAsync().ContinueWith(task =>
@@ -194,62 +169,34 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 DataSnapshot snapshot = task.Result;
                 if (snapshot != null && snapshot.Exists)
                 {
-                    gameIndex = (long)snapshot.Value;
-                    UpdateGameIndex(gameIndex + 1);
-                    Debug.Log($"gameIndex : {gameIndex}");
-                }
-                else
-                {
-                    Debug.Log("No data found at the specified path.");
+                    resultData.gameIndex = (long)snapshot.Value;
+                    UpdateGameIndex(resultData.gameIndex + 1);
                 }
             }
-            else if (task.IsFaulted)
-            {
-                Debug.LogError($"Failed to retrieve data: {task.Exception}");
-            }
+            else if (task.IsFaulted) Debug.LogError($"Failed to set Gameindex: {task.Exception}");
         });
     }
 
     void UpdateGameIndex(long newData)
     {
-        Debug.Log($"new Data : {newData}");
         // 업데이트할 데이터 생성
-        Dictionary<string, object> updateData = new Dictionary<string, object>
-        {
-            { "gameIndex", newData }
-        };
+        var updateData = new Dictionary<string, object> { { "gameIndex", newData }};
 
         // 데이터 업데이트
         reference.Child("GamePlayData").UpdateChildrenAsync(updateData).ContinueWith(task =>
         {
-            if (task.IsCompleted)
-            {
-                Debug.Log("Long data updated successfully.");
-            }
-            else if (task.IsFaulted)
-            {
-                Debug.LogError($"Failed to retrieve data: {task.Exception}");
-            }
+            if (task.IsFaulted) Debug.LogError($"Failed to retrieve data: {task.Exception}");
         });
     }
 
-    public async void SaveResultData(ResultData resultData)
+    public async void SaveResultData()
     {
         await SetGameIndex();
-        resultData.gameIndex = gameIndex;
-
         string json = JsonUtility.ToJson(resultData);
-        reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gameIndex).Push();
-        await reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gameIndex).SetRawJsonValueAsync(json).ContinueWith(task =>
+        reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).Push();
+        await reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
-            if (task.IsCompleted)
-            {
-                Debug.Log("Data saved successfully!");
-            }
-            else if (task.IsFaulted)
-            {
-                Debug.LogError("Failed to save data: " + task.Exception);
-            }
+            if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
         });
     }
     #endregion
@@ -264,24 +211,23 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     async Task SetUserData()
     {
         string uid = User.UserId;
-        Debug.Log($"is Data Exist : {await isDataExist(uid)}");
-        if (await isDataExist(uid))
+        if (await isDataExist(uid)) // get data from database
         {
             await reference.Child("UserData").Child(uid).GetValueAsync().ContinueWithOnMainThread(task => {
                 if (task.IsCompleted)
                 {
                     string temp = task.Result.GetRawJsonValue();
                     userData = JsonUtility.FromJson<UserData>(temp);
+                    PrefsBundle.Instance.GetPrefsData(userData.prefsdata);
                 }
                 SaveUserData();
             });
         }
-        else
+        else // initialize user data and save
         {
             InitializeUserData();
             SaveUserData();
         }
-        Debug.Log("SetUserData");
     }
 
     void InitializeUserData()
@@ -295,31 +241,21 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         userData.itemData.ticket = 5;
         userData.itemData.extra_ticket = 0;
         userData.itemData.ticket_time = "0";    // need Change
-        Debug.Log("InitializeUserData");
     }
 
     public async void SaveUserData()
     {
         if (userData.id != "0")
         {
-            // Debug.Log($"is Data Exist2 : {await isDataExist(User.UserId)}");
-            if (!(await isDataExist(User.UserId)))
-            {
-                reference.Child("UserData").Child(User.UserId).Push();
-                Debug.Log("Push 완료");
-            }
+            PrefsBundle.Instance.SetPrefsData();
+            userData.prefsdata = PrefsBundle.prefsData;
+
+            if (!(await isDataExist(User.UserId))) reference.Child("UserData").Child(User.UserId).Push();
 
             string json = JsonUtility.ToJson(userData);
             await reference.Child("UserData").Child(User.UserId).SetRawJsonValueAsync(json).ContinueWith(task =>
             {
-                if (task.IsCompleted)
-                {
-                    Debug.Log("UserData saved successfully!");
-                }
-                else if (task.IsFaulted)
-                {
-                    Debug.LogError("Failed to save data: " + task.Exception);
-                }
+                if (task.IsFaulted) Debug.LogError("Failed to save userdata: " + task.Exception);
             });
         }
         else return;
