@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -202,4 +201,12 @@ public class Scenes : MonoBehaviour
         Application.Quit();
     }
     #endregion
+
+    #region Test
+    public void Test()
+    {
+        photonManager.Info();
+    }
+    #endregion
+
 }

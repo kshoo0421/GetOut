@@ -26,7 +26,6 @@ public class OptionManager : BehaviorSingleton<OptionManager>
 
         PlayerPrefs.SetInt("LocaleNum", index);
         PlayerPrefs.Save();
-        Debug.Log(PlayerPrefs.GetInt("LocalNum"));
         StartCoroutine(ChangeRoutine(index));
     }
 

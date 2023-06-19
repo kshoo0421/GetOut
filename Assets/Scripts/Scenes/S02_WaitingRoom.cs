@@ -25,9 +25,7 @@ public class S02_WaitingRoom : Scenes
     public void CreateCustomRoom()
     {
         int randomNum = Random.Range(0, 999999999);
-        Debug.Log("randomNum : " + randomNum);
         PhotonManager.RoomString = randomNum.ToString();
-        Debug.Log("Room String : " + PhotonManager.RoomString);
         photonManager.CreateRoom();
         ChangeToScene(3);
     }
@@ -48,6 +46,5 @@ public class S02_WaitingRoom : Scenes
         photonManager.RandomMatch();
         ChangeToScene(4);
     }
-
     #endregion
 }

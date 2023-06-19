@@ -1,7 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using Photon.Pun.Demo.Cockpit;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -15,6 +14,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     /* Gane Ready */
     bool[] playerReady = new bool[4];
+
     #endregion
 
     #region Singleton
@@ -64,19 +64,31 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause) => Debug.Log("연결끊김");
     #endregion
 
+    #region Set User ID
+    public void SetUserID(string id, string nickName)
+    {
+        PhotonNetwork.AuthValues.UserId = id;
+        PhotonNetwork.LocalPlayer.NickName = nickName;
+        Debug.Log($"Set User ID : {PhotonNetwork.AuthValues.UserId}");
+    }
+
+    public void SignOutID()
+    {
+        PhotonNetwork.AuthValues.UserId = "";
+    }
+    #endregion
+
     #region Match Room
 
     public void JoinLobby() => PhotonNetwork.JoinLobby();
 
     public override void OnJoinedLobby() => Debug.Log("로비접속완료");
 
-    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomString, new RoomOptions { MaxPlayers = 4 }, null);
+    public void CreateRoom() => PhotonNetwork.CreateRoom(RoomString, new RoomOptions { MaxPlayers = 4, PublishUserId = true }, null);
 
     public void JoinRoom() => PhotonNetwork.JoinRoom(RoomString);
 
-    public void JoinOrCreateRoom() => PhotonNetwork.JoinOrCreateRoom(RoomString, new RoomOptions { MaxPlayers = 4 }, null);
-
-    // public void JoinRandomRoom() => PhotonNetwork.JoinRandomRoom();
+    public void JoinOrCreateRoom() => PhotonNetwork.JoinOrCreateRoom(RoomString, new RoomOptions { MaxPlayers = 4, PublishUserId = true }, null);
 
     public void LeaveRoom() => PhotonNetwork.LeaveRoom();
 
@@ -91,6 +103,15 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) => Debug.Log("방 랜덤 참가 실패");
 
     public void RandomMatch() => PhotonNetwork.JoinRandomOrCreateRoom();
+    #endregion
+
+    #region Get Players Information In Room
+    public string GetPlayerInformation(int num)
+    {
+        string player = PhotonNetwork.PlayerList[num].NickName.ToString();
+        Debug.Log($"playerList : {player}");
+        return player;
+    }
     #endregion
 
     #region Ready Game
@@ -127,6 +148,9 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
             string playerStr = "방에 있는 플레이어 목록 : ";
             for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) playerStr += PhotonNetwork.PlayerList[i].NickName + ", ";
+            Debug.Log($"Length : {PhotonNetwork.PlayerList.Length}");
+            Debug.Log($"NickName : {PhotonNetwork.PlayerList[0].NickName}");
+
             Debug.Log(playerStr);
         }
         else

@@ -42,27 +42,28 @@ public class S01_Lobby : Scenes
     [SerializeField] TMP_Text nameText;
     public void TestFunc()
     {
-        Debug.Log("Test");
         if (firebaseManager.GetCurUser() != null)
         {
-            Debug.Log(firebaseManager.GetCurUser().Email);
             nameText.text = $"Hi! {firebaseManager.GetCurUser().Email}";
         }
         else
         {
-            Debug.Log("ERROR : AuthManager.User == null");
             nameText.text = "ERROR : AuthManager.User == null";
         }
     }
     #endregion
 
     #region test2
-    public void MakeResultData()    // 데이터베이스 테스트용
+
+    public new void Test()    // 데이터베이스 테스트용
+    {
+        // ResultDataSave();
+        UserDataSave();
+    }
+
+    void ResultDataSave()
     {
         ResultData resultData = new ResultData();
-        firebaseManager.SetGameIndex();
-        resultData.gameIndex = firebaseManager.GetGameIndex();
-        Debug.Log(resultData.gameIndex);
 
         resultData.finalResult.first = 2;
         resultData.finalResult.second = 1;
@@ -167,8 +168,13 @@ public class S01_Lobby : Scenes
         resultData.missions.player4Mission.high.missionNum = 1;
         resultData.missions.player4Mission.high.isAchieved = false;
 
+        firebaseManager.SaveResultData(resultData);
+    }
 
-        firebaseManager.SaveResultData(resultData, resultData.gameIndex);
+    void UserDataSave()
+    {
+        FirebaseManager.userData.nickName = "Save1";
+        firebaseManager.SaveUserData();
     }
     #endregion
 }

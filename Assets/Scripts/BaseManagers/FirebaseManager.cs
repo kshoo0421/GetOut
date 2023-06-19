@@ -4,6 +4,7 @@ using Firebase.Database;
 using Firebase.Extensions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FirebaseManager : BehaviorSingleton<FirebaseManager>
@@ -20,7 +21,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     [SerializeField] static bool IsFirebaseReady { get; set; }
     [SerializeField] static bool IsSignInOnProgress { get; set; }
     /* database */
-    long gameIndex = 0;
+    public static long gameIndex = 0;
+    public static UserData userData;
 
     #endregion
     
@@ -117,7 +119,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         IsSignInOnProgress = true;
 
         await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
-            (task) =>
+            task =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
 
@@ -134,8 +136,10 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 else
                 {
                     User = task.Result.User;
+                    PhotonManager.Instance.SetUserID(User.Email, "Test1");
                 }
             });
+        await SetUserData();
     }
     #endregion
 
@@ -144,6 +148,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     { 
         firebaseAuth.SignOut();
         User = null;
+        userData.id = "0";
+        PhotonManager.Instance.SignOutID();   
     }
     #endregion
 
@@ -178,12 +184,10 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     }
     #endregion
 
-    #region Database - GameData
-    public long GetGameIndex() { return gameIndex; }
-    
-    public void SetGameIndex()
+    #region Database - GameData 
+    public Task SetGameIndex()
     {
-        reference.Child("GamePlayData").Child("gameIndex").GetValueAsync().ContinueWith(task =>
+        return reference.Child("GamePlayData").Child("gameIndex").GetValueAsync().ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
@@ -192,6 +196,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 {
                     gameIndex = (long)snapshot.Value;
                     UpdateGameIndex(gameIndex + 1);
+                    Debug.Log($"gameIndex : {gameIndex}");
                 }
                 else
                 {
@@ -200,15 +205,16 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
             }
             else if (task.IsFaulted)
             {
-                Debug.LogError("Failed to retrieve data: " + task.Exception);
+                Debug.LogError($"Failed to retrieve data: {task.Exception}");
             }
         });
     }
 
     void UpdateGameIndex(long newData)
     {
+        Debug.Log($"new Data : {newData}");
         // 업데이트할 데이터 생성
-        var updateData = new Dictionary<string, object>
+        Dictionary<string, object> updateData = new Dictionary<string, object>
         {
             { "gameIndex", newData }
         };
@@ -222,16 +228,19 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
             }
             else if (task.IsFaulted)
             {
-                Debug.LogError("Failed to update data: " + task.Exception);
+                Debug.LogError($"Failed to retrieve data: {task.Exception}");
             }
         });
     }
 
-    public async void SaveResultData(ResultData resultData, long gIndex)
+    public async void SaveResultData(ResultData resultData)
     {
+        await SetGameIndex();
+        resultData.gameIndex = gameIndex;
+
         string json = JsonUtility.ToJson(resultData);
-        reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gIndex).Push();
-        await reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gIndex).SetRawJsonValueAsync(json).ContinueWith(task =>
+        reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gameIndex).Push();
+        await reference.Child("GamePlayData").Child("GPD").Child("GPD : " + gameIndex).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
             if (task.IsCompleted)
             {
@@ -241,12 +250,79 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
             {
                 Debug.LogError("Failed to save data: " + task.Exception);
             }
-        }
-        );
+        });
     }
     #endregion
 
     #region Database - UserData
+    async Task<bool> isDataExist(string uid)
+    {
+        DataSnapshot snapshot = await reference.Child("UserData").Child(uid).GetValueAsync();
+        return snapshot.Exists;
+    }
 
+    async Task SetUserData()
+    {
+        string uid = User.UserId;
+        Debug.Log($"is Data Exist : {await isDataExist(uid)}");
+        if (await isDataExist(uid))
+        {
+            await reference.Child("UserData").Child(uid).GetValueAsync().ContinueWithOnMainThread(task => {
+                if (task.IsCompleted)
+                {
+                    string temp = task.Result.GetRawJsonValue();
+                    userData = JsonUtility.FromJson<UserData>(temp);
+                }
+                SaveUserData();
+            });
+        }
+        else
+        {
+            InitializeUserData();
+            SaveUserData();
+        }
+        Debug.Log("SetUserData");
+    }
+
+    void InitializeUserData()
+    {
+        userData = new UserData();
+        userData.id = User.UserId;
+        userData.email = User.Email;
+        userData.nickName = "nickName1";    // need change
+        userData.itemData = new ItemData();
+        userData.itemData.gold = 1000;
+        userData.itemData.ticket = 5;
+        userData.itemData.extra_ticket = 0;
+        userData.itemData.ticket_time = "0";    // need Change
+        Debug.Log("InitializeUserData");
+    }
+
+    public async void SaveUserData()
+    {
+        if (userData.id != "0")
+        {
+            // Debug.Log($"is Data Exist2 : {await isDataExist(User.UserId)}");
+            if (!(await isDataExist(User.UserId)))
+            {
+                reference.Child("UserData").Child(User.UserId).Push();
+                Debug.Log("Push 완료");
+            }
+
+            string json = JsonUtility.ToJson(userData);
+            await reference.Child("UserData").Child(User.UserId).SetRawJsonValueAsync(json).ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    Debug.Log("UserData saved successfully!");
+                }
+                else if (task.IsFaulted)
+                {
+                    Debug.LogError("Failed to save data: " + task.Exception);
+                }
+            });
+        }
+        else return;
+    }
     #endregion
 }

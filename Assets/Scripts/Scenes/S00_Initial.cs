@@ -125,10 +125,11 @@ public class S00_Initial : Scenes
             await firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
 
             if (firebaseManager.GetCurUser() == null)
+            {
                 Debug.Log("null");
+            }
             else
             {
-                Debug.Log(firebaseManager.GetCurUser().Email);
                 Debug.Log("로그인 성공");
             }
             ChangeToScene(1);
