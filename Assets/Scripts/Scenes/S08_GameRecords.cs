@@ -7,5 +7,9 @@ public class S08_GameRecords : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

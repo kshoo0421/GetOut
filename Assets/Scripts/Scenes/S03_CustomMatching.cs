@@ -18,6 +18,10 @@ public class S03_CustomMatching : Scenes
         InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 
     #region Exit Custom Matching

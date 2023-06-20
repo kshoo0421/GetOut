@@ -5,6 +5,8 @@ using Photon.Realtime;
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
     #region Field
+    public static bool IsPhotonReady = false;
+
     /* Singleton */
     private static PhotonManager _instance;
 
@@ -55,6 +57,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
+        IsPhotonReady = true;
         Debug.Log("서버접속완료");
         PhotonNetwork.LocalPlayer.NickName = NickNameString;
     }
@@ -79,7 +82,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Match Room
-
     public void JoinLobby() => PhotonNetwork.JoinLobby();
 
     public override void OnJoinedLobby() => Debug.Log("로비접속완료");

@@ -7,6 +7,7 @@ public struct UserData
     public string id;
     public string email;
     public string nickName;
+    public int isFirst;
 
     // item info
     public ItemData itemData;
@@ -20,8 +21,8 @@ public struct ItemData
 {
     public long gold;
     public long ticket;
-    public long extra_ticket;
-    public string ticket_time;
+    public long extraTicket;
+    public string ticketTime;
 }
 
 [Serializable]

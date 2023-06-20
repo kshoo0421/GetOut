@@ -7,5 +7,9 @@ public class S07_RecordRoom : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

@@ -7,6 +7,10 @@ public class S06_Game : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 
     #region Back to Waiting Room

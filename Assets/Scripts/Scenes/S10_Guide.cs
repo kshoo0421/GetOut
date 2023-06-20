@@ -7,5 +7,9 @@ public class S10_Guide : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

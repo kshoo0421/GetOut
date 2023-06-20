@@ -13,6 +13,10 @@ public class S02_WaitingRoom : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 
     #region Custom Match

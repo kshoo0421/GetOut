@@ -7,5 +7,10 @@ public class S05_StartGame : Scenes
     {
         InitialSet();
     }
+
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

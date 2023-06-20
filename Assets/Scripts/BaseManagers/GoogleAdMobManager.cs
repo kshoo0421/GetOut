@@ -90,6 +90,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
 
         Debug.Log("Loading banner ad.");
         _bannerView.LoadAd(adRequest);
+        ToggleBannerAd();
     }
 
     public void ListenToAdEvents()
@@ -144,8 +145,11 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     }
     public void ToggleBannerAd()
     {
-        if (isBannerOpen) _bannerView.Show();
-        else _bannerView.Hide();
+        if(_bannerView != null )
+        {
+            if (isBannerOpen) _bannerView.Show();
+            else _bannerView.Hide();
+        }
     }
 
     public void ToggleBannerAd(bool b)
@@ -154,7 +158,6 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         PrefsBundle.Instance.SetInt(IntPrefs.isBannerOpen, b ? 1 : 0);
         ToggleBannerAd();
     }
-
     #endregion
 
     #region ¸®¿öµå ±¤°í

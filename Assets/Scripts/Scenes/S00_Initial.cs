@@ -5,7 +5,12 @@ using TMPro;
 public class S00_Initial : Scenes
 {
     #region Field
-    /* Select InputField */ 
+    /* Initialize */
+    bool isInitialized = false;
+    [SerializeField] GameObject BeforeLoad;
+    [SerializeField] GameObject AfterLoad;
+
+    /* Select InputField */
     TMP_InputField nextInputField;
     TMP_InputField currentInputField;
     [SerializeField] TMP_InputField[] signInInputFields; // 로그인
@@ -46,6 +51,16 @@ public class S00_Initial : Scenes
 
     void Update()
     {
+        if(!isInitialized) 
+        {
+            if (FirebaseManager.IsFirebaseReady && PhotonManager.IsPhotonReady)
+            {
+                BeforeLoad.SetActive(false);
+                AfterLoad.SetActive(true);
+                isInitialized = true;
+                Debug.Log("초기화 완료");
+            }
+        }
         FocusUpdate();
     }
     #endregion

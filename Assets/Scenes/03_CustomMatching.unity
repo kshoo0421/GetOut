@@ -4580,7 +4580,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1249435466}
         m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
         m_MethodName: ToggleOptionPanel
         m_Mode: 1

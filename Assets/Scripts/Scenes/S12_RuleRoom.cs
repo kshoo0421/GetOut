@@ -7,5 +7,9 @@ public class S12_RuleRoom : Scenes
     {
         InitialSet();
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

@@ -15,6 +15,10 @@ public class S04_RandomMatching : Scenes
         InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 
     #region Exit Random Matching

@@ -2,12 +2,16 @@ using UnityEngine;
 using Firebase.Auth;
 using Photon.Realtime;
 using TMPro;
+using System;
+using Unity.VisualScripting;
 
 public class S01_Lobby : Scenes
 {
     #region Field
     /* Check Sign In*/
     FirebaseUser curUser;
+    [SerializeField] TMP_Text ticket_count;
+    [SerializeField] TMP_Text restMin, restSec;
     #endregion
 
     #region monobehaviour
@@ -15,6 +19,20 @@ public class S01_Lobby : Scenes
     {
         InitialSet();
         TestFunc();
+    }
+
+    void Update()
+    {
+        ForUpdate();
+        ticket_count.text = FirebaseManager.userData.itemData.ticket.ToString();
+        restMin.text = FirebaseManager.restMinute;   
+        restSec.text = FirebaseManager.restSecond;
+    }
+
+    void OnDestroy()
+    {
+        restMin.text = "00";
+        restSec.text = "00";
     }
     #endregion
 
@@ -54,11 +72,11 @@ public class S01_Lobby : Scenes
     #endregion
 
     #region test2
-
     public new void Test()    // 데이터베이스 테스트용
     {
         // ResultDataSave();
-        UserDataSave();
+        // UserDataSave();
+        MinusTicket();
     }
 
     void ResultDataSave()
@@ -176,6 +194,11 @@ public class S01_Lobby : Scenes
     {
         FirebaseManager.userData.nickName = "Save1";
         firebaseManager.SaveUserData();
+    }
+
+    void MinusTicket()
+    {
+        if(firebaseManager.CanUseTicket()) firebaseManager.UseTicket();
     }
     #endregion
 }

@@ -6,7 +6,7 @@ public enum StringPrefs { };
 
 public class PrefsBundle : BehaviorSingleton<PrefsBundle>
 {
-    #region Field;
+    #region Field
     // int
     public static int isBannerOpen;
     public static int LocaleNum;
@@ -24,7 +24,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
     #endregion
 
     #region Monobehaviour
-    private void Awake()
+    void Awake()
     {
         UpdatePrefs();
         prefsData = new PrefsData();
@@ -60,13 +60,17 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
                 key = "isSEMute"; 
                 break;
 
+            case IntPrefs.isBGMMute:
+                key = "isBGMMute";
+                break;
+
             default:
                 key = "none"; 
                 break;
         }
         PlayerPrefs.SetInt(key, value);
-        UpdateInt();
         PlayerPrefs.Save();
+        UpdateInt();
     }
 
     void UpdateInt()
@@ -98,8 +102,8 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
                 break;
         }
         PlayerPrefs.SetFloat(key, value);
-        UpdateFloat();
         PlayerPrefs.Save();
+        UpdateFloat();
     }
 
     void UpdateFloat()
@@ -120,8 +124,8 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
                 break;
         }
         PlayerPrefs.SetFloat(key, value);
-        UpdateString();
         PlayerPrefs.Save();
+        UpdateString();
     }
 
     void UpdateString()
@@ -130,7 +134,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
     #endregion
 
     #region PrefsData
-    public void SetPrefsData()
+    public void GetPrefsData()
     {
         prefsData.isBannerOpen = isBannerOpen;
         prefsData.LocaleNum = LocaleNum;
@@ -141,7 +145,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
         prefsData.BGMVolume = BGMVolume.ToString();
     }
 
-    public void GetPrefsData(PrefsData pref)
+    public void SetPrefsData(PrefsData pref)
     {
         isBannerOpen = (int)pref.isBannerOpen;
         LocaleNum = (int)pref.LocaleNum;

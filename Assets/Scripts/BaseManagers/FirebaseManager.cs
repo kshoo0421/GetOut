@@ -2,12 +2,13 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class FirebaseManager : BehaviorSingleton<FirebaseManager>
-{   
+{
     #region Field
     static FirebaseUser User;
 
@@ -17,8 +18,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     static FirebaseDatabase firebaseDatabase;
     static DatabaseReference reference;
 
-    [SerializeField] static bool IsFirebaseReady { get; set; }
-    [SerializeField] static bool IsSignInOnProgress { get; set; }
+    public static bool IsFirebaseReady { get; set; }
+    static bool IsSignInOnProgress { get; set; }
     /* database */
     public static ResultData resultData;
     public static UserData userData;
@@ -124,7 +125,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 else
                 {
                     User = task.Result.User;
-                    PhotonManager.Instance.SetUserID(User.Email, "Test1");
+                    PhotonManager.Instance.SetUserID(User.Email, "Test1");  // need to change
                 }
             });
         await SetUserData();
@@ -137,7 +138,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         firebaseAuth.SignOut();
         User = null;
         userData.id = "0";
-        PhotonManager.Instance.SignOutID();   
+        PhotonManager.Instance.SignOutID();
     }
     #endregion
 
@@ -218,14 +219,14 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 {
                     string temp = task.Result.GetRawJsonValue();
                     userData = JsonUtility.FromJson<UserData>(temp);
-                    PrefsBundle.Instance.GetPrefsData(userData.prefsdata);
+                    PrefsBundle.Instance.SetPrefsData(userData.prefsdata);
                 }
                 SaveUserData();
             });
         }
         else // initialize user data and save
         {
-            InitializeUserData();
+            InitializeUserData();   
             SaveUserData();
         }
     }
@@ -236,21 +237,19 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         userData.id = User.UserId;
         userData.email = User.Email;
         userData.nickName = "nickName1";    // need change
+        userData.isFirst = 1;
         userData.itemData = new ItemData();
-        userData.itemData.gold = 1000;
-        userData.itemData.ticket = 5;
-        userData.itemData.extra_ticket = 0;
-        userData.itemData.ticket_time = "0";    // need Change
+        InitItemData();
     }
 
     public async void SaveUserData()
     {
         if (userData.id != "0")
         {
-            PrefsBundle.Instance.SetPrefsData();
+            PrefsBundle.Instance.GetPrefsData();
             userData.prefsdata = PrefsBundle.prefsData;
 
-            if (!(await isDataExist(User.UserId))) reference.Child("UserData").Child(User.UserId).Push();
+            /*if (!(await isDataExist(User.UserId))) */reference.Child("UserData").Child(User.UserId).Push();
 
             string json = JsonUtility.ToJson(userData);
             await reference.Child("UserData").Child(User.UserId).SetRawJsonValueAsync(json).ContinueWith(task =>
@@ -258,7 +257,84 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 if (task.IsFaulted) Debug.LogError("Failed to save userdata: " + task.Exception);
             });
         }
+    }
+    #endregion
+
+    #region ItemData
+    public void InitItemData()
+    {
+        userData.itemData = new ItemData();
+        userData.itemData.extraTicket = 10;
+        userData.itemData.ticket = 5;
+        userData.itemData.ticketTime = DateTime.Now.ToString();
+        userData.itemData.gold = 5000;
+    }
+
+    public async void SaveItemData()
+    {
+        if (userData.id != "0")
+        {
+            string json = JsonUtility.ToJson(userData.itemData);
+            await reference.Child("UserData").Child(User.UserId).Child("itemData").SetRawJsonValueAsync(json);
+        }
         else return;
+    }
+    #endregion
+
+    #region ticket
+    public static string restMinute = "00", restSecond = "00";
+
+    public bool isFullTicket() => (userData.itemData.ticket == 5) ? true : false;
+    public bool CanUseTicket() => (userData.itemData.ticket > 0) ? true : false;   
+    public void UseTicket()
+    {
+        userData.itemData.ticket -= 1;
+        if(userData.itemData.ticket == 4)
+        {
+            DateTime currentTime = DateTime.Now;
+            userData.itemData.ticketTime = currentTime.ToString();
+        }
+        SaveItemData();
+    }
+
+    public void AutoFillTicket()   // cooltime : 1 hour
+    {
+        DateTime currentTime = DateTime.Now;
+        DateTime tmpDT = Convert.ToDateTime(userData.itemData.ticketTime);
+        TimeSpan diff = currentTime - tmpDT;
+        if(diff.Hours > 0)  // 1시간 넘게 차이난다면
+        {
+            int tmp = diff.Hours;
+            tmpDT.AddHours(tmp);
+            userData.itemData.ticket += tmp;
+            if(userData.itemData.ticket >= 5)
+            {
+                userData.itemData.ticket = 5;
+                userData.itemData.ticketTime = DateTime.Now.ToString();
+            }
+            else
+            {
+                userData.itemData.ticketTime = tmpDT.ToString();
+                Debug.Log(tmpDT.ToString());
+            }
+            SaveItemData(); 
+        }
+        CheckRestTime(tmpDT.AddHours(1) - currentTime);
+    }
+
+    void CheckRestTime(TimeSpan diff)
+    {
+        if (isFullTicket())
+        {
+            Debug.Log("isFullTicket");
+            restMinute = "00";
+            restSecond = "00";
+        }
+        else
+        {
+            restMinute = diff.Minutes.ToString("00");
+            restSecond = diff.Seconds.ToString("00");
+        }
     }
     #endregion
 }

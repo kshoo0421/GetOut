@@ -7,5 +7,10 @@ public class S13_Friends : Scenes
     {
         InitialSet();
     }
+
+    void Update()
+    {
+        ForUpdate();
+    }
     #endregion
 }

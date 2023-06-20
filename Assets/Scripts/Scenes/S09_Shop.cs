@@ -23,6 +23,7 @@ public class S09_Shop : Scenes
 
     void Update()
     {
+        ForUpdate();
         CanShowAd();
         googleAdMobManager.ListenToAdEvents();
     }
