@@ -103,9 +103,9 @@ public class Scenes : MonoBehaviour
         ApplyBGMVolume();
     }
 
-    public void SetSEVolume(float value)
+    public void SetSEVolume(float value)    // for slider
     {
-        if (value == 0) return; // Destroy 시 초기화 방지
+        if (value == 0) return; // prevent initialization when destroy
         seVolume = value;
         PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, seVolume);
         ApplySEVolume();
@@ -116,7 +116,10 @@ public class Scenes : MonoBehaviour
     void MakeSEMute(bool b)
     {
         isSEMute = b;
-        PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
+        if (PrefsBundle.isSEMute != (b ? 1 : 0))
+        {
+            PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
+        }
         Mute_TMP[0].text = b ? "O" : "X";
         for (int i = 0; i < soundEffects.Length; i++) soundEffects[i].mute = b;
     }
@@ -130,9 +133,9 @@ public class Scenes : MonoBehaviour
         seSlider.value = seVolume;
     }
 
-    public void SetBGMVolume(float value)
+    public void SetBGMVolume(float value)   // for slider
     {
-        if (value == 0) return; // Destroy 시 초기화 방지
+        if (value == 0) return; // prevent initialization when destroy
         bgmVolume = value;
         PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, bgmVolume);
         ApplyBGMVolume();
@@ -143,7 +146,11 @@ public class Scenes : MonoBehaviour
     void MakeBGMMute(bool b)
     {
         isBGMMute = b;
-        PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
+        if (PrefsBundle.isBGMMute != (b ? 1 : 0))
+        {
+            PrefsBundle.Instance.SetInt(IntPrefs.isBGMMute, b ? 1 : 0);
+        }
+        
         Mute_TMP[1].text = b ? "O" : "X";
         BGM.bgm.mute = b;
     }
