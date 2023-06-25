@@ -1,3 +1,5 @@
+using Photon.Pun.Demo.Cockpit;
+using System.Linq;
 using UnityEngine;
 
 public class S05_StartGame : Scenes
@@ -13,4 +15,6 @@ public class S05_StartGame : Scenes
         ForUpdate();
     }
     #endregion
+
+    
 }

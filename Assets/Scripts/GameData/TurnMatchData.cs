@@ -3,12 +3,12 @@ using System;
 [Serializable]
 public struct TurnMatchData  // 대진 배정
 {
-    OpponentData t1OpponentData;
-    OpponentData t2OpponentData;
-    OpponentData t3OpponentData;
-    OpponentData t4OpponentData;
-    OpponentData t5OpponentData;
-    OpponentData t6OpponentData;
+    public OpponentData t1OpponentData;
+    public OpponentData t2OpponentData;
+    public OpponentData t3OpponentData;
+    public OpponentData t4OpponentData;
+    public OpponentData t5OpponentData;
+    public OpponentData t6OpponentData;
 }
 
 [Serializable]

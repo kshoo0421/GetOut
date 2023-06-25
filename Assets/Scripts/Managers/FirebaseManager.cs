@@ -21,7 +21,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     public static bool IsFirebaseReady { get; set; }
     static bool IsSignInOnProgress { get; set; }
     /* database */
-    public static ResultData resultData;
+    // public static ResultData resultData;
+    public static GameData gameData;
     public static UserData userData;
     #endregion
     
@@ -156,9 +157,13 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     #endregion
 
     #region Database - GameData 
-    public void InitializeResultData()
+    public void InitializeGameData()
     {
-        resultData = new ResultData();
+        gameData = new GameData();
+        TurnData[] turnData = new TurnData[6];
+        gameData.players = new PlayersD[4];
+        for(int i = 0; i<4; i++) gameData.players[i].turnData = turnData;
+
     }
 
     public Task SetGameIndex()
@@ -170,8 +175,10 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 DataSnapshot snapshot = task.Result;
                 if (snapshot != null && snapshot.Exists)
                 {
-                    resultData.gameIndex = (long)snapshot.Value;
-                    UpdateGameIndex(resultData.gameIndex + 1);
+                    // resultData.gameIndex = (long)snapshot.Value;
+                    gameData.gameIndex = (long)snapshot.Value;
+                    // UpdateGameIndex(resultData.gameIndex + 1);
+                    UpdateGameIndex(gameData.gameIndex + 1);
                 }
             }
             else if (task.IsFaulted) Debug.LogError($"Failed to set Gameindex: {task.Exception}");
@@ -190,15 +197,23 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         });
     }
 
-    public async void SaveResultData()
+    public async void SaveGameData()
     {
         await SetGameIndex();
-        string json = JsonUtility.ToJson(resultData);
-        reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).Push();
-        await reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+        // string json = JsonUtility.ToJson(resultData);
+        string json = JsonUtility.ToJson(gameData);
+        //reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).Push();
+        //await reference.Child("GamePlayData").Child("GPD").Child(resultData.gameIndex.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+        //{
+        //    if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
+        //});
+
+        reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).Push();
+        await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
             if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
         });
+
     }
     #endregion
 
@@ -238,7 +253,6 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         userData.email = User.Email;
         userData.nickName = "nickName1";    // need change
         userData.isFirst = 1;
-        userData.itemData = new ItemData();
         InitItemData();
     }
 
