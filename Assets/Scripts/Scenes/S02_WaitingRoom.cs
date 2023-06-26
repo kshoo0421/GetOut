@@ -17,6 +17,12 @@ public class S02_WaitingRoom : Scenes
     {
         ForUpdate();
     }
+
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
+
     #endregion
 
     #region Custom Match

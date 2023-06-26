@@ -8,8 +8,10 @@ public class S01_Lobby : Scenes
     #region Field
     /* Check Sign In*/
     FirebaseUser curUser;
-    [SerializeField] TMP_Text ticket_count;
+    [SerializeField] TMP_Text ticketCount;
     [SerializeField] TMP_Text restTime;
+    [SerializeField] TMP_Text extraTicketCount;
+    [SerializeField] GameObject BackBtnPanel;
     #endregion
 
     #region monobehaviour
@@ -22,12 +24,14 @@ public class S01_Lobby : Scenes
     void Update()
     {
         ForUpdate();
-        ticket_count.text = FirebaseManager.userData.itemData.ticket.ToString();
+        ticketCount.text = FirebaseManager.userData.itemData.ticket.ToString();
+        extraTicketCount.text = FirebaseManager.userData.itemData.extraTicket.ToString();
         restTime.text = FirebaseManager.restMinute + ":" + FirebaseManager.restSecond;
     }
 
     void OnDestroy()
     {
+        ForOnDestroy();
         restTime.text = "00:00";
     }
     #endregion
@@ -50,6 +54,21 @@ public class S01_Lobby : Scenes
         firebaseManager.SignOut();
         ChangeToScene(0);
     }
+    #endregion
+
+    #region Btn
+    public void ToggleBackBtnPanel()
+    {
+        if(BackBtnPanel.activeSelf) 
+        { 
+            BackBtnPanel.SetActive(false); 
+        }
+        else 
+        {
+            BackBtnPanel.SetActive(true);
+        }
+    }
+
     #endregion
 
     #region test1

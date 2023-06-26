@@ -14,7 +14,11 @@ public class S05_StartGame : Scenes
     {
         ForUpdate();
     }
-    #endregion
 
-    
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
+
+    #endregion
 }

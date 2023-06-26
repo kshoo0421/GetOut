@@ -22,6 +22,12 @@ public class S03_CustomMatching : Scenes
     {
         ForUpdate();
     }
+
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
+
     #endregion
 
     #region Exit Custom Matching

@@ -11,5 +11,10 @@ public class S10_Guide : Scenes
     {
         ForUpdate();
     }
+
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
     #endregion
 }

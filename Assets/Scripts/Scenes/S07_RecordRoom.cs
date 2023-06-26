@@ -11,5 +11,11 @@ public class S07_RecordRoom : Scenes
     {
         ForUpdate();
     }
+
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
+
     #endregion
 }

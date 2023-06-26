@@ -132,9 +132,8 @@ public class S00_Initial : Scenes
         }
     }
 
-    public async void SignIn()
+    public async void SignInBtn()
     {
-        Debug.Log("Sign In");
         if (firebaseManager.checkSignIn())
         {
             await firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);

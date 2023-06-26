@@ -11,5 +11,11 @@ public class S08_GameRecords : Scenes
     {
         ForUpdate();
     }
+
+    void OnDestroy()
+    {
+        ForOnDestroy();
+    }
+
     #endregion
 }

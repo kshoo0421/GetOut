@@ -28,6 +28,21 @@ public class Scenes : MonoBehaviour
     [SerializeField] GameObject QuitPanel;
     #endregion
 
+    #region  For Monobehaviour
+    protected void ForUpdate()
+    {
+        if (!firebaseManager.isFullTicket())
+        {
+            firebaseManager.AutoFillTicket();
+        }
+    }
+
+    protected void ForOnDestroy()
+    {
+        firebaseManager.SignOut();
+    }
+    #endregion
+
     #region Change Scene
     public void ChangeToScene(int sceneIndex) => UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
     #endregion
@@ -190,7 +205,6 @@ public class Scenes : MonoBehaviour
     #endregion
 
     #region Quit Game
- 
     public void ToggleQuitPanel()
     {
         if (QuitPanel.activeSelf)
@@ -206,16 +220,6 @@ public class Scenes : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-    #endregion
-
-    #region 
-    protected void ForUpdate()
-    {
-        if (!firebaseManager.isFullTicket())
-        {
-            firebaseManager.AutoFillTicket();
-        }
     }
     #endregion
 
