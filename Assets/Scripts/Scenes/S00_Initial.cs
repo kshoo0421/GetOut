@@ -132,7 +132,7 @@ public class S00_Initial : Scenes
         }
     }
 
-    public async void SignInBtn()
+    public async void SignIn()
     {
         if (firebaseManager.checkSignIn())
         {

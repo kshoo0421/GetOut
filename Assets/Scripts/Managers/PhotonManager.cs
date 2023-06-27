@@ -18,7 +18,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     /* Gane Ready */
     bool[] playerReady = new bool[4];
-
     #endregion
 
     #region Singleton
@@ -98,8 +97,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom() => Debug.Log("방 만들기 완료");
 
-    public override void OnJoinedRoom() => Debug.Log("방 참가 완료");
-
+    public override void OnJoinedRoom()
+    {
+        PhotonNetwork.Instantiate("PlayerPrefab", Vector2.zero, Quaternion.identity);
+        Debug.Log("방 참가 및 instance 생성 완료");
+    }
     public override void OnCreateRoomFailed(short returnCode, string message) => Debug.Log("방 만들기 실패");
 
     public override void OnJoinRoomFailed(short returnCode, string message) => Debug.Log("방 참가 실패");
@@ -258,8 +260,37 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Syncronize and State
-    #endregion
+    [PunRPC] public string GetPlayerName(int playerNum) => FirebaseManager.gameData.players[playerNum].playerName;
 
+    [PunRPC] public void SetTmd(TurnMatchData tmd) => FirebaseManager.turnMatchData = tmd;
+
+    [PunRPC]
+    public void ProposeGoldInTurn(int playerNum, int otherPlayerNum, int turnNum, int proposeGold, int roomNum)
+    {
+        FirebaseManager.gameData.players[playerNum].turnData[turnNum].gold = proposeGold;
+        FirebaseManager.gameData.players[playerNum].turnData[turnNum].gameRoomNum = (roomNum == 1) ? true : false;
+
+        FirebaseManager.gameData.players[otherPlayerNum].turnData[turnNum].gold = proposeGold;
+        FirebaseManager.gameData.players[otherPlayerNum].turnData[turnNum].gameRoomNum = (roomNum == 1) ? true : false;
+
+        FirebaseManager.Instance.SaveGameData();
+    }
+
+    [PunRPC]
+    public void GetGoldInTurn(int playerNum, int otherPlayerNum, int turnNum, bool isAchieved)
+    {
+        FirebaseManager.gameData.players[playerNum].turnData[turnNum].isAchieved = isAchieved;
+        FirebaseManager.gameData.players[otherPlayerNum].turnData[turnNum].isAchieved = isAchieved;
+
+        FirebaseManager.Instance.SaveGameData();
+    }
+
+    [PunRPC]
+    public int EndTurn(int roomNum)
+    {
+        return roomNum;
+    }
+    #endregion
 
     #region Information
     [ContextMenu("정보")]

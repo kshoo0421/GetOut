@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 
 public class S03_CustomMatching : Scenes
 {
@@ -21,6 +22,7 @@ public class S03_CustomMatching : Scenes
     void Update()
     {
         ForUpdate();
+        UpdatePlayerNickName();
     }
 
     void OnDestroy()
@@ -36,5 +38,16 @@ public class S03_CustomMatching : Scenes
         photonManager.LeaveRoom();
         ChangeToScene(2);
     }
+    #endregion
+
+    #region Update String
+    void UpdatePlayerNickName()
+    {
+        for(int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            playerNames[i].text = photonManager.GetPlayerInformation(i);
+        }
+    }
+
     #endregion
 }

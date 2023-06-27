@@ -3,17 +3,19 @@ using System;
 [Serializable]
 public struct TurnMatchData  // 대진 배정
 {
-    public OpponentData t1OpponentData;
-    public OpponentData t2OpponentData;
-    public OpponentData t3OpponentData;
-    public OpponentData t4OpponentData;
-    public OpponentData t5OpponentData;
-    public OpponentData t6OpponentData;
+    public Turn[] turn;
 }
 
 [Serializable]
-public struct OpponentData  // 1player 기준 상대
+public struct Turn
 {
-    public long opponent;    // 상대가 누구인가
-    public bool isProposer; // 제안자 vs 수락자
+    public MatchRoom Room1;
+    public MatchRoom Room2;
+}
+
+[Serializable]
+public struct MatchRoom
+{
+    public int proposer;
+    public int getter;
 }

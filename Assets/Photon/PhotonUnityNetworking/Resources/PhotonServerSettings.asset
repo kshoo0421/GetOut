@@ -41,6 +41,11 @@ MonoBehaviour:
   - RespawnSpaceship
   - ReadyOrNot
   - SpawnOnNetwork
+  - EndTurn
+  - GetGoldInTurn
+  - ProposeGoldInTurn
+  - GetPlayerName
+  - SetTmd
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
