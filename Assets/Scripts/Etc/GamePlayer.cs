@@ -1,8 +1,9 @@
 using Photon.Pun;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
-public class GamePlayer : MonoBehaviourPunCallbacks
+public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
 {
     #region Field
     public static string[] playerNames;
@@ -13,20 +14,23 @@ public class GamePlayer : MonoBehaviourPunCallbacks
     #endregion
 
     #region MonoBehabiour
-    void Awake()
+    void OnEnable()
     {
         playerNames = new string[PhotonNetwork.PlayerList.Length];
         SetPlayerNum();
     }
 
-    private void Start()
+    void OnDisable()
     {
-        SetPlayerNum();
 
     }
+    #endregion
 
-    void OnDestroy()
+    #region IPunInstantiateMagicCallback
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        // e.g. store this gameobject as this player's charater in Player.TagObject
+        info.Sender.TagObject = this.GameObject();
     }
     #endregion
 
@@ -53,7 +57,7 @@ public class GamePlayer : MonoBehaviourPunCallbacks
         pv.RPC("ReadyForGame", RpcTarget.All, playerNum);
     }
 
-    #region Syncronize and State
+    #region PunRPC
     [PunRPC] void SetTmd(TurnMatchData tmd) => FirebaseManager.turnMatchData = tmd;
 
     [PunRPC] void ReadyForGame(int playerNum)

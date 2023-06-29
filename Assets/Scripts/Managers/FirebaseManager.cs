@@ -154,7 +154,8 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 {
                     User = task.Result.User;
                     int index = User.Email.IndexOf("@");
-                    PhotonManager.Instance.SetUserID(User.UserId, User.Email.Substring(0, index));
+                    PhotonManager.NickNameString = User.Email.Substring(0, index);
+                    PhotonManager.Instance.SetUserID(User.UserId);
                 }
             });
         await SetUserData();

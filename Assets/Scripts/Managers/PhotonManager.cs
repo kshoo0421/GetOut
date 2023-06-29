@@ -42,14 +42,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         SetPhoton();
     }
 
-    // void Update() => StatusString = PhotonNetwork.NetworkClientState.ToString();
-
     #endregion
 
     #region Set Photon
     void SetPhoton()
     {
         PhotonNetwork.GameVersion = gameVersion;
+        PhotonNetwork.AutomaticallySyncScene = true;    // 같은 룸의 유저들에게 자동으로 씬을 로딩
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log("Connecting To Master Server...");
     }
@@ -60,7 +59,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         IsPhotonReady = true;
         Debug.Log("서버접속완료");
-        PhotonNetwork.LocalPlayer.NickName = NickNameString;
     }
 
     public void Disconnect() => PhotonNetwork.Disconnect();
@@ -69,11 +67,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Set User ID
-    public void SetUserID(string id, string nickName)
+    public void SetUserID(string id)
     {
         PhotonNetwork.AuthValues.UserId = id;
-        PhotonNetwork.LocalPlayer.NickName = nickName;
-        Debug.Log($"Set User ID : {PhotonNetwork.AuthValues.UserId}");
+        PhotonNetwork.LocalPlayer.NickName = NickNameString;
     }
 
     public void SignOutID()
@@ -100,12 +97,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             photonView.TransferOwnership(PhotonNetwork.PlayerListOthers[0]);
         }
         PhotonNetwork.LeaveRoom();
-    }s
+    }
     public override void OnCreatedRoom() => Debug.Log("방 만들기 완료");
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.Instantiate("PlayerPrefab", Vector2.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
         Debug.Log("방 참가 및 instance 생성 완료");
     }
     public override void OnCreateRoomFailed(short returnCode, string message) => Debug.Log("방 만들기 실패");
