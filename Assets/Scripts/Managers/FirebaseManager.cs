@@ -64,7 +64,22 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         );
     }
 
-    void InitDataForGame()
+    public void InitDataForGame()
+    {
+        InitGameData();
+        InitTurnMatchData();
+    }
+
+    void InitGameData()
+    {
+        gameData = new GameData();
+        gameData.playerReady = new bool[4] { false, false, false, false };
+        TurnData[] turnData = new TurnData[6];
+        gameData.players = new Players[4];
+        for (int i = 0; i < 4; i++) gameData.players[i].turnData = turnData;
+    }
+
+    void InitTurnMatchData()
     {
         turnMatchData = new TurnMatchData();
         curTurnNum = 0;
@@ -153,6 +168,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         User = null;
         userData.id = "0";
         PhotonManager.Instance.SignOutID();
+        Debug.Log("로그아웃 완료");
     }
     #endregion
 
@@ -170,15 +186,6 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     #endregion
 
     #region Database - GameData 
-    public void InitializeGameData()
-    {
-        gameData = new GameData();
-        TurnData[] turnData = new TurnData[6];
-        gameData.players = new PlayersD[4];
-        for(int i = 0; i<4; i++) gameData.players[i].turnData = turnData;
-
-    }
-
     public Task SetGameIndex()
     {
         return reference.Child("GamePlayData").Child("gameIndex").GetValueAsync().ContinueWith(task =>

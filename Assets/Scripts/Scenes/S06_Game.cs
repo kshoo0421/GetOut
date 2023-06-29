@@ -28,11 +28,6 @@ public class S06_Game : Scenes
     {
         ForUpdate();
     }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 
     #region State Set

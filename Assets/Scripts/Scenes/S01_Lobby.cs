@@ -31,7 +31,6 @@ public class S01_Lobby : Scenes
 
     void OnDestroy()
     {
-        ForOnDestroy();
         restTime.text = "00:00";
     }
     #endregion
@@ -97,7 +96,7 @@ public class S01_Lobby : Scenes
 
     void GameDataSave()
     {
-        firebaseManager.InitializeGameData();
+        firebaseManager.InitDataForGame();
         for(int i = 0; i < 4; i++)
         {
             FirebaseManager.gameData.players[i].playerName = "player" + i;

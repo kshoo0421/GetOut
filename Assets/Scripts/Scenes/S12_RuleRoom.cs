@@ -11,9 +11,5 @@ public class S12_RuleRoom : Scenes
     {
         ForUpdate();
     }
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 }

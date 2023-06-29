@@ -27,11 +27,6 @@ public class S09_Shop : Scenes
         CanShowAd();
         googleAdMobManager.ListenToAdEvents();
     }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 
     #region Ads

@@ -6,10 +6,12 @@ public enum MissionLevel { Low, Mid, High };
 [Serializable] public struct GameData
 {
     public long gameIndex;
-    public PlayersD[] players;  // length : 4
+    public long curTurn;
+    public bool[] playerReady;
+    public Players[] players;  // length : 4
 }
 
-[Serializable] public struct PlayersD
+[Serializable] public struct Players
 {
     public string playerName;
     public TurnData[] turnData; // length : 6

@@ -19,11 +19,6 @@ public class S04_RandomMatching : Scenes
     {
         ForUpdate();
     }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 
     #region Exit Random Matching

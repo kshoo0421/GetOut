@@ -17,12 +17,6 @@ public class S02_WaitingRoom : Scenes
     {
         ForUpdate();
     }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
-
     #endregion
 
     #region Custom Match
@@ -37,6 +31,7 @@ public class S02_WaitingRoom : Scenes
         int randomNum = Random.Range(0, 999999999);
         PhotonManager.RoomString = randomNum.ToString();
         photonManager.CreateRoom();
+        firebaseManager.InitDataForGame();
         ChangeToScene(3);
     }
 
@@ -44,6 +39,7 @@ public class S02_WaitingRoom : Scenes
     {
         PhotonManager.RoomString = customRoomNumField.text;
         photonManager.JoinRoom();
+        firebaseManager.InitDataForGame();
         ChangeToScene(3);
     }
     #endregion
@@ -54,6 +50,7 @@ public class S02_WaitingRoom : Scenes
         int randomNum = Random.Range(0, 999999999);
         PhotonManager.RoomString = randomNum.ToString();
         photonManager.RandomMatch();
+        firebaseManager.InitDataForGame();
         ChangeToScene(4);
     }
     #endregion

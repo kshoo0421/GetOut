@@ -36,11 +36,6 @@ public class Scenes : MonoBehaviour
             firebaseManager.AutoFillTicket();
         }
     }
-
-    protected void ForOnDestroy()
-    {
-        firebaseManager.SignOut();
-    }
     #endregion
 
     #region Change Scene

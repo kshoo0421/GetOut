@@ -12,9 +12,5 @@ public class S13_Friends : Scenes
     {
         ForUpdate();
     }
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 }

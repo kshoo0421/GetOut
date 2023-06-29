@@ -23,31 +23,57 @@ public class S03_CustomMatching : Scenes
     {
         ForUpdate();
         UpdatePlayerNickName();
-    }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
-
-    #endregion
-
-    #region Exit Custom Matching
-    public void ExitCustomMatching()
-    {
-        photonManager.LeaveRoom();
-        ChangeToScene(2);
+        UpdatePlayerReady();
     }
     #endregion
 
     #region Update String
     void UpdatePlayerNickName()
     {
-        for(int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        for(int i = 0; i < 4; i++)
         {
-            playerNames[i].text = photonManager.GetPlayerInformation(i);
+            if (i < PhotonNetwork.PlayerList.Length)
+            {
+                playerNames[i].text = photonManager.GetPlayerInformation(i);
+            }
+            else
+            {
+                playerNames[i].text = "AI";
+            }
         }
     }
+    #endregion
 
+    #region Check Ready
+    public void UpdatePlayerReady()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            if(i <  PhotonNetwork.PlayerList.Length)
+            {
+                playerOX[i].text = FirebaseManager.gameData.playerReady[i] ? "O" : "X";
+            }
+            else
+            {
+                playerOX[i].text = " ";
+            }
+        }
+    }
+    #endregion
+
+    #region GameStart
+    public void GameStart()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.LoadLevel(6);
+        ChangeToScene(6);
+    }
+
+    public void BackToWaitingRoom()
+    {
+        PhotonNetwork.AutomaticallySyncScene = false;
+        photonManager.LeaveRoom();
+        ChangeToScene(2);
+    }
     #endregion
 }

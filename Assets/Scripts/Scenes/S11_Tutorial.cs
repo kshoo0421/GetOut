@@ -12,10 +12,5 @@ public class S11_Tutorial : Scenes
     {
         ForUpdate();
     }
-
-    void OnDestroy()
-    {
-        ForOnDestroy();
-    }
     #endregion
 }
