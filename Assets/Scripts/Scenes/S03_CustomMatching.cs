@@ -61,6 +61,15 @@ public class S03_CustomMatching : Scenes
     }
     #endregion
 
+    #region Button
+    public void ToggleReady()
+    {
+        GamePlayer gamePlayer = FirebaseManager.MyPlayer.GetComponent<GamePlayer>();
+        gamePlayer.TogglePlayerReady();
+    }
+
+    #endregion
+
     #region GameStart
     public void GameStart()
     {

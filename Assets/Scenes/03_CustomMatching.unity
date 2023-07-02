@@ -3648,9 +3648,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4829679102221400103, guid: 1bd96a69206483044b4248815bc16ebc, type: 3}
-        m_TargetAssemblyTypeName: GamePlayer, Assembly-CSharp
-        m_MethodName: TogglePlayerReady
+      - m_Target: {fileID: 1249435466}
+        m_TargetAssemblyTypeName: S03_CustomMatching, Assembly-CSharp
+        m_MethodName: ToggleReady
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

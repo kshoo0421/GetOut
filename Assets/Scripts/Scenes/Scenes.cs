@@ -180,7 +180,9 @@ public class Scenes : MonoBehaviour
 
     #region Open Keyboard
     TouchScreenKeyboard keyboard;
-    public void OpenKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+    public void OpenDefaultKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+
+    public void OpenNumberKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad);
 
     public void CloseKeyboard()
     {

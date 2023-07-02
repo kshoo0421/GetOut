@@ -6033,7 +6033,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1474831876}
         m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
-        m_MethodName: OpenKeyboard
+        m_MethodName: OpenNumberKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

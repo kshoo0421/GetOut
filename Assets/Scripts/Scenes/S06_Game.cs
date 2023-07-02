@@ -6,7 +6,6 @@ using Photon.Pun;
 public class S06_Game : Scenes
 {
     #region Field
-    PhotonView pv;
     int curPlayer;
 
     [SerializeField] TMP_Text TurnNumText;  // 몇 번째 턴인지
@@ -22,7 +21,6 @@ public class S06_Game : Scenes
     void Start()
     {
         InitialSet();
-        pv = PhotonView.Get(this);
     }
     void Update()
     {
@@ -45,14 +43,14 @@ public class S06_Game : Scenes
     #region Set Game
     public void SetGame()
     {
-        if(curPlayer == 0)
+        FirebaseManager.gameData = new GameData();
+        if (FirebaseManager.MyPlayer.view.ViewID == 1001)
         {
             FirebaseManager.turnMatchData = new TurnMatchData();
             FirebaseManager.turnMatchData.turn = new Turn[6];
-            FirebaseManager.gameData = new GameData();
             SetOpponent();
+            FirebaseManager.MyPlayer.SetTmdIfP1();
         }
-
     }
 
     void SetOpponent()
@@ -172,12 +170,6 @@ public class S06_Game : Scenes
             default: break;
         }
     }
-    #endregion
-
-    #region RPC
-
-
-
     #endregion
 
     #region Game

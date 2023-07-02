@@ -28,6 +28,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     public static TurnMatchData turnMatchData;
     public static int curTurnNum;
     public static bool isProposeTurn, isGameStarted;
+    public static GamePlayer MyPlayer;
     #endregion
 
     #region Monobehavior

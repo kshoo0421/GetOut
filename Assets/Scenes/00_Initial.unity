@@ -2399,8 +2399,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1725792295}
-        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
-        m_MethodName: OpenKeyboard
+        m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
+        m_MethodName: OpenDefaultKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4700,8 +4700,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1725792295}
-        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
-        m_MethodName: OpenKeyboard
+        m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
+        m_MethodName: OpenDefaultKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5305,8 +5305,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1725792295}
-        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
-        m_MethodName: OpenKeyboard
+        m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
+        m_MethodName: OpenDefaultKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6140,8 +6140,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1725792295}
-        m_TargetAssemblyTypeName: S_InitialManager, Assembly-CSharp
-        m_MethodName: OpenKeyboard
+        m_TargetAssemblyTypeName: Scenes, Assembly-CSharp
+        m_MethodName: OpenDefaultKeyboard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -10,19 +10,20 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
 
     int playerNum;
     bool isProposer;
-
+    public PhotonView view;
     #endregion
 
     #region MonoBehabiour
     void OnEnable()
     {
         playerNames = new string[PhotonNetwork.PlayerList.Length];
-        SetPlayerNum();
-    }
-
-    void OnDisable()
-    {
-
+        
+        view = GetComponent<PhotonView>(); 
+        if(view.IsMine == true)
+        {
+            FirebaseManager.MyPlayer = this;
+            playerNum = (view.ViewID / 1000) - 1;
+        }
     }
     #endregion
 
@@ -34,28 +35,21 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     }
     #endregion
 
-    #region Set Player Num
-    void SetPlayerNum()
-    {
-        for (int i = 0; i < playerNames.Length; i++)
-        {
-            if (playerNames[i] == FirebaseManager.userData.id)
-            {
-                playerNum = i;
-                return;
-            }
-        }
-    }
-    #endregion
-
+    #region For RPC Functions
     public void TogglePlayerReady()
     {
-        Debug.Log($"playerNum : {playerNum}");
-        ReadyForGame(playerNum);
-
-        PhotonView pv = PhotonView.Get(this);
-        pv.RPC("ReadyForGame", RpcTarget.All, playerNum);
+        view.RPC("ReadyForGame", RpcTarget.All, playerNum);
     }
+
+    public void SetTmdIfP1()
+    {
+        if(view.ViewID == 1001)
+        {
+            view.RPC("SetTmd", RpcTarget.All, FirebaseManager.turnMatchData);
+        }
+    }
+
+    #endregion
 
     #region PunRPC
     [PunRPC] void SetTmd(TurnMatchData tmd) => FirebaseManager.turnMatchData = tmd;
@@ -63,7 +57,6 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     [PunRPC] void ReadyForGame(int playerNum)
     {
         FirebaseManager.gameData.playerReady[playerNum] = !FirebaseManager.gameData.playerReady[playerNum];
-        Debug.Log($"player ready : {FirebaseManager.gameData.playerReady[playerNum]}");
     }
 
     [PunRPC] void ProposeGoldInTurn(int playerNum, int otherPlayerNum, int turnNum, int proposeGold, int roomNum)

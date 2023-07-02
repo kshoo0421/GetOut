@@ -102,8 +102,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        Debug.Log("방 참가 및 instance 생성 완료");
+        SpawnMyPlayerEverywhere();
+        Debug.Log("방 참가 완료");
     }
     public override void OnCreateRoomFailed(short returnCode, string message) => Debug.Log("방 만들기 실패");
 
@@ -119,6 +119,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         string player = PhotonNetwork.PlayerList[num].NickName.ToString();
         return player;
+    }
+    #endregion
+
+    #region Spawn
+    void SpawnMyPlayerEverywhere()
+    {
+        PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        Debug.Log("instance 생성 완료");
     }
     #endregion
 
