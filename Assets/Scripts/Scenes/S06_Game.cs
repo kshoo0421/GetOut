@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using Photon.Pun;
 
 public class S06_Game : Scenes
 {
@@ -9,7 +8,19 @@ public class S06_Game : Scenes
     int curPlayer;
 
     [SerializeField] TMP_Text TurnNumText;  // 몇 번째 턴인지
-    [SerializeField] TMP_Text TurnStateText;    // Get vs Set
+    [SerializeField] TMP_Text LeftTime;
+
+    /* Panels */
+    [SerializeField] GameObject SuggestPanel;
+    [SerializeField] GameObject GetPanel;
+    [SerializeField] GameObject LoadingPanel;
+    [SerializeField] GameObject MissionSetPanel;
+    [SerializeField] GameObject ResultPanel;
+    [SerializeField] GameObject WaitingPanel;
+
+
+    [SerializeField] GameObject MissionCheckPanel;
+    [SerializeField] GameObject QuitBtnPanel;
 
     /* Game */
     bool isTmdInit = false;
@@ -21,16 +32,23 @@ public class S06_Game : Scenes
     void Start()
     {
         InitialSet();
+        SetMissionCheckData();
     }
     void Update()
     {
         ForUpdate();
+        if(SuggestPanel.activeSelf == true)
+        {
+            CheckGoldAmount();
+        }
     }
     #endregion
 
     #region State Set
-    void SetStateText(bool b) => TurnStateText.text = b ? "Get" : "Set";
-
+    public void TimerSet(int sec)
+    {
+        
+    }
 
     #endregion
 
@@ -170,6 +188,135 @@ public class S06_Game : Scenes
             default: break;
         }
     }
+    #endregion
+
+    #region Toggle Panels
+    void ToggleSuggestPanel(bool b) => SuggestPanel.SetActive(b);
+
+    void ToggleGetPanel(bool b) => GetPanel.SetActive(b);
+
+    void ToggleLoadingPanel(bool b) => LoadingPanel.SetActive(b);
+
+    void ToggleMissionSetPanel(bool b) => MissionSetPanel.SetActive(b);
+
+    void ToggleResultPanel(bool b) => ResultPanel.SetActive(b);
+
+    void ToggleWaitingPanel(bool b) => WaitingPanel.SetActive(b);
+
+    void ToggleMissionCheckPanel(bool b) => MissionCheckPanel.SetActive(b);
+
+    void ToggleQuitBtnPanel(bool b) => QuitBtnPanel.SetActive(b);
+    #endregion
+
+    #region Suggest Panel
+    [SerializeField] TMP_InputField SuggestGoldInputField;
+    [SerializeField] GameObject SuggestConfirmPanel;
+    [SerializeField] TMP_Text SuggestConfirmTMP;
+
+    void ToggleSuggestConfirmPanel(bool b) => SuggestConfirmPanel.SetActive(b);
+
+    public void SuggestBtn()
+    {
+        ToggleSuggestConfirmPanel(true);
+    }
+
+    void CheckGoldAmount()
+    {
+        if(SuggestGoldInputField.text.Length > 2)
+        {
+            if(SuggestGoldInputField.text != "100")
+            {
+                SuggestGoldInputField.text.Substring(SuggestGoldInputField.text.Length - 2);
+            }
+        }
+    }
+
+    public void ConfirmSuggestYesBtn()
+    {
+
+    }
+
+    public void ConfirmSuggestNoBtn()
+    {
+        ToggleSuggestConfirmPanel(false);
+    }
+
+    void SuggestTurnTimeEnd()
+    {
+
+    }
+    #endregion
+
+    #region GetPanel
+    [SerializeField] TMP_Text GetGoldTMP;
+
+    [SerializeField] GameObject GetConfirmPanel;
+    [SerializeField] TMP_Text GetConfirmTMP;
+
+    [SerializeField] GameObject OutConfirmPanel;
+    [SerializeField] TMP_Text OutConfirmTMP;
+
+    void SetGetGoldTMP()    // initial
+    {
+
+    }
+    #endregion
+
+    #region LoadingPanel
+
+    #endregion
+
+    #region Mission Set Panel
+
+    #endregion
+
+    #region Result Panel
+
+    #endregion
+
+    #region Waiting Panel
+
+    #endregion
+
+    #region Mission Check Panel
+    [SerializeField] TMP_Text[] MissionGold;
+    [SerializeField] TMP_Text[] MissionInformation;
+
+    public void MissionCheckBtn() => ToggleMissionCheckPanel(true);
+
+    public void CloseMissionCheck() => ToggleMissionCheckPanel(false);
+
+    public void LookAllMissions()
+    {
+
+    }
+
+    void SetMissionCheckData()
+    {
+        MissionGold[0].text = "50" + "G";   // 숫자 변경 필요
+        MissionInformation[0].text = "Information of Mission 1\nTest Text";
+
+        MissionGold[1].text = "150" + "G";   // 숫자 변경 필요
+        MissionInformation[1].text = "Information of Mission 2\nTest Text";
+
+        MissionGold[2].text = "270" + "G";   // 숫자 변경 필요
+        MissionInformation[2].text = "Information of Mission 3\nTest Text";
+    }
+
+    #endregion
+
+    #region Quit Panel
+    public void QuitBtn() => ToggleQuitBtnPanel(true);
+
+    public void CancelQuitBtn() => ToggleQuitBtnPanel(false);
+
+    public void ConfirmQuitBtn()
+    {
+        photonManager.LeaveRoom();
+        ChangeToScene(2);
+        // AI 대체 추가
+    }
+
     #endregion
 
     #region Game
