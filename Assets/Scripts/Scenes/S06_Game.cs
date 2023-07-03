@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using UnityEngine.UI;
 
 public class S06_Game : Scenes
 {
@@ -208,14 +209,65 @@ public class S06_Game : Scenes
     void ToggleQuitBtnPanel(bool b) => QuitBtnPanel.SetActive(b);
     #endregion
 
+    #region Test Toggle Panel
+    public void ToggleGetBtn()
+    {
+        if (GetPanel.activeSelf == true) ToggleGetPanel(false);
+        else
+        {
+            InitGetPanel();
+            ToggleGetPanel(true);
+        }
+    }
+
+    public void ToggleSuggestBtn()
+    {
+        if (SuggestPanel.activeSelf == true) ToggleSuggestPanel(false);
+        else
+        {
+            SuggestGoldInputField.text = "00";
+            ToggleSuggestPanel(true);
+        }
+    }
+
+    public void ToggleLoadingBtn()
+    {
+        if (LoadingPanel.activeSelf == true) ToggleLoadingPanel(false);
+        else ToggleLoadingPanel(true);
+    }
+
+    public void ToggleMissionBtn()
+    {
+        if (MissionSetPanel.activeSelf == true) ToggleMissionSetPanel(false);
+        else
+        {
+            InitMissionSet();
+            ToggleMissionSetPanel(true);
+        }
+    }
+
+    public void ToggleResultBtn()
+    {
+        if (ResultPanel.activeSelf == true) ToggleResultPanel(false);
+        else ToggleResultPanel(true);
+    }
+
+    public void ToggleWaitingBtn()
+    {
+        if (WaitingPanel.activeSelf == true) ToggleWaitingPanel(false);
+        else ToggleWaitingPanel(true);
+    }
+    #endregion
+
     #region Suggest Panel
+    [SerializeField] Button SuggestBtn;
     [SerializeField] TMP_InputField SuggestGoldInputField;
     [SerializeField] GameObject SuggestConfirmPanel;
     [SerializeField] TMP_Text SuggestConfirmTMP;
 
     void ToggleSuggestConfirmPanel(bool b) => SuggestConfirmPanel.SetActive(b);
 
-    public void SuggestBtn()
+    public void PressSuggestBtn()
     {
         ToggleSuggestConfirmPanel(true);
     }
@@ -224,16 +276,19 @@ public class S06_Game : Scenes
     {
         if(SuggestGoldInputField.text.Length > 2)
         {
-            if(SuggestGoldInputField.text != "100")
+            if (SuggestGoldInputField.text != "100")
             {
-                SuggestGoldInputField.text.Substring(SuggestGoldInputField.text.Length - 2);
+                string tmp = SuggestGoldInputField.text.Substring(SuggestGoldInputField.text.Length - 2);
+                SuggestGoldInputField.text = tmp;
             }
         }
     }
 
     public void ConfirmSuggestYesBtn()
     {
-
+        SuggestGoldInputField.interactable = false;
+        SuggestBtn.interactable = false;
+        ToggleSuggestConfirmPanel(false);
     }
 
     public void ConfirmSuggestNoBtn()
@@ -256,9 +311,66 @@ public class S06_Game : Scenes
     [SerializeField] GameObject OutConfirmPanel;
     [SerializeField] TMP_Text OutConfirmTMP;
 
+    [SerializeField] Button GetButton;
+    [SerializeField] Button OutButton;
+
+    void InitGetPanel()
+    {
+        GetButton.interactable = true;
+        OutButton.interactable = true;
+        SetGetGoldTMP();
+    }
+
     void SetGetGoldTMP()    // initial
     {
+        GetGoldTMP.text = "40"; // need to change
+        GetGoldTMP.color = Color.black;
+    }
 
+    public void GetBtn()
+    {   
+        GetConfirmPanel.SetActive(true);
+    }
+
+    public void OutBtn()
+    {
+        OutConfirmPanel.SetActive(true);
+    }
+
+    public void GetConfirmYesBtn()
+    {
+        // Get RPC Function
+        // FirebaseManager.MyPlayer.GetOutGold(1, true);
+        // 창 닫기
+        GetConfirmPanel.SetActive(false);
+        // 글자 색상 변경
+        GetGoldTMP.color = Color.blue;
+
+        GetButton.interactable = false;
+        OutButton.interactable = false;
+    }
+
+    public void GetConfirmNoBtn()
+    {
+        GetConfirmPanel.SetActive(false);
+    }
+
+    public void OutConfirmYesBtn()
+    {
+        // Out RPC Function
+        // FirebaseManager.MyPlayer.GetOutGold(1, false);
+        // 창 닫기
+        OutConfirmPanel.SetActive(false);
+        // 글자 색상 변경
+        GetGoldTMP.color = Color.red;
+
+        GetButton.interactable = false;
+        OutButton.interactable = false;
+    }
+
+    public void OutConfirmNoBtn()
+    {
+        OutConfirmPanel.SetActive(false);
     }
     #endregion
 
@@ -267,11 +379,61 @@ public class S06_Game : Scenes
     #endregion
 
     #region Mission Set Panel
+    [SerializeField] Button[] RerollBtns;
+    [SerializeField] TMP_Text[] MissionInfoTMPs;
+    [SerializeField] TMP_Text[] MissionGoldTMPs;
+
+    void InitMissionSet()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            RerollBtns[i].interactable = true;
+        }
+
+        // Mission Low, Mid, High Update
+
+
+        MissionSetTextUpdate();
+    }
+    
+    void MissionSetTextUpdate()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            MissionInfoTMPs[i].text = "This is Example of Missions Information.\nL2";
+            MissionGoldTMPs[i].text = "50" + "G";
+        }
+    }
+
+    public void MissionReroll(int i)
+    {
+        // Mission Num Change
+        RerollBtns[i].interactable = false;
+    }
+
+    public void MissionFix()
+    {
+        for(int i = 0;i < 3;i++)
+        {
+            RerollBtns[i].interactable = false;
+        }
+    }
+
 
     #endregion
 
     #region Result Panel
+    public void BackToRoom()
+    {
+        // if random match or custom match
+        ChangeToScene(3);
+    }
 
+    public void BackToLobby()
+    {
+        photonManager.LeaveRoom();
+        ChangeToScene(2);
+    }
     #endregion
 
     #region Waiting Panel
@@ -281,15 +443,16 @@ public class S06_Game : Scenes
     #region Mission Check Panel
     [SerializeField] TMP_Text[] MissionGold;
     [SerializeField] TMP_Text[] MissionInformation;
+    [SerializeField] GameObject AllMissionsPanel;
 
     public void MissionCheckBtn() => ToggleMissionCheckPanel(true);
 
     public void CloseMissionCheck() => ToggleMissionCheckPanel(false);
 
-    public void LookAllMissions()
-    {
+    void ToggleAllMissionsPanel(bool b) => AllMissionsPanel.SetActive(b);
+    public void LookAllMissionsBtn() => ToggleAllMissionsPanel(true);
 
-    }
+    public void CloseAllMissionsBtn() => ToggleAllMissionsPanel(false);
 
     void SetMissionCheckData()
     {
@@ -320,14 +483,9 @@ public class S06_Game : Scenes
     #endregion
 
     #region Game
-
-
-
     public void ProposeGold(int gold)
     {
 
     }
-
-
     #endregion
 }

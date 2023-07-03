@@ -49,6 +49,10 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
+    public void GetOutGold(int otherPlayerNum, bool isAchieved)
+    {
+        view.RPC("GetGoldInTurn", RpcTarget.All, playerNum, otherPlayerNum, FirebaseManager.gameData.curTurn, isAchieved);
+    }
     #endregion
 
     #region PunRPC
