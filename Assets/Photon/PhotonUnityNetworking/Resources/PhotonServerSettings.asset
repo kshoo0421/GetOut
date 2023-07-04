@@ -48,6 +48,19 @@ MonoBehaviour:
   - SetTmd
   - ToggleReadyForGame
   - ReadyForGame
+  - SetGameData
+  - SuggestGoldInTurn
+  - SetGamePhase
+  - RPC_RPCSetGamePhase
+  - RPC_SetGameData
+  - RPC_GetGoldInTurn
+  - RPC_ReadyForGame
+  - RPC_SuggestGold
+  - RPC_GetGold
+  - RPC_SavePlayerMissionData
+  - RPC_SetGamePhase
+  - RPC_SetSuggestPhase
+  - RPC_SetGetPhase
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

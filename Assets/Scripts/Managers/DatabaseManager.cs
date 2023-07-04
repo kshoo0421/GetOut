@@ -2,12 +2,14 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using UnityEngine;
 
-public class FirebaseManager : BehaviorSingleton<FirebaseManager>
+public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
     #region Field
     static FirebaseUser User;
@@ -20,15 +22,16 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
 
     public static bool IsFirebaseReady { get; set; }
     static bool IsSignInOnProgress { get; set; }
+    
     /* database */
     public static GameData gameData;
     public static UserData userData;
+    public static DateTime gameTime;
+    public static string leftTime = "0";
 
     /* Data For Game */
-    public static TurnMatchData turnMatchData;
-    public static int curTurnNum;
-    public static bool isProposeTurn, isGameStarted;
     public static GamePlayer MyPlayer;
+    public static GamePhase gamePhase;
     #endregion
 
     #region Monobehavior
@@ -60,32 +63,30 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                 firebaseDatabase = FirebaseDatabase.DefaultInstance;
                 reference = firebaseDatabase.GetReference("/"); // Default
             }
-            Debug.Log("Firebase Set 완료");
         }
         );
     }
 
-    public void InitDataForGame()
-    {
-        InitGameData();
-        InitTurnMatchData();
-    }
-
-    void InitGameData()
+    public void InitGameData()
     {
         gameData = new GameData();
         gameData.playerReady = new bool[4] { false, false, false, false };
-        TurnData[] turnData = new TurnData[6];
-        gameData.players = new Players[4];
-        for (int i = 0; i < 4; i++) gameData.players[i].turnData = turnData;
-    }
+        gameData.playerId = new string[4] { "AI1", "AI2", "AI3", "AI4" };
+        gameData.playerMissionData = new PlayerMissionData[4];
+        
+        TurnData turnData = new TurnData();
+        turnData.matchWith = new long[4] { -1, -1, -1, -1 };
+        turnData.gold = new long[4] { 0, 0, 0, 0 };
+        turnData.success = new bool[4] { false, false, false, false };
+        turnData.isProposer = new bool[4] { false, false, false, false };
 
-    void InitTurnMatchData()
-    {
-        turnMatchData = new TurnMatchData();
-        curTurnNum = 0;
-        isProposeTurn = true;
-        isGameStarted = false;
+        gameData.turnData = new TurnData[6];
+        for(int i= 0; i < 6; i++)
+        {
+            gameData.turnData[i] = turnData;
+        }
+
+        Debug.Log($"gameData.turnData[0].matchWith[0] : {gameData.turnData[0].matchWith[0]}");
     }
     #endregion
 
@@ -228,6 +229,28 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
             if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
         });
     }
+
+    public async void SavePlayerMissionData(int playerNum)
+    {
+        string json = JsonUtility.ToJson(gameData.playerMissionData);
+
+        await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString())
+            .Child("PlayerMissionData").Child(playerNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+        {
+            if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
+        });
+    }
+
+    public async void SaveTurnData(int turnNum)
+    {
+        string json = JsonUtility.ToJson(gameData.turnData[turnNum]);
+
+        await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString())
+            .Child("turnData").Child(turnNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+            {
+                if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
+            });
+    }
     #endregion
 
     #region Database - UserData
@@ -249,7 +272,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
                     userData = JsonUtility.FromJson<UserData>(temp);
                     PrefsBundle.Instance.SetPrefsData(userData.prefsdata);
                 }
-                SaveUserData();
+                //SaveUserData();
             });
         }
         else // initialize user data and save
@@ -265,14 +288,12 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         userData.id = User.UserId;
         userData.email = User.Email;
         int index = User.Email.IndexOf("@");
-        Debug.Log("index : " + index);
         userData.nickName = User.Email.Substring(0, index);
-        Debug.Log("nickName" + userData.nickName);
         userData.isFirst = 1;
         InitItemData();
     }
 
-    public async void SaveUserData()
+    async void SaveUserData()
     {
         if (userData.id != "0")
         {
@@ -298,6 +319,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
         userData.itemData.ticket = 5;
         userData.itemData.ticketTime = DateTime.Now.ToString();
         userData.itemData.gold = 5000;
+        Debug.Log("initItemData ");
     }
 
     public async void SaveItemData()
@@ -330,6 +352,7 @@ public class FirebaseManager : BehaviorSingleton<FirebaseManager>
     public void AutoFillTicket()   // cooltime : 1 hour
     {
         DateTime currentTime = DateTime.Now;
+        Debug.Log($"{userData.itemData.ticketTime}");
         DateTime tmpDT = Convert.ToDateTime(userData.itemData.ticketTime);
         TimeSpan diff = currentTime - tmpDT;
         if(diff.Hours > 0)  // 1시간 넘게 차이난다면

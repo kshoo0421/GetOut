@@ -1,13 +1,13 @@
 using UnityEngine;
+
 using TMPro;
-using System.Linq;
+
 using UnityEngine.UI;
+using System;
 
 public class S06_Game : Scenes
 {
     #region Field
-    int curPlayer;
-
     [SerializeField] TMP_Text TurnNumText;  // 몇 번째 턴인지
     [SerializeField] TMP_Text LeftTime;
 
@@ -24,9 +24,11 @@ public class S06_Game : Scenes
     [SerializeField] GameObject QuitBtnPanel;
 
     /* Game */
-    bool isTmdInit = false;
     string[] playerName = new string[4];
-    int curTurnNum;
+    GamePhase curGamePhase;
+    GameData gd;
+    GamePlayer MyPlayer;
+    bool isGet;
     #endregion
 
     #region monobehaviour
@@ -34,161 +36,46 @@ public class S06_Game : Scenes
     {
         InitialSet();
         SetMissionCheckData();
+        databaseManager.InitGameData();
+        MyPlayer = DatabaseManager.MyPlayer;
+        gd = DatabaseManager.gameData;
+        curGamePhase = GamePhase.Default;
+        Debug.Log($"gd.turnData[0].matchWith[0] : {gd.turnData[0].matchWith[0]}");
     }
     void Update()
     {
         ForUpdate();
-        if(SuggestPanel.activeSelf == true)
+        TurnNumText.text = (DatabaseManager.gameData.curTurn + 1).ToString();
+
+        if (curGamePhase != DatabaseManager.gamePhase)
+        {
+            curGamePhase = DatabaseManager.gamePhase;
+            PanelUpdate(curGamePhase);
+         
+            if (MyPlayer.isPlayerCaptain)
+            {
+                NextPhaseFunction(curGamePhase);
+            }
+        }
+
+        if (curGamePhase == GamePhase.GetPhase || curGamePhase == GamePhase.SetMission || 
+            curGamePhase == GamePhase.WaitingGetPhase || curGamePhase == GamePhase.SuggestPhase 
+            || curGamePhase == GamePhase.WaitingSuggestPhase)
+        {
+            UpdateTime();
+        }
+
+        if (curGamePhase == GamePhase.SuggestPhase)
         {
             CheckGoldAmount();
         }
     }
     #endregion
 
-    #region State Set
-    public void TimerSet(int sec)
-    {
-        
-    }
-
-    #endregion
-
     #region SceneChange
     public void BackToCustom() => ChangeToScene(3);
 
     public void BackToRandom() => ChangeToScene(4);
-    #endregion
-
-    #region Set Game
-    public void SetGame()
-    {
-        FirebaseManager.gameData = new GameData();
-        if (FirebaseManager.MyPlayer.view.ViewID == 1001)
-        {
-            FirebaseManager.turnMatchData = new TurnMatchData();
-            FirebaseManager.turnMatchData.turn = new Turn[6];
-            SetOpponent();
-            FirebaseManager.MyPlayer.SetTmdIfP1();
-        }
-    }
-
-    void SetOpponent()
-    {
-        Turn[] turns = InitTurns();
-        System.Random random = new System.Random();
-        for (int i = 0; i < 3; i++)
-        {
-            if (random.Next() % 2 == 0)
-            {
-                FirebaseManager.turnMatchData.turn[i * 2] = turns[i * 4];
-                FirebaseManager.turnMatchData.turn[i * 2 + 1] = turns[i * 4 + 1];
-
-            }
-            else
-            {
-                FirebaseManager.turnMatchData.turn[i * 2] = turns[i * 4 + 2];
-                FirebaseManager.turnMatchData.turn[i * 2 + 1] = turns[i * 4 + 3];
-            }
-        }
-        FirebaseManager.turnMatchData.turn = FirebaseManager.turnMatchData.turn.OrderBy(x => random.Next()).ToArray();
-    }
-
-    Turn[] InitTurns()
-    {
-        Turn[] turns = new Turn[12];
-        turns[0].Room1.getter = 1;
-        turns[0].Room1.proposer = 2;
-        turns[0].Room2.getter = 3;
-        turns[0].Room2.proposer = 4;
-
-        turns[1].Room1.getter = 2;
-        turns[1].Room1.proposer = 1;
-        turns[1].Room2.getter = 4;
-        turns[1].Room2.proposer = 3;
-        //----------------------------
-        turns[2].Room1.getter = 1;
-        turns[2].Room1.proposer = 2;
-        turns[2].Room2.getter = 4;
-        turns[2].Room2.proposer = 3;
-
-        turns[3].Room1.getter = 2;
-        turns[3].Room1.proposer = 1;
-        turns[3].Room2.getter = 3;
-        turns[3].Room2.proposer = 4;
-        //----------------------------
-        turns[4].Room1.getter = 1;
-        turns[4].Room1.proposer = 3;
-        turns[4].Room2.getter = 2;
-        turns[4].Room2.proposer = 4;
-
-        turns[5].Room1.getter = 3;
-        turns[5].Room1.proposer = 1;
-        turns[5].Room2.getter = 4;
-        turns[5].Room2.proposer = 2;
-        //----------------------------
-        turns[6].Room1.getter = 1;
-        turns[6].Room1.proposer = 3;
-        turns[6].Room2.getter = 4;
-        turns[6].Room2.proposer = 2;
-
-        turns[7].Room1.getter = 3;
-        turns[7].Room1.proposer = 1;
-        turns[7].Room2.getter = 2;
-        turns[7].Room2.proposer = 4;
-        //----------------------------
-        turns[8].Room1.getter = 1;
-        turns[8].Room1.proposer = 4;
-        turns[8].Room2.getter = 2;
-        turns[8].Room2.proposer = 3;
-
-        turns[9].Room1.getter = 4;
-        turns[9].Room1.proposer = 1;
-        turns[9].Room2.getter = 3;
-        turns[9].Room2.proposer = 2;
-        //----------------------------
-        turns[10].Room1.getter = 1;
-        turns[10].Room1.proposer = 4;
-        turns[10].Room2.getter = 3;
-        turns[10].Room2.proposer = 2;
-
-        turns[11].Room1.getter = 4;
-        turns[11].Room1.proposer = 1;
-        turns[11].Room2.getter = 2;
-        turns[11].Room2.proposer = 3;
-
-        return turns;
-    }
-
-    public void SetPlayerMission(int playerNumber, MissionLevel missionLevel)
-    {
-        System.Random random = new System.Random();
-        int tmp = random.Next(1, 10);
-        switch (missionLevel)
-        {
-            case MissionLevel.Low:
-                while (FirebaseManager.gameData.players[playerNumber].playerMission.low.missionNum == tmp)
-                {
-                    tmp = random.Next(1, 10);
-                }
-                FirebaseManager.gameData.players[playerNumber].playerMission.low.missionNum = tmp;
-                break;
-            case MissionLevel.Mid:
-                while (FirebaseManager.gameData.players[playerNumber].playerMission.mid.missionNum == tmp)
-                {
-                    tmp = random.Next(1, 10);
-                }
-                FirebaseManager.gameData.players[playerNumber].playerMission.mid.missionNum = tmp;
-                break;
-            case MissionLevel.High:
-                while (FirebaseManager.gameData.players[playerNumber].playerMission.high.missionNum == tmp)
-                {
-                    tmp = random.Next(1, 10);
-                }
-                FirebaseManager.gameData.players[playerNumber].playerMission.high.missionNum = tmp;
-                break;
-            default: break;
-        }
-    }
     #endregion
 
     #region Toggle Panels
@@ -207,6 +94,55 @@ public class S06_Game : Scenes
     void ToggleMissionCheckPanel(bool b) => MissionCheckPanel.SetActive(b);
 
     void ToggleQuitBtnPanel(bool b) => QuitBtnPanel.SetActive(b);
+
+    void PanelUpdate(GamePhase gamePhase)
+    {
+        AllPanelOff();
+
+        switch (gamePhase)
+        {
+            case GamePhase.Default:
+                ToggleLoadingPanel(true);
+                break;
+
+            case GamePhase.InitGame:
+            case GamePhase.LoadingPhase:
+                ToggleLoadingPanel(true);
+                break;
+
+            case GamePhase.SetMission:
+                ToggleMissionSetPanel(true);
+                break;
+
+            case GamePhase.SuggestPhase:
+                ToggleSuggestPanel(true);
+                break;
+
+            case GamePhase.GetPhase:
+                isGet = true;
+                ToggleGetPanel(true);
+                break;
+
+            case GamePhase.ResultPhase:
+                ToggleResultPanel(true);
+                break;
+
+            case GamePhase.WaitingGetPhase:
+            case GamePhase.WaitingSuggestPhase:
+                ToggleWaitingPanel(true);
+                break;
+        }
+    }
+
+    void AllPanelOff()
+    {
+        ToggleLoadingPanel(false);
+        ToggleSuggestPanel(false);
+        ToggleGetPanel(false);
+        ToggleMissionSetPanel(false);
+        ToggleResultPanel(false);
+        ToggleWaitingPanel(false);
+    }
     #endregion
 
     #region Test Toggle Panel
@@ -323,13 +259,15 @@ public class S06_Game : Scenes
 
     void SetGetGoldTMP()    // initial
     {
-        GetGoldTMP.text = "40"; // need to change
+        GetGoldTMP.text = gd.turnData[gd.curTurn].gold[MyPlayer.playerNum].ToString();
         GetGoldTMP.color = Color.black;
     }
 
     public void GetBtn()
     {   
         GetConfirmPanel.SetActive(true);
+        GetConfirmTMP.text = $"Do you really get {GetGoldTMP.text} gold?" +
+            $"\n(opponent : {100 - gd.turnData[gd.curTurn].gold[MyPlayer.playerNum]} gold)";
     }
 
     public void OutBtn()
@@ -339,8 +277,7 @@ public class S06_Game : Scenes
 
     public void GetConfirmYesBtn()
     {
-        // Get RPC Function
-        // FirebaseManager.MyPlayer.GetOutGold(1, true);
+        isGet = true;
         // 창 닫기
         GetConfirmPanel.SetActive(false);
         // 글자 색상 변경
@@ -357,8 +294,7 @@ public class S06_Game : Scenes
 
     public void OutConfirmYesBtn()
     {
-        // Out RPC Function
-        // FirebaseManager.MyPlayer.GetOutGold(1, false);
+        isGet = false;
         // 창 닫기
         OutConfirmPanel.SetActive(false);
         // 글자 색상 변경
@@ -389,26 +325,42 @@ public class S06_Game : Scenes
         {
             RerollBtns[i].interactable = true;
         }
-
         // Mission Low, Mid, High Update
-
-
         MissionSetTextUpdate();
     }
     
-    void MissionSetTextUpdate()
+    void MissionSetTextUpdate() // need to change
     {
+        MissionInfo mi = new MissionInfo();
+        
+        int[] missionNum = new int[3];
+        missionNum[0] = (int)gd.playerMissionData[MyPlayer.playerNum].low.missionNum;
+        missionNum[1] = (int)gd.playerMissionData[MyPlayer.playerNum].mid.missionNum;
+        missionNum[2] = (int)gd.playerMissionData[MyPlayer.playerNum].high.missionNum;
         for(int i = 0; i < 3; i++)
         {
-            MissionInfoTMPs[i].text = "This is Example of Missions Information.\nL2";
-            MissionGoldTMPs[i].text = "50" + "G";
+            MissionInfoTMPs[0].text = mi.GetMissionInfo((MissionLevel)i, missionNum[i]);
+            MissionGoldTMPs[0].text = mi.GetMissionGold((MissionLevel)i, missionNum[i]).ToString() + "G";
         }
     }
 
     public void MissionReroll(int i)
     {
         // Mission Num Change
+        switch(i)
+        {
+            case 0:
+                MyPlayer.SetPlayerMission(MissionLevel.Low);
+                break;
+            case 1:
+                MyPlayer.SetPlayerMission(MissionLevel.Mid);
+                break;
+            case 2:
+                MyPlayer.SetPlayerMission(MissionLevel.High);
+                break;
+        }
         RerollBtns[i].interactable = false;
+        MyPlayer.SavePlayerMissionData();
     }
 
     public void MissionFix()
@@ -418,8 +370,6 @@ public class S06_Game : Scenes
             RerollBtns[i].interactable = false;
         }
     }
-
-
     #endregion
 
     #region Result Panel
@@ -450,6 +400,7 @@ public class S06_Game : Scenes
     public void CloseMissionCheck() => ToggleMissionCheckPanel(false);
 
     void ToggleAllMissionsPanel(bool b) => AllMissionsPanel.SetActive(b);
+
     public void LookAllMissionsBtn() => ToggleAllMissionsPanel(true);
 
     public void CloseAllMissionsBtn() => ToggleAllMissionsPanel(false);
@@ -482,8 +433,172 @@ public class S06_Game : Scenes
 
     #endregion
 
+    #region timer
+    void setNewTime(int sec)    // Phase 변경과 더불어 표현되어야 함.
+    {
+        DatabaseManager.leftTime = sec.ToString();
+        DatabaseManager.gameTime = DateTime.Now.AddSeconds(sec);
+    }
+
+    void UpdateTime()
+    {
+        TimeSpan diff = DatabaseManager.gameTime - DateTime.Now;
+        if (diff.Seconds > 0) DatabaseManager.leftTime = diff.Seconds.ToString();
+        else
+        {
+            DatabaseManager.leftTime = "0";
+            switch(curGamePhase)
+            {
+                case GamePhase.SetMission:
+                    MyPlayer.SavePlayerMissionData();
+                    gd.curTurn = 0;
+                    MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                    break;
+
+                case GamePhase.SuggestPhase:
+                case GamePhase.WaitingSuggestPhase:
+                    if (curGamePhase == GamePhase.SuggestPhase)
+                    {
+                        MyPlayer.SuggestGold((int)gd.turnData[gd.curTurn].matchWith[MyPlayer.playerNum], Int32.Parse(SuggestGoldInputField.text));
+                    }
+
+                    if (MyPlayer.isPlayerCaptain)
+                    {
+                        int tmp1 = -1, tmp2 = -1;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (!gd.turnData[gd.curTurn].isProposer[i])
+                            {
+                                if (tmp1 == -1) tmp1 = i;
+                                else
+                                {
+                                    tmp2 = i;
+                                    break;
+                                }
+                            }
+                        }
+                        MyPlayer.SetGetPhase(tmp1, tmp2);
+                    }
+                    break;
+
+                case GamePhase.GetPhase:
+                case GamePhase.WaitingGetPhase:
+                    if(curGamePhase == GamePhase.GetPhase) 
+                    {
+                        MyPlayer.GetOutGold((int)gd.turnData[gd.curTurn].matchWith[MyPlayer.playerNum], isGet);
+                    }
+
+                    if (MyPlayer.isPlayerCaptain)
+                    {
+                        if (gd.curTurn < 5)
+                        {
+                            gd.curTurn++;
+                            MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                        }
+                        else
+                        {
+                            MyPlayer.SetGamePhase(GamePhase.ResultPhase);
+                        }
+                    }
+                    break;
+            }
+            MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+        }
+    }
+    #endregion
+
     #region Game
-    public void ProposeGold(int gold)
+    void NextPhaseFunction(GamePhase curGamePhase)
+    {
+        switch (curGamePhase)
+        {
+            case GamePhase.Default:
+                DefaultPhaseBehaviour();
+                break;
+
+            case GamePhase.InitGame:
+                InitPhaseBehaviour();
+                break;
+            case GamePhase.LoadingPhase:
+                LoadingPhaseBehaviour();
+                break;
+
+            case GamePhase.SetMission:
+                SetMissionPhaseBehaviour();
+                break;
+
+            case GamePhase.SuggestPhase:
+                SuggestPhaseBehaviour();
+                break;
+
+            case GamePhase.GetPhase:
+                GetPhaseBehaviour();
+                break;
+
+            case GamePhase.ResultPhase:
+                ResultPhaseBehaviour();
+                break;
+
+            case GamePhase.WaitingGetPhase:
+                WaitingGetPhaseBehaviour();
+                break;
+
+            case GamePhase.WaitingSuggestPhase:
+                WaitingSuggestPhaseBehaviour();
+                break;
+        }
+    }
+
+    void DefaultPhaseBehaviour() => MyPlayer.SetGamePhase(GamePhase.InitGame);
+
+    void InitPhaseBehaviour() => MyPlayer.SetGame();
+
+    void SetMissionPhaseBehaviour()
+    {
+        InitMissionSet();
+        setNewTime(30);
+    }
+
+    void SuggestPhaseBehaviour()
+    {
+        setNewTime(20);
+    }
+
+    void GetPhaseBehaviour()
+    {
+        setNewTime(10);
+    }
+
+    void LoadingPhaseBehaviour()
+    {
+        databaseManager.SaveTurnData((int)gd.curTurn);
+        int tmp1 = -1, tmp2 = -1;
+        for(int i = 0; i < 4; i++)
+        {
+            if (gd.turnData[gd.curTurn].isProposer[i])
+            {
+                if (tmp1 == -1) tmp1 = i;
+                else
+                {
+                    tmp2 = i;
+                    break;
+                }
+            }
+        }
+        MyPlayer.SetSuggestPhase(tmp1, tmp2);
+    }
+
+    void ResultPhaseBehaviour()
+    {
+
+    }
+
+    void WaitingGetPhaseBehaviour()
+    {
+
+    }
+
+    void WaitingSuggestPhaseBehaviour()
     {
 
     }

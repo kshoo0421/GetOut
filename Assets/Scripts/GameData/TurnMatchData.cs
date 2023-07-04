@@ -9,13 +9,8 @@ public struct TurnMatchData  // 대진 배정
 [Serializable]
 public struct Turn
 {
-    public MatchRoom Room1;
-    public MatchRoom Room2;
-}
-
-[Serializable]
-public struct MatchRoom
-{
-    public int proposer;
-    public int getter;
+    public long R1S;    // room1 suggestor
+    public long R1G;   // room1 getter
+    public long R2S;   // room2 suggestor
+    public long R2G;   // room2 getter
 }

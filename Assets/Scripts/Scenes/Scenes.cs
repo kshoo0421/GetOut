@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
 using TMPro;
 
 public class Scenes : MonoBehaviour
 {
     #region Field
     /* Managers */
-    protected FirebaseManager firebaseManager;
+    protected DatabaseManager databaseManager;
     protected GoogleAdMobManager googleAdMobManager;
     protected OptionManager optionManager;
     protected PhotonManager photonManager;
@@ -31,9 +32,9 @@ public class Scenes : MonoBehaviour
     #region  For Monobehaviour
     protected void ForUpdate()
     {
-        if (!firebaseManager.isFullTicket())
+        if (!databaseManager.isFullTicket())
         {
-            firebaseManager.AutoFillTicket();
+            databaseManager.AutoFillTicket();
         }
     }
     #endregion
@@ -61,7 +62,7 @@ public class Scenes : MonoBehaviour
     #region Set Managers
     protected void SetManagers()
     {
-        firebaseManager = FirebaseManager.Instance;
+        databaseManager = DatabaseManager.Instance;
         googleAdMobManager = GoogleAdMobManager.Instance;
         optionManager = OptionManager.Instance;
         photonManager = PhotonManager.Instance;

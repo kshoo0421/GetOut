@@ -53,7 +53,7 @@ public class S00_Initial : Scenes
     {
         if(!isInitialized) 
         {
-            if (FirebaseManager.IsFirebaseReady && PhotonManager.IsPhotonReady)
+            if (DatabaseManager.IsFirebaseReady && PhotonManager.IsPhotonReady)
             {
                 BeforeLoad.SetActive(false);
                 AfterLoad.SetActive(true);
@@ -134,11 +134,11 @@ public class S00_Initial : Scenes
 
     public async void SignIn()
     {
-        if (firebaseManager.checkSignIn())
+        if (databaseManager.checkSignIn())
         {
-            await firebaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
+            await databaseManager.SignIn(emailLogInField.text, passwordLogInField.text);
 
-            if (firebaseManager.GetCurUser() == null)
+            if (databaseManager.GetCurUser() == null)
             {
                 Debug.Log("null");
             }
@@ -164,7 +164,7 @@ public class S00_Initial : Scenes
 
     public void CheckEmailOverlap()
     {
-        if (firebaseManager.checkEmailOverlap())
+        if (databaseManager.checkEmailOverlap())
         {
             signUpMessage.text = "This e-mail is already exist";
             isEmailOvelap = false;
@@ -178,7 +178,7 @@ public class S00_Initial : Scenes
 
     public void CheckPasswordOverlap()
     {
-        if (firebaseManager.checkEmailOverlap())
+        if (databaseManager.checkEmailOverlap())
         {
             signUpMessage.text = "You can't use this Password";
             isPasswordOvelap = false;
@@ -205,7 +205,7 @@ public class S00_Initial : Scenes
         }
         else
         {
-            await firebaseManager.SignIn(emailSignUpField.text, passwordSignUpField.text);
+            await databaseManager.SignIn(emailSignUpField.text, passwordSignUpField.text);
             signUpMessage.text = "Sign Up Done";
         }
         return;

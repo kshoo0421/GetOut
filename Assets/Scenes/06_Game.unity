@@ -586,8 +586,14 @@ MonoBehaviour:
   - {fileID: 852997553}
   - {fileID: 1065570387}
   - {fileID: 2111196207}
-  MissionGold: []
-  MissionInformation: []
+  MissionGold:
+  - {fileID: 183697628}
+  - {fileID: 587899463}
+  - {fileID: 1212417518}
+  MissionInformation:
+  - {fileID: 2090704264}
+  - {fileID: 1258923439}
+  - {fileID: 1029723490}
   AllMissionsPanel: {fileID: 1446448569}
 --- !u!4 &58786078
 Transform:

@@ -1,30 +1,29 @@
 using System;
 
-public enum MissionLevel { Low, Mid, High };
+public enum MissionLevel { Low = 0, Mid = 1, High = 2 };
+
+public enum GamePhase { Default, InitGame, SetMission, LoadingPhase,
+     SuggestPhase, GetPhase, WaitingGetPhase, WaitingSuggestPhase, ResultPhase }
 
 #region Data
 [Serializable] public struct GameData
 {
     public long gameIndex;
     public long curTurn;
+    public bool isProposerTurn;
     public bool[] playerReady;
-    public Players[] players;  // length : 4
-}
+    public string[] playerId;
+    public PlayerMissionData[] playerMissionData;
+    public TurnData[] turnData;
 
-[Serializable] public struct Players
-{
-    public string playerName;
-    public TurnData[] turnData; // length : 6
-    public PlayerMissionData playerMission;
-    public long finalRank;   // µî¼ö
 }
 
 [Serializable] public struct TurnData
 {
-    public bool gameRoomNum;    // true : room1, false : room2
-    public bool isProposer;
-    public long gold;
-    public bool isAchieved;
+    public long[] matchWith;
+    public long[] gold;
+    public bool[] success;
+    public bool[] isProposer;
 }
 
 [Serializable]
