@@ -1,13 +1,12 @@
-using UnityEngine;
-
 public class S07_RecordRoom : Scenes
 {
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
     }

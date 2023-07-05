@@ -24,13 +24,13 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
     #endregion
 
     #region Monobehaviour
-    void Awake()
+    private void Awake()
     {
         UpdatePrefs();
         prefsData = new PrefsData();
     }
 
-    void UpdatePrefs()
+    private void UpdatePrefs()
     {
         UpdateInt();
         UpdateFloat();
@@ -42,7 +42,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
     public void SetInt(IntPrefs prefs, int value)
     {
         string key = "none";
-        switch(prefs)
+        switch (prefs)
         {
             case IntPrefs.isBannerOpen:
                 key = "isBannerOpen";
@@ -56,8 +56,8 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
                 key = "isVolumeFirst";
                 break;
 
-            case IntPrefs.isSEMute: 
-                key = "isSEMute"; 
+            case IntPrefs.isSEMute:
+                key = "isSEMute";
                 break;
 
             case IntPrefs.isBGMMute:
@@ -65,7 +65,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
                 break;
 
             default:
-                key = "none"; 
+                key = "none";
                 break;
         }
         PlayerPrefs.SetInt(key, value);
@@ -73,7 +73,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
         UpdateInt();
     }
 
-    void UpdateInt()
+    private void UpdateInt()
     {
         isBannerOpen = PlayerPrefs.GetInt("isBannerOpen");
         LocaleNum = PlayerPrefs.GetInt("LocaleNum");
@@ -106,7 +106,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
         UpdateFloat();
     }
 
-    void UpdateFloat()
+    private void UpdateFloat()
     {
         SEVolume = PlayerPrefs.GetFloat("SEVolume");
         BGMVolume = PlayerPrefs.GetFloat("BGMVolume");
@@ -128,7 +128,7 @@ public class PrefsBundle : BehaviorSingleton<PrefsBundle>
         UpdateString();
     }
 
-    void UpdateString()
+    private void UpdateString()
     {
     }
     #endregion

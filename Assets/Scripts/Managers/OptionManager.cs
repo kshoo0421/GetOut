@@ -1,20 +1,19 @@
 using System.Collections;
-using UnityEngine;
 using UnityEngine.Localization.Settings;
 
 public class OptionManager : BehaviorSingleton<OptionManager>
 {
     #region Field
     /* Change Locale */
-    bool isChanging;
+    private bool isChanging;
 
     #endregion
 
     #region Monobehaviour
-    void Awake()
+    private void Awake()
     {
         // Set Language
-        ChangeLocale(PrefsBundle.LocaleNum); 
+        ChangeLocale(PrefsBundle.LocaleNum);
     }
     #endregion
 
@@ -28,7 +27,7 @@ public class OptionManager : BehaviorSingleton<OptionManager>
         StartCoroutine(ChangeRoutine(index));
     }
 
-    IEnumerator ChangeRoutine(int index)
+    private IEnumerator ChangeRoutine(int index)
     {
         isChanging = true;
 

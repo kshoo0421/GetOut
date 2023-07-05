@@ -1,57 +1,57 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class S00_Initial : Scenes
 {
     #region Field
     /* Initialize */
-    bool isInitialized = false;
-    [SerializeField] GameObject BeforeLoad;
-    [SerializeField] GameObject AfterLoad;
+    private bool isInitialized = false;
+    [SerializeField] private GameObject BeforeLoad;
+    [SerializeField] private GameObject AfterLoad;
 
     /* Select InputField */
-    TMP_InputField nextInputField;
-    TMP_InputField currentInputField;
-    [SerializeField] TMP_InputField[] signInInputFields; // 로그인
-    [SerializeField] TMP_InputField[] signUpInputFields; // 회원가입
-    int currentSignInInputFieldIndex = 0; // 현재 포커스 로그인 인덱스
-    int currentSignUpInputFieldIndex = 0; // 현재 포커스 회원가입 인덱스
+    private TMP_InputField nextInputField;
+    private TMP_InputField currentInputField;
+    [SerializeField] private TMP_InputField[] signInInputFields; // 로그인
+    [SerializeField] private TMP_InputField[] signUpInputFields; // 회원가입
+    private int currentSignInInputFieldIndex = 0; // 현재 포커스 로그인 인덱스
+    private int currentSignUpInputFieldIndex = 0; // 현재 포커스 회원가입 인덱스
 
 
     /* Sign In */
-    [SerializeField] GameObject SignInPanel;
-    [SerializeField] TMP_InputField emailLogInField;
-    [SerializeField] TMP_InputField passwordLogInField;
+    [SerializeField] private GameObject SignInPanel;
+    [SerializeField] private TMP_InputField emailLogInField;
+    [SerializeField] private TMP_InputField passwordLogInField;
 
     /* Sign Up */
-    bool isEmailOvelap = true;
-    bool isPasswordOvelap = true;
+    private bool isEmailOvelap = true;
+    private bool isPasswordOvelap = true;
 
-    [SerializeField] GameObject SignUpPanel;
-    [SerializeField] TMP_Text signUpMessage;
+    [SerializeField] private GameObject SignUpPanel;
+    [SerializeField] private TMP_Text signUpMessage;
 
-    [SerializeField] Button signUpButton;
-    [SerializeField] Button signUpPanelOnBtn;
-    [SerializeField] Button signUpPanelOffBtn;
-    [SerializeField] Button checkEmailOverlapBtn;
-    [SerializeField] Button checkPasswordOverlapBtn;
+    [SerializeField] private Button signUpButton;
+    [SerializeField] private Button signUpPanelOnBtn;
+    [SerializeField] private Button signUpPanelOffBtn;
+    [SerializeField] private Button checkEmailOverlapBtn;
+    [SerializeField] private Button checkPasswordOverlapBtn;
 
-    [SerializeField] TMP_InputField emailSignUpField;
-    [SerializeField] TMP_InputField passwordSignUpField;
+    [SerializeField] private TMP_InputField emailSignUpField;
+    [SerializeField] private TMP_InputField passwordSignUpField;
 
     #endregion
 
     #region MonoBehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
         SelectInputField();
     }
 
-    void Update()
+    private void Update()
     {
-        if(!isInitialized) 
+        if (!isInitialized)
         {
             if (DatabaseManager.IsFirebaseReady && PhotonManager.IsPhotonReady)
             {
@@ -66,28 +66,28 @@ public class S00_Initial : Scenes
     #endregion
 
     #region Select InputField 
-    void SelectInputField()
+    private void SelectInputField()
     {
         // 첫 번째 InputField에 포커스 설정
         signInInputFields[0].Select();
         signUpInputFields[0].Select();
     }
 
-    void FocusUpdate()
+    private void FocusUpdate()
     {
         // 현재 포커스를 가지고 있는 InputField
-        if (SignUpPanel.activeSelf == true) SignUpFieldFocus();   
+        if (SignUpPanel.activeSelf == true) SignUpFieldFocus();
         else SignInFieldFocus();
     }
 
-    void SignUpFieldFocus()
+    private void SignUpFieldFocus()
     {
         currentInputField = signUpInputFields[currentSignInInputFieldIndex];
         if (Input.GetKeyDown(KeyCode.Tab)) SignUpFieldTab();
     }
 
-    void SignUpFieldTab()
-    { 
+    private void SignUpFieldTab()
+    {
         // 현재 InputField의 다음 순서 InputField로 포커스 이동
         currentSignUpInputFieldIndex = (currentSignUpInputFieldIndex + 1) % signUpInputFields.Length;
         nextInputField = signUpInputFields[currentSignUpInputFieldIndex];
@@ -97,13 +97,13 @@ public class S00_Initial : Scenes
         nextInputField.ActivateInputField();
     }
 
-    void SignInFieldFocus()
+    private void SignInFieldFocus()
     {
         currentInputField = signInInputFields[currentSignInInputFieldIndex];
         if (Input.GetKeyDown(KeyCode.Tab)) SignInFieldTab();
     }
 
-    void SignInFieldTab()
+    private void SignInFieldTab()
     {
         // 현재 InputField의 다음 순서 InputField로 포커스 이동
         currentSignInInputFieldIndex = (currentSignInInputFieldIndex + 1) % signInInputFields.Length;
@@ -113,7 +113,7 @@ public class S00_Initial : Scenes
         nextInputField.Select();
         nextInputField.ActivateInputField();
     }
-        #endregion
+    #endregion
 
     #region Sign In
     public void OpenSignInPanel()

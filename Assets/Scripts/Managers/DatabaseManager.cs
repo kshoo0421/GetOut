@@ -2,27 +2,25 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
-
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
     #region Field
-    static FirebaseUser User;
+    private static FirebaseUser User;
 
     /* Base Set */
-    static FirebaseApp firebaseApp;
-    static FirebaseAuth firebaseAuth;
-    static FirebaseDatabase firebaseDatabase;
-    static DatabaseReference reference;
+    private static FirebaseApp firebaseApp;
+    private static FirebaseAuth firebaseAuth;
+    private static FirebaseDatabase firebaseDatabase;
+    private static DatabaseReference reference;
 
     public static bool IsFirebaseReady { get; set; }
-    static bool IsSignInOnProgress { get; set; }
-    
+    private static bool IsSignInOnProgress { get; set; }
+
     /* database */
     public static GameData gameData;
     public static UserData userData;
@@ -35,17 +33,17 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #endregion
 
     #region Monobehavior
-    void Awake()
+    private void Awake()
     {
         FirebaseApp.Create();
         InitializeFM();
     }
 
-    void OnDestroy() => SignOut();
+    private void OnDestroy() => SignOut();
     #endregion
-   
+
     #region Initialize  
-    void InitializeFM()
+    private void InitializeFM()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
         {
@@ -73,7 +71,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         gameData.playerReady = new bool[4] { false, false, false, false };
         gameData.playerId = new string[4] { "AI1", "AI2", "AI3", "AI4" };
         gameData.playerMissionData = new PlayerMissionData[4];
-        
+
         TurnData turnData = new TurnData();
         turnData.matchWith = new long[4] { -1, -1, -1, -1 };
         turnData.gold = new long[4] { 0, 0, 0, 0 };
@@ -81,7 +79,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         turnData.isProposer = new bool[4] { false, false, false, false };
 
         gameData.turnData = new TurnData[6];
-        for(int i= 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             gameData.turnData[i] = turnData;
         }
@@ -113,7 +111,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             if (task.IsFaulted)
             {
                 // 회원가입 실패 이유 => 이메일이 비정상 / 비밀번호가 너무 간단 / 이미 가입된 이메일 등등...
-                Debug.LogError("회원가입 실패");  
+                Debug.LogError("회원가입 실패");
                 return;
             }
 
@@ -166,7 +164,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     #region SignOut
     public void SignOut()
-    { 
+    {
         firebaseAuth.SignOut();
         User = null;
         userData.id = "0";
@@ -206,10 +204,10 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         });
     }
 
-    void UpdateGameIndex(long newData)
+    private void UpdateGameIndex(long newData)
     {
         // 업데이트할 데이터 생성
-        var updateData = new Dictionary<string, object> { { "gameIndex", newData }};
+        var updateData = new Dictionary<string, object> { { "gameIndex", newData } };
 
         // 데이터 업데이트
         reference.Child("GamePlayData").UpdateChildrenAsync(updateData).ContinueWith(task =>
@@ -254,18 +252,19 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #endregion
 
     #region Database - UserData
-    async Task<bool> isDataExist(string uid)
+    private async Task<bool> isDataExist(string uid)
     {
         DataSnapshot snapshot = await reference.Child("UserData").Child(uid).GetValueAsync();
         return snapshot.Exists;
     }
 
-    async Task SetUserData()
+    private async Task SetUserData()
     {
         string uid = User.UserId;
         if (await isDataExist(uid)) // get data from database
         {
-            await reference.Child("UserData").Child(uid).GetValueAsync().ContinueWithOnMainThread(task => {
+            await reference.Child("UserData").Child(uid).GetValueAsync().ContinueWithOnMainThread(task =>
+            {
                 if (task.IsCompleted)
                 {
                     string temp = task.Result.GetRawJsonValue();
@@ -277,12 +276,12 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         }
         else // initialize user data and save
         {
-            InitializeUserData();   
+            InitializeUserData();
             SaveUserData();
         }
     }
 
-    void InitializeUserData()
+    private void InitializeUserData()
     {
         userData = new UserData();
         userData.id = User.UserId;
@@ -293,14 +292,15 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         InitItemData();
     }
 
-    async void SaveUserData()
+    private async void SaveUserData()
     {
         if (userData.id != "0")
         {
             PrefsBundle.Instance.GetPrefsData();
             userData.prefsdata = PrefsBundle.prefsData;
 
-            /*if (!(await isDataExist(User.UserId))) */reference.Child("UserData").Child(User.UserId).Push();
+            /*if (!(await isDataExist(User.UserId))) */
+            reference.Child("UserData").Child(User.UserId).Push();
 
             string json = JsonUtility.ToJson(userData);
             await reference.Child("UserData").Child(User.UserId).SetRawJsonValueAsync(json).ContinueWith(task =>
@@ -337,11 +337,11 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public static string restMinute = "00", restSecond = "00";
 
     public bool isFullTicket() => (userData.itemData.ticket == 5) ? true : false;
-    public bool CanUseTicket() => (userData.itemData.ticket > 0) ? true : false;   
+    public bool CanUseTicket() => (userData.itemData.ticket > 0) ? true : false;
     public void UseTicket()
     {
         userData.itemData.ticket -= 1;
-        if(userData.itemData.ticket == 4)
+        if (userData.itemData.ticket == 4)
         {
             DateTime currentTime = DateTime.Now;
             userData.itemData.ticketTime = currentTime.ToString();
@@ -355,12 +355,12 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         Debug.Log($"{userData.itemData.ticketTime}");
         DateTime tmpDT = Convert.ToDateTime(userData.itemData.ticketTime);
         TimeSpan diff = currentTime - tmpDT;
-        if(diff.Hours > 0)  // 1시간 넘게 차이난다면
+        if (diff.Hours > 0)  // 1시간 넘게 차이난다면
         {
             int tmp = diff.Hours;
             tmpDT.AddHours(tmp);
             userData.itemData.ticket += tmp;
-            if(userData.itemData.ticket >= 5)
+            if (userData.itemData.ticket >= 5)
             {
                 userData.itemData.ticket = 5;
                 userData.itemData.ticketTime = DateTime.Now.ToString();
@@ -370,12 +370,12 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
                 userData.itemData.ticketTime = tmpDT.ToString();
                 Debug.Log(tmpDT.ToString());
             }
-            SaveItemData(); 
+            SaveItemData();
         }
         CheckRestTime(tmpDT.AddHours(1) - currentTime);
     }
 
-    void CheckRestTime(TimeSpan diff)
+    private void CheckRestTime(TimeSpan diff)
     {
         if (isFullTicket())
         {

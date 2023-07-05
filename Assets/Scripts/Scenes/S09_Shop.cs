@@ -6,22 +6,22 @@ public class S09_Shop : Scenes
 {
     #region Field
     /* Ads */
-    [SerializeField] Button[] AdsBtns;  // 0 : 배너 광고, 
-    [SerializeField] Button RewardAdsBtn;
+    [SerializeField] private Button[] AdsBtns;  // 0 : 배너 광고, 
+    [SerializeField] private Button RewardAdsBtn;
 
     /* CurState */
-    [SerializeField] TMP_Text curStateTmp;
+    [SerializeField] private TMP_Text curStateTmp;
 
     #endregion
 
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
         SetAd();
     }
 
-    void Update()
+    private void Update()
     {
         ForUpdate();
         CanShowAd();
@@ -30,11 +30,12 @@ public class S09_Shop : Scenes
     #endregion
 
     #region Ads
-    void SetAd()
+    private void SetAd()
     {
         googleAdMobManager.LoadRewardedAd();
     }
-    void CanShowAd() => RewardAdsBtn.interactable = googleAdMobManager.CanShowAd(); // 리워드 광고를 틀 수 있으면 활성화
+
+    private void CanShowAd() => RewardAdsBtn.interactable = googleAdMobManager.CanShowAd(); // 리워드 광고를 틀 수 있으면 활성화
 
     public void ToggleBannerAd(bool b) => googleAdMobManager.ToggleBannerAd(b); // 배너 광고 설정/해제
 
@@ -47,10 +48,10 @@ public class S09_Shop : Scenes
 
     public void HandleClick()
     {
-        if(targetProductId == PaymentManager.ProductCharacterSkin
+        if (targetProductId == PaymentManager.ProductCharacterSkin
             || targetProductId == PaymentManager.ProductSubscription)
         {
-            if(paymentManager.HadPurchased(targetProductId))
+            if (paymentManager.HadPurchased(targetProductId))
             {
                 Debug.Log("이미 구매한 상품");
                 return;

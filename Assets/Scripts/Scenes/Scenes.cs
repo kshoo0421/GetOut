@@ -1,8 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
 using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Scenes : MonoBehaviour
 {
@@ -14,19 +13,19 @@ public class Scenes : MonoBehaviour
     protected PhotonManager photonManager;
     protected PaymentManager paymentManager;
     /* Options */
-    [SerializeField] GameObject OptionPanel;
-    [SerializeField] GameObject[] InOptionPanels; // 0 : Sound; 1 : Language; 2 : Resolution
+    [SerializeField] private GameObject OptionPanel;
+    [SerializeField] private GameObject[] InOptionPanels; // 0 : Sound; 1 : Language; 2 : Resolution
 
     /* SoundEffect - BGM */
-    [SerializeField] AudioSource[] soundEffects;
+    [SerializeField] private AudioSource[] soundEffects;
     public Slider seSlider;
     public Slider bgmSlider;
-    float seVolume, bgmVolume;
-    bool isSEMute = false, isBGMMute = false;
-    [SerializeField] TMP_Text[] Mute_TMP;
-    
+    private float seVolume, bgmVolume;
+    private bool isSEMute = false, isBGMMute = false;
+    [SerializeField] private TMP_Text[] Mute_TMP;
+
     /* Quit */
-    [SerializeField] GameObject QuitPanel;
+    [SerializeField] private GameObject QuitPanel;
     #endregion
 
     #region  For Monobehaviour
@@ -100,7 +99,7 @@ public class Scenes : MonoBehaviour
     #endregion
 
     #region Option - Sound
-    void InitializeVolume() // Initialize
+    private void InitializeVolume() // Initialize
     {
         if (PrefsBundle.isVolumeFirst == 0)
         {
@@ -130,10 +129,10 @@ public class Scenes : MonoBehaviour
         PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, seVolume);
         ApplySEVolume();
     }
-    
+
     public void ToggleSeMute() => MakeSEMute(!isSEMute);
 
-    void MakeSEMute(bool b)
+    private void MakeSEMute(bool b)
     {
         if (PrefsBundle.isSEMute != (b ? 1 : 0))
         {
@@ -144,7 +143,7 @@ public class Scenes : MonoBehaviour
         for (int i = 0; i < soundEffects.Length; i++) soundEffects[i].mute = b;
     }
 
-    void ApplySEVolume()
+    private void ApplySEVolume()
     {
         for (int i = 0; i < soundEffects.Length; i++) soundEffects[i].volume = seVolume;
         seSlider.value = seVolume;
@@ -160,7 +159,7 @@ public class Scenes : MonoBehaviour
 
     public void ToggleBgmMute() => MakeBGMMute(!isBGMMute);
 
-    void MakeBGMMute(bool b)
+    private void MakeBGMMute(bool b)
     {
         if (PrefsBundle.isBGMMute != (b ? 1 : 0))
         {
@@ -172,7 +171,7 @@ public class Scenes : MonoBehaviour
         BGM.bgm.mute = b;
     }
 
-    void ApplyBGMVolume()
+    private void ApplyBGMVolume()
     {
         BGM.bgm.volume = bgmVolume;
         bgmSlider.value = bgmVolume;
@@ -180,7 +179,7 @@ public class Scenes : MonoBehaviour
     #endregion
 
     #region Open Keyboard
-    TouchScreenKeyboard keyboard;
+    private TouchScreenKeyboard keyboard;
     public void OpenDefaultKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
 
     public void OpenNumberKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad);

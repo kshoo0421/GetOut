@@ -23,11 +23,11 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
     #endregion
 
     #region Monobehaviour
-    void Awake() => InitUnityIAP();
+    private void Awake() => InitUnityIAP();
     #endregion
 
     #region Initialize
-    void InitUnityIAP()
+    private void InitUnityIAP()
     {
         if (IsInitialized) return;
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
@@ -78,7 +78,7 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
     {
         Debug.Log($"구매 성공 - ID : {args.purchasedProduct.definition.id}");
-        if(args.purchasedProduct.definition.id == ProductGold)
+        if (args.purchasedProduct.definition.id == ProductGold)
         {
             Debug.Log("골드 상승 처리...");
         }
@@ -106,7 +106,7 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
         if (!IsInitialized) return;
 
         var product = storeController.products.WithID(productId);
-        
+
         if (product != null && product.availableToPurchase)
         {
             Debug.Log($"구매 시도 - {product.definition.id}");
@@ -120,9 +120,9 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
 
     public void ResotrePurchase()   // 구매 복구 함수. 안드로이드는 필요 없음. iOS는 필요
     {
-        if(!IsInitialized) return;
+        if (!IsInitialized) return;
 
-        if(Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.OSXPlayer)   // iPhone, 맥킨토시
+        if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.OSXPlayer)   // iPhone, 맥킨토시
         {
             Debug.Log("구매 복구 시도");
 
@@ -135,11 +135,11 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
 
     public bool HadPurchased(string productId)
     {
-        if(!IsInitialized) return false;
+        if (!IsInitialized) return false;
 
         var product = storeController.products.WithID(productId);
 
-        if(product != null)
+        if (product != null)
         {
             return product.hasReceipt;
         }

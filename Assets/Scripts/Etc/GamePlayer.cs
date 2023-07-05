@@ -1,9 +1,7 @@
-using UnityEngine;
-using Unity.VisualScripting;
-
 using Photon.Pun;
 using System.Linq;
-using JetBrains.Annotations;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
 {
@@ -12,17 +10,21 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     public bool isPlayerCaptain;
 
     public PhotonView view;
+    private GameData gd;
+    private GamePhase gp;
     #endregion
 
     #region MonoBehabiour
-    void OnEnable()
+    private void OnEnable()
     {
-        view = GetComponent<PhotonView>(); 
-        if(view.IsMine == true)
+        view = GetComponent<PhotonView>();
+        if (view.IsMine == true)
         {
             DatabaseManager.MyPlayer = this;
             playerNum = (view.ViewID / 1000) - 1;
         }
+        gd = DatabaseManager.gameData;
+        gp = DatabaseManager.gamePhase;
     }
     #endregion
 
@@ -35,66 +37,57 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     #endregion
 
     #region PunRPC
-    [PunRPC] 
-    void RPC_ReadyForGame(int playerNum)
-    {
-        DatabaseManager.gameData.playerReady[playerNum] = !DatabaseManager.gameData.playerReady[playerNum];
-    }
+    [PunRPC] private void RPC_ReadyForGame(int playerNum) => gd.playerReady[playerNum] = !gd.playerReady[playerNum];
 
-    [PunRPC] void RPC_SetGameData(GameData gameData) => DatabaseManager.gameData = gameData;
+    [PunRPC] private void RPC_SetGameData(GameData gameData) => gd = gameData;
 
-    [PunRPC] void RPC_SetGamePhase(GamePhase gamePhase) => DatabaseManager.gamePhase = gamePhase;
+    [PunRPC] private void RPC_SetGamePhase(GamePhase gamePhase) => gp = gamePhase;
 
-    [PunRPC] 
-    void RPC_SetSuggestPhase(int suggest1, int suggest2)
+    [PunRPC]
+    private void RPC_SetSuggestPhase(int suggest1, int suggest2)
     {
         if (playerNum == suggest1 || playerNum == suggest2)
         {
-            DatabaseManager.gamePhase = GamePhase.SuggestPhase;
+            gp = GamePhase.SuggestPhase;
         }
         else
         {
-            DatabaseManager.gamePhase = GamePhase.WaitingSuggestPhase;
+            gp = GamePhase.WaitingSuggestPhase;
         }
     }
-    
-    [PunRPC] 
-    void RPC_SetGetPhase(int get1, int get2)
+
+    [PunRPC]
+    private void RPC_SetGetPhase(int get1, int get2)
     {
         if (playerNum == get1 || playerNum == get2)
         {
-            DatabaseManager.gamePhase = GamePhase.GetPhase;
+            gp = GamePhase.GetPhase;
         }
         else
         {
-            DatabaseManager.gamePhase = GamePhase.WaitingGetPhase;
+            gp = GamePhase.WaitingGetPhase;
         }
     }
 
-    [PunRPC] 
-    void RPC_SavePlayerMissionData(int playerNum) => DatabaseManager.Instance.SavePlayerMissionData(playerNum);
+    [PunRPC] private void RPC_SavePlayerMissionData(int playerNum) => DatabaseManager.Instance.SavePlayerMissionData(playerNum);
 
-    [PunRPC] 
-    void RPC_SuggestGold(int playerNum, int otherPlayerNum, int proposeGold)
+    [PunRPC]
+    private void RPC_SuggestGold(int playerNum, int otherPlayerNum, int proposeGold)
     {
-        GameData gameData = DatabaseManager.gameData;
+        gd.turnData[gd.curTurn].gold[playerNum] = proposeGold;
+        gd.turnData[gd.curTurn].isProposer[playerNum] = true;
 
-        gameData.turnData[gameData.curTurn].gold[playerNum] = proposeGold;
-        gameData.turnData[gameData.curTurn].isProposer[playerNum] = true;
+        gd.turnData[gd.curTurn].gold[otherPlayerNum] = proposeGold;
+        gd.turnData[gd.curTurn].isProposer[otherPlayerNum] = false;
 
-        gameData.turnData[gameData.curTurn].gold[otherPlayerNum] = proposeGold;
-        gameData.turnData[gameData.curTurn].isProposer[otherPlayerNum] = false;
-
-        DatabaseManager.Instance.SaveTurnData((int)gameData.curTurn);
+        DatabaseManager.Instance.SaveTurnData((int)gd.curTurn);
     }
 
-    [PunRPC] 
-    void RPC_GetGold(int playerNum, int otherPlayerNum, int turnNum, bool isAchieved)
+    [PunRPC]
+    private void RPC_GetGold(int playerNum, int otherPlayerNum, bool isAchieved)
     {
-        GameData gameData = DatabaseManager.gameData;
-
-        gameData.turnData[gameData.curTurn].success[playerNum] = isAchieved;
-        gameData.turnData[gameData.curTurn].success[otherPlayerNum] = isAchieved;
+        gd.turnData[gd.curTurn].success[playerNum] = isAchieved;
+        gd.turnData[gd.curTurn].success[otherPlayerNum] = isAchieved;
 
         DatabaseManager.Instance.SaveGameData();
     }
@@ -108,19 +101,18 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
 
     public void SetGameData()
     {
-        view.RPC("RPC_SetGameData", RpcTarget.All, DatabaseManager.gameData);
+        view.RPC("RPC_SetGameData", RpcTarget.All, gd);
     }
 
     public void SetGamePhase(GamePhase gamePhase)
     {
-        view.RPC("RPC_SetGamePhase", RpcTarget.All, DatabaseManager.gamePhase);
+        view.RPC("RPC_SetGamePhase", RpcTarget.All, gd);
     }
 
     public void SetGetPhase(int get1, int get2)
     {
         view.RPC("RPC_SetGetPhase", RpcTarget.All, get1, get2);
     }
-
 
     public void SetSuggestPhase(int suggest1, int suggest2)
     {
@@ -158,7 +150,7 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
-    void SetOpponent(out TurnMatchData tmd)
+    private void SetOpponent(out TurnMatchData tmd)
     {
         tmd.turn = new Turn[6];
         Turn[] turns = InitTurns();
@@ -168,18 +160,18 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
             if (random.Next() % 2 == 0)
             {
                 tmd.turn[i * 2] = turns[i * 4];
-                tmd.turn[i * 2 + 1] = turns[i * 4 + 1];
+                tmd.turn[(i * 2) + 1] = turns[(i * 4) + 1];
 
             }
             else
             {
-                tmd.turn[i * 2] = turns[i * 4 + 2];
-                tmd.turn[i * 2 + 1] = turns[i * 4 + 3];
+                tmd.turn[i * 2] = turns[(i * 4) + 2];
+                tmd.turn[(i * 2) + 1] = turns[(i * 4) + 3];
             }
         }
         tmd.turn = tmd.turn.OrderBy(x => random.Next()).ToArray();
 
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             Debug.Log($"tmd.turn[{i}].R1S : {tmd.turn[i].R1S}");
             Debug.Log($"tmd.turn[{i}].R1G : {tmd.turn[i].R1G}");
@@ -189,10 +181,10 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
-    Turn[] InitTurns()
+    private Turn[] InitTurns()
     {
         Turn[] turns = new Turn[12];
-        turns[0].R1S= 0;
+        turns[0].R1S = 0;
         turns[0].R1G = 1;
         turns[0].R2S = 2;
         turns[0].R2G = 3;
@@ -255,12 +247,12 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         return turns;
     }
 
-    void InitGameData(ref TurnMatchData tmd)
+    private void InitGameData(ref TurnMatchData tmd)
     {
         GameData gd = DatabaseManager.gameData;
         gd.curTurn = -1;
         gd.isProposerTurn = false;
-        for(int i =0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             Debug.Log($"i : {i}, tmd.turn[i].R1P : {tmd.turn[i].R1S}, tmd.turn[i].R1G : {tmd.turn[i].R1G}");
             Debug.Log($"gd.turnData[i].matchWith[tmd.turn[i].R1S] : {gd.turnData[i].matchWith[tmd.turn[i].R1S]}");
@@ -289,7 +281,7 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
-    void InitPlayerMissions()
+    private void InitPlayerMissions()
     {
         SetPlayerMission(MissionLevel.Low);
         SetPlayerMission(MissionLevel.Mid);

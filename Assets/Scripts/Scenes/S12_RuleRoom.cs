@@ -1,13 +1,12 @@
-using UnityEngine;
-
 public class S12_RuleRoom : Scenes
 {
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
     }

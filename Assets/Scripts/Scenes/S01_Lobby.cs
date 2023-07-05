@@ -1,25 +1,24 @@
-using UnityEngine;
-
 using TMPro;
+using UnityEngine;
 
 public class S01_Lobby : Scenes
 {
     #region Field
     /* Check Sign In*/
-    [SerializeField] TMP_Text ticketCount;
-    [SerializeField] TMP_Text restTime;
-    [SerializeField] TMP_Text extraTicketCount;
-    [SerializeField] GameObject BackBtnPanel;
+    [SerializeField] private TMP_Text ticketCount;
+    [SerializeField] private TMP_Text restTime;
+    [SerializeField] private TMP_Text extraTicketCount;
+    [SerializeField] private GameObject BackBtnPanel;
     #endregion
 
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
         ShowHiText();
     }
 
-    void Update()
+    private void Update()
     {
         ForUpdate();
         ticketCount.text = DatabaseManager.userData.itemData.ticket.ToString();
@@ -27,7 +26,7 @@ public class S01_Lobby : Scenes
         restTime.text = DatabaseManager.restMinute + ":" + DatabaseManager.restSecond;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         restTime.text = "00:00";
     }
@@ -44,11 +43,11 @@ public class S01_Lobby : Scenes
     #region Btn
     public void ToggleBackBtnPanel()
     {
-        if(BackBtnPanel.activeSelf) 
-        { 
-            BackBtnPanel.SetActive(false); 
+        if (BackBtnPanel.activeSelf)
+        {
+            BackBtnPanel.SetActive(false);
         }
-        else 
+        else
         {
             BackBtnPanel.SetActive(true);
         }
@@ -57,7 +56,7 @@ public class S01_Lobby : Scenes
     #endregion
 
     #region test1
-    [SerializeField] TMP_Text nameText;
+    [SerializeField] private TMP_Text nameText;
     public void ShowHiText()
     {
         if (databaseManager.GetCurUser() != null)
@@ -79,9 +78,9 @@ public class S01_Lobby : Scenes
         // MinusTicket();
     }
 
-    void MinusTicket()
+    private void MinusTicket()
     {
-        if(databaseManager.CanUseTicket()) databaseManager.UseTicket();
+        if (databaseManager.CanUseTicket()) databaseManager.UseTicket();
     }
     #endregion
 }

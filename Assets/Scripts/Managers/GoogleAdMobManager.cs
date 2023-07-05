@@ -14,9 +14,9 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     #endregion
 
     #region Monobehaviour
-    void Awake()
+    private void Awake()
     {
-        switch(PrefsBundle.isBannerOpen)
+        switch (PrefsBundle.isBannerOpen)
         {
             case 0:
                 isBannerOpen = false;
@@ -29,7 +29,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         }
     }
 
-    void Start()
+    private void Start()
     {
         var requestConfiguration = new RequestConfiguration
             .Builder()
@@ -52,8 +52,8 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
 
     #region ¹è³Ê ±¤°í
 #if UNITY_ANDROID
-    const string bannerTestID = "ca-app-pub-3940256099942544/6300978111";
-    const string bannerID = "ca-app-pub-5086433509319711/7826487033";
+    private const string bannerTestID = "ca-app-pub-3940256099942544/6300978111";
+    private const string bannerID = "ca-app-pub-5086433509319711/7826487033";
 #elif UNITY_IPHONE
     const string bannerTestID = "ca-app-pub-3940256099942544/2934735716";
     const string bannerID = "ca-app-pub-5086433509319711/9283038937";
@@ -62,9 +62,9 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     const string bannerID = "unused";
 #endif
 
-    BannerView _bannerView;
+    private BannerView _bannerView;
 
-    void CreateBannerView()
+    private void CreateBannerView()
     {
         Debug.Log("Creating banner view");
 
@@ -108,7 +108,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         };
 
         _bannerView.OnAdPaid += (AdValue adValue) =>
-        { 
+        {
             Debug.Log(String.Format("Banner view paid {0} {1}.",
                 adValue.Value,
                 adValue.CurrencyCode));
@@ -135,7 +135,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         };
     }
 
-    void DestroyAd()
+    private void DestroyAd()
     {
         if (_bannerView != null)
         {
@@ -145,7 +145,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     }
     public void ToggleBannerAd()
     {
-        if(_bannerView != null )
+        if (_bannerView != null)
         {
             if (isBannerOpen) _bannerView.Show();
             else _bannerView.Hide();
@@ -162,8 +162,8 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
 
     #region ¸®¿öµå ±¤°í
 #if UNITY_ANDROID
-    string rewardedTestID = "ca-app-pub-3940256099942544/5224354917";
-    string rewardedID = "ca-app-pub-5086433509319711/4281105640";
+    private string rewardedTestID = "ca-app-pub-3940256099942544/5224354917";
+    private string rewardedID = "ca-app-pub-5086433509319711/4281105640";
 #elif UNITY_IPHONE
     string rewardedTestID = "ca-app-pub-3940256099942544/1712485313";
     string rewardedID = "ca-app-pub-5086433509319711/5903300775";
@@ -172,7 +172,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
     string rewardedID = "unused";
 #endif
 
-    RewardedAd rewardedAd;
+    private RewardedAd rewardedAd;
 
     public void LoadRewardedAd()
     {
@@ -237,7 +237,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         }
     }
 
-    void RegisterEventHandlers(RewardedAd ad)
+    private void RegisterEventHandlers(RewardedAd ad)
     {
         ad.OnAdPaid += (AdValue adValue) =>
         {
@@ -273,7 +273,7 @@ public class GoogleAdMobManager : BehaviorSingleton<GoogleAdMobManager>
         };
     }
 
-    void RegisterReloadHandler(RewardedAd ad)
+    private void RegisterReloadHandler(RewardedAd ad)
     {
         ad.OnAdFullScreenContentClosed += () =>
         {

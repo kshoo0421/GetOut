@@ -1,20 +1,20 @@
-using UnityEngine;
-
 using TMPro;
+using UnityEngine;
 
 public class S02_WaitingRoom : Scenes
 {
     #region Fields
-    [SerializeField] GameObject CustomMatchPanel;
-    [SerializeField] TMP_InputField customRoomNumField;
+    [SerializeField] private GameObject CustomMatchPanel;
+    [SerializeField] private TMP_InputField customRoomNumField;
     #endregion
 
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
     }

@@ -1,21 +1,22 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class S04_RandomMatching : Scenes
 {
     #region Field
-    [SerializeField] TMP_Text roomNumber; // room number
-    [SerializeField] TMP_Text curState; // current state
-    [SerializeField] TMP_Text[] PlayerNames;
+    [SerializeField] private TMP_Text roomNumber; // room number
+    [SerializeField] private TMP_Text curState; // current state
+    [SerializeField] private TMP_Text[] PlayerNames;
     #endregion
 
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
     }

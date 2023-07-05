@@ -5,7 +5,7 @@ public class BGM : MonoBehaviour
     private static BGM _instance;
     public static AudioSource bgm;
 
-    void Awake()
+    private void Awake()
     {
         if (_instance == null)
         {
@@ -16,7 +16,7 @@ public class BGM : MonoBehaviour
         }
         else
         {
-            Destroy( gameObject );
+            Destroy(gameObject);
         }
     }
 }

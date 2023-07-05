@@ -1,25 +1,26 @@
-using UnityEngine;
-using TMPro;
 using Photon.Pun;
+using TMPro;
+using UnityEngine;
 
 public class S03_CustomMatching : Scenes
 {
     #region Field
-    int curUserNum;
+    private int curUserNum;
 
-    [SerializeField] TMP_Text roomNumber; // room number
-    [SerializeField] TMP_Text curState; // current state
-    [SerializeField] TMP_Text[] playerNames;
-    [SerializeField] TMP_Text[] playerOX;
+    [SerializeField] private TMP_Text roomNumber; // room number
+    [SerializeField] private TMP_Text curState; // current state
+    [SerializeField] private TMP_Text[] playerNames;
+    [SerializeField] private TMP_Text[] playerOX;
     #endregion
 
     #region monobehaviour
-    void Start()
-    { 
+    private void Start()
+    {
         InitialSet();
         roomNumber.text = PhotonManager.RoomString;
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
         UpdatePlayerNickName();
@@ -28,9 +29,9 @@ public class S03_CustomMatching : Scenes
     #endregion
 
     #region Update String
-    void UpdatePlayerNickName()
+    private void UpdatePlayerNickName()
     {
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (i < PhotonNetwork.PlayerList.Length)
             {
@@ -47,9 +48,9 @@ public class S03_CustomMatching : Scenes
     #region Check Ready
     public void UpdatePlayerReady()
     {
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if(i <  PhotonNetwork.PlayerList.Length)
+            if (i < PhotonNetwork.PlayerList.Length)
             {
                 playerOX[i].text = DatabaseManager.gameData.playerReady[i] ? "O" : "X";
             }
@@ -71,13 +72,13 @@ public class S03_CustomMatching : Scenes
     #endregion
 
     #region Panels
-    [SerializeField] GameObject NotReadyPanel;
-    [SerializeField] GameObject BackToWaitingPanel;
+    [SerializeField] private GameObject NotReadyPanel;
+    [SerializeField] private GameObject BackToWaitingPanel;
 
-    void ToggleNotReadyPanel(bool b) => NotReadyPanel.SetActive(b);
+    private void ToggleNotReadyPanel(bool b) => NotReadyPanel.SetActive(b);
 
-    void ToggleBackToWaitingPanel(bool b) => BackToWaitingPanel.SetActive(b);
-    
+    private void ToggleBackToWaitingPanel(bool b) => BackToWaitingPanel.SetActive(b);
+
     public void CloseNotReadyPanel()
     {
         ToggleNotReadyPanel(false);
@@ -97,7 +98,7 @@ public class S03_CustomMatching : Scenes
     #endregion
 
     #region GameStart
-    bool CheckAllPlayerReady()
+    private bool CheckAllPlayerReady()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -108,7 +109,7 @@ public class S03_CustomMatching : Scenes
 
     public void GameStart()
     {
-        if(CheckAllPlayerReady())
+        if (CheckAllPlayerReady())
         {
             PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.LoadLevel(6);

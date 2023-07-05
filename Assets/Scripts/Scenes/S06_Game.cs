@@ -1,38 +1,36 @@
-using UnityEngine;
-
-using TMPro;
-
-using UnityEngine.UI;
 using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class S06_Game : Scenes
 {
     #region Field
-    [SerializeField] TMP_Text TurnNumText;  // 몇 번째 턴인지
-    [SerializeField] TMP_Text LeftTime;
+    [SerializeField] private TMP_Text TurnNumText;  // 몇 번째 턴인지
+    [SerializeField] private TMP_Text LeftTime;
 
     /* Panels */
-    [SerializeField] GameObject SuggestPanel;
-    [SerializeField] GameObject GetPanel;
-    [SerializeField] GameObject LoadingPanel;
-    [SerializeField] GameObject MissionSetPanel;
-    [SerializeField] GameObject ResultPanel;
-    [SerializeField] GameObject WaitingPanel;
+    [SerializeField] private GameObject SuggestPanel;
+    [SerializeField] private GameObject GetPanel;
+    [SerializeField] private GameObject LoadingPanel;
+    [SerializeField] private GameObject MissionSetPanel;
+    [SerializeField] private GameObject ResultPanel;
+    [SerializeField] private GameObject WaitingPanel;
 
 
-    [SerializeField] GameObject MissionCheckPanel;
-    [SerializeField] GameObject QuitBtnPanel;
+    [SerializeField] private GameObject MissionCheckPanel;
+    [SerializeField] private GameObject QuitBtnPanel;
 
     /* Game */
-    string[] playerName = new string[4];
-    GamePhase curGamePhase;
-    GameData gd;
-    GamePlayer MyPlayer;
-    bool isGet;
+    private string[] playerName = new string[4];
+    private GamePhase curGamePhase;
+    private GameData gd;
+    private GamePlayer MyPlayer;
+    private bool isGet;
     #endregion
 
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
         SetMissionCheckData();
@@ -42,7 +40,8 @@ public class S06_Game : Scenes
         curGamePhase = GamePhase.Default;
         Debug.Log($"gd.turnData[0].matchWith[0] : {gd.turnData[0].matchWith[0]}");
     }
-    void Update()
+
+    private void Update()
     {
         ForUpdate();
         TurnNumText.text = (DatabaseManager.gameData.curTurn + 1).ToString();
@@ -51,15 +50,15 @@ public class S06_Game : Scenes
         {
             curGamePhase = DatabaseManager.gamePhase;
             PanelUpdate(curGamePhase);
-         
+
             if (MyPlayer.isPlayerCaptain)
             {
                 NextPhaseFunction(curGamePhase);
             }
         }
 
-        if (curGamePhase == GamePhase.GetPhase || curGamePhase == GamePhase.SetMission || 
-            curGamePhase == GamePhase.WaitingGetPhase || curGamePhase == GamePhase.SuggestPhase 
+        if (curGamePhase == GamePhase.GetPhase || curGamePhase == GamePhase.SetMission ||
+            curGamePhase == GamePhase.WaitingGetPhase || curGamePhase == GamePhase.SuggestPhase
             || curGamePhase == GamePhase.WaitingSuggestPhase)
         {
             UpdateTime();
@@ -79,23 +78,23 @@ public class S06_Game : Scenes
     #endregion
 
     #region Toggle Panels
-    void ToggleSuggestPanel(bool b) => SuggestPanel.SetActive(b);
+    private void ToggleSuggestPanel(bool b) => SuggestPanel.SetActive(b);
 
-    void ToggleGetPanel(bool b) => GetPanel.SetActive(b);
+    private void ToggleGetPanel(bool b) => GetPanel.SetActive(b);
 
-    void ToggleLoadingPanel(bool b) => LoadingPanel.SetActive(b);
+    private void ToggleLoadingPanel(bool b) => LoadingPanel.SetActive(b);
 
-    void ToggleMissionSetPanel(bool b) => MissionSetPanel.SetActive(b);
+    private void ToggleMissionSetPanel(bool b) => MissionSetPanel.SetActive(b);
 
-    void ToggleResultPanel(bool b) => ResultPanel.SetActive(b);
+    private void ToggleResultPanel(bool b) => ResultPanel.SetActive(b);
 
-    void ToggleWaitingPanel(bool b) => WaitingPanel.SetActive(b);
+    private void ToggleWaitingPanel(bool b) => WaitingPanel.SetActive(b);
 
-    void ToggleMissionCheckPanel(bool b) => MissionCheckPanel.SetActive(b);
+    private void ToggleMissionCheckPanel(bool b) => MissionCheckPanel.SetActive(b);
 
-    void ToggleQuitBtnPanel(bool b) => QuitBtnPanel.SetActive(b);
+    private void ToggleQuitBtnPanel(bool b) => QuitBtnPanel.SetActive(b);
 
-    void PanelUpdate(GamePhase gamePhase)
+    private void PanelUpdate(GamePhase gamePhase)
     {
         AllPanelOff();
 
@@ -134,7 +133,7 @@ public class S06_Game : Scenes
         }
     }
 
-    void AllPanelOff()
+    private void AllPanelOff()
     {
         ToggleLoadingPanel(false);
         ToggleSuggestPanel(false);
@@ -196,21 +195,21 @@ public class S06_Game : Scenes
     #endregion
 
     #region Suggest Panel
-    [SerializeField] Button SuggestBtn;
-    [SerializeField] TMP_InputField SuggestGoldInputField;
-    [SerializeField] GameObject SuggestConfirmPanel;
-    [SerializeField] TMP_Text SuggestConfirmTMP;
+    [SerializeField] private Button SuggestBtn;
+    [SerializeField] private TMP_InputField SuggestGoldInputField;
+    [SerializeField] private GameObject SuggestConfirmPanel;
+    [SerializeField] private TMP_Text SuggestConfirmTMP;
 
-    void ToggleSuggestConfirmPanel(bool b) => SuggestConfirmPanel.SetActive(b);
+    private void ToggleSuggestConfirmPanel(bool b) => SuggestConfirmPanel.SetActive(b);
 
     public void PressSuggestBtn()
     {
         ToggleSuggestConfirmPanel(true);
     }
 
-    void CheckGoldAmount()
+    private void CheckGoldAmount()
     {
-        if(SuggestGoldInputField.text.Length > 2)
+        if (SuggestGoldInputField.text.Length > 2)
         {
             if (SuggestGoldInputField.text != "100")
             {
@@ -232,39 +231,39 @@ public class S06_Game : Scenes
         ToggleSuggestConfirmPanel(false);
     }
 
-    void SuggestTurnTimeEnd()
+    private void SuggestTurnTimeEnd()
     {
 
     }
     #endregion
 
     #region GetPanel
-    [SerializeField] TMP_Text GetGoldTMP;
+    [SerializeField] private TMP_Text GetGoldTMP;
 
-    [SerializeField] GameObject GetConfirmPanel;
-    [SerializeField] TMP_Text GetConfirmTMP;
+    [SerializeField] private GameObject GetConfirmPanel;
+    [SerializeField] private TMP_Text GetConfirmTMP;
 
-    [SerializeField] GameObject OutConfirmPanel;
-    [SerializeField] TMP_Text OutConfirmTMP;
+    [SerializeField] private GameObject OutConfirmPanel;
+    [SerializeField] private TMP_Text OutConfirmTMP;
 
-    [SerializeField] Button GetButton;
-    [SerializeField] Button OutButton;
+    [SerializeField] private Button GetButton;
+    [SerializeField] private Button OutButton;
 
-    void InitGetPanel()
+    private void InitGetPanel()
     {
         GetButton.interactable = true;
         OutButton.interactable = true;
         SetGetGoldTMP();
     }
 
-    void SetGetGoldTMP()    // initial
+    private void SetGetGoldTMP()    // initial
     {
         GetGoldTMP.text = gd.turnData[gd.curTurn].gold[MyPlayer.playerNum].ToString();
         GetGoldTMP.color = Color.black;
     }
 
     public void GetBtn()
-    {   
+    {
         GetConfirmPanel.SetActive(true);
         GetConfirmTMP.text = $"Do you really get {GetGoldTMP.text} gold?" +
             $"\n(opponent : {100 - gd.turnData[gd.curTurn].gold[MyPlayer.playerNum]} gold)";
@@ -315,29 +314,29 @@ public class S06_Game : Scenes
     #endregion
 
     #region Mission Set Panel
-    [SerializeField] Button[] RerollBtns;
-    [SerializeField] TMP_Text[] MissionInfoTMPs;
-    [SerializeField] TMP_Text[] MissionGoldTMPs;
+    [SerializeField] private Button[] RerollBtns;
+    [SerializeField] private TMP_Text[] MissionInfoTMPs;
+    [SerializeField] private TMP_Text[] MissionGoldTMPs;
 
-    void InitMissionSet()
+    private void InitMissionSet()
     {
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             RerollBtns[i].interactable = true;
         }
         // Mission Low, Mid, High Update
         MissionSetTextUpdate();
     }
-    
-    void MissionSetTextUpdate() // need to change
+
+    private void MissionSetTextUpdate() // need to change
     {
         MissionInfo mi = new MissionInfo();
-        
+
         int[] missionNum = new int[3];
         missionNum[0] = (int)gd.playerMissionData[MyPlayer.playerNum].low.missionNum;
         missionNum[1] = (int)gd.playerMissionData[MyPlayer.playerNum].mid.missionNum;
         missionNum[2] = (int)gd.playerMissionData[MyPlayer.playerNum].high.missionNum;
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             MissionInfoTMPs[0].text = mi.GetMissionInfo((MissionLevel)i, missionNum[i]);
             MissionGoldTMPs[0].text = mi.GetMissionGold((MissionLevel)i, missionNum[i]).ToString() + "G";
@@ -347,7 +346,7 @@ public class S06_Game : Scenes
     public void MissionReroll(int i)
     {
         // Mission Num Change
-        switch(i)
+        switch (i)
         {
             case 0:
                 MyPlayer.SetPlayerMission(MissionLevel.Low);
@@ -365,7 +364,7 @@ public class S06_Game : Scenes
 
     public void MissionFix()
     {
-        for(int i = 0;i < 3;i++)
+        for (int i = 0; i < 3; i++)
         {
             RerollBtns[i].interactable = false;
         }
@@ -391,21 +390,21 @@ public class S06_Game : Scenes
     #endregion
 
     #region Mission Check Panel
-    [SerializeField] TMP_Text[] MissionGold;
-    [SerializeField] TMP_Text[] MissionInformation;
-    [SerializeField] GameObject AllMissionsPanel;
+    [SerializeField] private TMP_Text[] MissionGold;
+    [SerializeField] private TMP_Text[] MissionInformation;
+    [SerializeField] private GameObject AllMissionsPanel;
 
     public void MissionCheckBtn() => ToggleMissionCheckPanel(true);
 
     public void CloseMissionCheck() => ToggleMissionCheckPanel(false);
 
-    void ToggleAllMissionsPanel(bool b) => AllMissionsPanel.SetActive(b);
+    private void ToggleAllMissionsPanel(bool b) => AllMissionsPanel.SetActive(b);
 
     public void LookAllMissionsBtn() => ToggleAllMissionsPanel(true);
 
     public void CloseAllMissionsBtn() => ToggleAllMissionsPanel(false);
 
-    void SetMissionCheckData()
+    private void SetMissionCheckData()
     {
         MissionGold[0].text = "50" + "G";   // 숫자 변경 필요
         MissionInformation[0].text = "Information of Mission 1\nTest Text";
@@ -434,20 +433,20 @@ public class S06_Game : Scenes
     #endregion
 
     #region timer
-    void setNewTime(int sec)    // Phase 변경과 더불어 표현되어야 함.
+    private void setNewTime(int sec)    // Phase 변경과 더불어 표현되어야 함.
     {
         DatabaseManager.leftTime = sec.ToString();
         DatabaseManager.gameTime = DateTime.Now.AddSeconds(sec);
     }
 
-    void UpdateTime()
+    private void UpdateTime()
     {
         TimeSpan diff = DatabaseManager.gameTime - DateTime.Now;
         if (diff.Seconds > 0) DatabaseManager.leftTime = diff.Seconds.ToString();
         else
         {
             DatabaseManager.leftTime = "0";
-            switch(curGamePhase)
+            switch (curGamePhase)
             {
                 case GamePhase.SetMission:
                     MyPlayer.SavePlayerMissionData();
@@ -483,7 +482,7 @@ public class S06_Game : Scenes
 
                 case GamePhase.GetPhase:
                 case GamePhase.WaitingGetPhase:
-                    if(curGamePhase == GamePhase.GetPhase) 
+                    if (curGamePhase == GamePhase.GetPhase)
                     {
                         MyPlayer.GetOutGold((int)gd.turnData[gd.curTurn].matchWith[MyPlayer.playerNum], isGet);
                     }
@@ -508,7 +507,7 @@ public class S06_Game : Scenes
     #endregion
 
     #region Game
-    void NextPhaseFunction(GamePhase curGamePhase)
+    private void NextPhaseFunction(GamePhase curGamePhase)
     {
         switch (curGamePhase)
         {
@@ -549,31 +548,31 @@ public class S06_Game : Scenes
         }
     }
 
-    void DefaultPhaseBehaviour() => MyPlayer.SetGamePhase(GamePhase.InitGame);
+    private void DefaultPhaseBehaviour() => MyPlayer.SetGamePhase(GamePhase.InitGame);
 
-    void InitPhaseBehaviour() => MyPlayer.SetGame();
+    private void InitPhaseBehaviour() => MyPlayer.SetGame();
 
-    void SetMissionPhaseBehaviour()
+    private void SetMissionPhaseBehaviour()
     {
         InitMissionSet();
         setNewTime(30);
     }
 
-    void SuggestPhaseBehaviour()
+    private void SuggestPhaseBehaviour()
     {
         setNewTime(20);
     }
 
-    void GetPhaseBehaviour()
+    private void GetPhaseBehaviour()
     {
         setNewTime(10);
     }
 
-    void LoadingPhaseBehaviour()
+    private void LoadingPhaseBehaviour()
     {
         databaseManager.SaveTurnData((int)gd.curTurn);
         int tmp1 = -1, tmp2 = -1;
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (gd.turnData[gd.curTurn].isProposer[i])
             {
@@ -588,17 +587,17 @@ public class S06_Game : Scenes
         MyPlayer.SetSuggestPhase(tmp1, tmp2);
     }
 
-    void ResultPhaseBehaviour()
+    private void ResultPhaseBehaviour()
     {
 
     }
 
-    void WaitingGetPhaseBehaviour()
+    private void WaitingGetPhaseBehaviour()
     {
 
     }
 
-    void WaitingSuggestPhaseBehaviour()
+    private void WaitingSuggestPhaseBehaviour()
     {
 
     }

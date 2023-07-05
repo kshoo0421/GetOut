@@ -1,12 +1,10 @@
-using UnityEngine;
-
 public class MissionInfo
 {
-    Mission[] LowMission = new Mission[10];
-    Mission[] MidMission = new Mission[10];
-    Mission[] HighMission = new Mission[10];
+    private Mission[] LowMission = new Mission[10];
+    private Mission[] MidMission = new Mission[10];
+    private Mission[] HighMission = new Mission[10];
 
-    void OnEnable()
+    private void OnEnable()
     {
         SetLowMissions();
         SetMidMissions();
@@ -112,7 +110,7 @@ public class MissionInfo
 
     public string GetMissionInfo(MissionLevel ml, int missionNum)
     {
-        switch(ml)
+        switch (ml)
         {
             case (MissionLevel)0:
                 return LowMission[missionNum].info;
@@ -122,7 +120,7 @@ public class MissionInfo
 
             case (MissionLevel)2:
                 return HighMission[missionNum].info;
- 
+
             default:
                 break;
         }
@@ -156,7 +154,7 @@ public class MissionInfo
 
 }
 
-struct Mission
+internal struct Mission
 {
     public int gold;
     public string info;

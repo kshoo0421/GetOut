@@ -1,7 +1,5 @@
-using UnityEngine;
-using Photon;
 using Photon.Pun;
-using Photon.Realtime;
+using UnityEngine;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -13,10 +11,10 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     /* Match Room */
     public static string StatusString, RoomString, NickNameString;
-    readonly string gameVersion = "1";
+    private readonly string gameVersion = "1";
 
     /* Gane Ready */
-    bool[] playerReady = new bool[4];
+    private bool[] playerReady = new bool[4];
     #endregion
 
     #region Singleton
@@ -36,7 +34,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Monobehaviour
-    void Awake()
+    private void Awake()
     {
         SetPhoton();
     }
@@ -44,7 +42,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Set Photon
-    void SetPhoton()
+    private void SetPhoton()
     {
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.AutomaticallySyncScene = true;    // 같은 룸의 유저들에게 자동으로 씬을 로딩

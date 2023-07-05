@@ -1,14 +1,12 @@
-using UnityEngine;
-
 public class S11_Tutorial : Scenes
 {
     #region monobehaviour
-    void Start()
+    private void Start()
     {
         InitialSet();
     }
 
-    void Update()
+    private void Update()
     {
         ForUpdate();
     }
