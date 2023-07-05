@@ -61,6 +61,10 @@ MonoBehaviour:
   - RPC_SetGamePhase
   - RPC_SetSuggestPhase
   - RPC_SetGetPhase
+  - RPC_GetOutGold
+  - RPC_SynchronizeGameData
+  - RPC_SynchronizeTurn
+  - RPC_ToggleGameReady
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

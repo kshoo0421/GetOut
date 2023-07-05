@@ -30,6 +30,10 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     /* Data For Game */
     public static GamePlayer MyPlayer;
     public static GamePhase gamePhase;
+    public static RandomOrCustom randomOrCustom;
+    public static bool isGet;
+    public static int goldAmount;
+    public static int curTurn;
     #endregion
 
     #region Monobehavior
@@ -76,15 +80,13 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         turnData.matchWith = new long[4] { -1, -1, -1, -1 };
         turnData.gold = new long[4] { 0, 0, 0, 0 };
         turnData.success = new bool[4] { false, false, false, false };
-        turnData.isProposer = new bool[4] { false, false, false, false };
+        turnData.isSuggestor = new bool[4] { false, false, false, false };
 
         gameData.turnData = new TurnData[6];
         for (int i = 0; i < 6; i++)
         {
             gameData.turnData[i] = turnData;
         }
-
-        Debug.Log($"gameData.turnData[0].matchWith[0] : {gameData.turnData[0].matchWith[0]}");
     }
     #endregion
 
@@ -248,6 +250,19 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             {
                 if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
             });
+    }
+
+    public async void UpdateGameData()
+    {
+        await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                string temp = task.Result.GetRawJsonValue();
+                gameData = JsonUtility.FromJson<GameData>(temp);
+                PrefsBundle.Instance.SetPrefsData(userData.prefsdata);
+            }
+        });
     }
     #endregion
 

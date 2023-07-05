@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System.Linq;
+using System.Transactions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -26,6 +27,11 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         gd = DatabaseManager.gameData;
         gp = DatabaseManager.gamePhase;
     }
+
+    private void OnDestroy()
+    {
+        Debug.Log($"player {playerNum} : Destroyed");
+    }
     #endregion
 
     #region IPunInstantiateMagicCallback
@@ -36,15 +42,44 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     }
     #endregion
 
-    #region PunRPC
-    [PunRPC] private void RPC_ReadyForGame(int playerNum) => gd.playerReady[playerNum] = !gd.playerReady[playerNum];
+    #region Random / Custom Room
+    public void ToggleGameReady()   // ready or not to start game
+    {
+        view.RPC("RPC_ToggleGameReady", RpcTarget.All, playerNum);
+    }
+    [PunRPC] private void RPC_ToggleGameReady(int playerNum) => gd.playerReady[playerNum] = !gd.playerReady[playerNum];
+    #endregion
 
-    [PunRPC] private void RPC_SetGameData(GameData gameData) => gd = gameData;
+    #region In Game Common Function
+    // Synchronize Turn Data
+    public void SynchronizeTurn(int curTurn) // Syncronize turn data
+    {
+        view.RPC("RPC_SynchronizeTurn", RpcTarget.All, curTurn);
+    }
+    [PunRPC] private void RPC_SynchronizeTurn(int curTurn) => DatabaseManager.curTurn = curTurn;
 
-    [PunRPC] private void RPC_SetGamePhase(GamePhase gamePhase) => gp = gamePhase;
+    // Synchronize GameData
+    public void SynchronizeGameData()
+    {
+        view.RPC("RPC_SynchronizeGameData", RpcTarget.All, playerNum);
+    }
+    [PunRPC] private void RPC_SynchronizeGameData() => DatabaseManager.Instance.UpdateGameData();
 
-    [PunRPC]
-    private void RPC_SetSuggestPhase(int suggest1, int suggest2)
+    // Save Player Mission Data
+    public void SavePlayerMissionData()
+    {
+        view.RPC("RPC_SavePlayerMissionData", RpcTarget.All);
+    }
+    [PunRPC] private void RPC_SavePlayerMissionData(int playerNum) => DatabaseManager.Instance.SavePlayerMissionData(playerNum);
+    #endregion
+
+    #region Suggest Phase
+    // when the suggest phase start, Set Suggest Phase
+    public void SetSuggestPhase(int suggest1, int suggest2)
+    {
+        view.RPC("RPC_SetSuggestPhase", RpcTarget.All, suggest1, suggest2);
+    }
+    [PunRPC] private void RPC_SetSuggestPhase(int suggest1, int suggest2)
     {
         if (playerNum == suggest1 || playerNum == suggest2)
         {
@@ -54,6 +89,34 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         {
             gp = GamePhase.WaitingSuggestPhase;
         }
+    }
+
+    // in the end, suggest gold
+    public void SuggestGold()
+    {
+        int otherPlayerNum = (int)gd.turnData[DatabaseManager.curTurn].matchWith[playerNum];
+        int goldAmount = DatabaseManager.goldAmount;
+        view.RPC("RPC_SuggestGold", RpcTarget.All, playerNum, otherPlayerNum, goldAmount);
+    }
+
+    [PunRPC] private void RPC_SuggestGold(int playerNum, int otherPlayerNum, int proposeGold)
+    {
+        int curTurn = DatabaseManager.curTurn;
+        gd.turnData[curTurn].gold[playerNum] = proposeGold;
+        gd.turnData[curTurn].isSuggestor[playerNum] = true;
+
+        gd.turnData[curTurn].gold[otherPlayerNum] = proposeGold;
+        gd.turnData[curTurn].isSuggestor[otherPlayerNum] = false;
+
+        DatabaseManager.Instance.SaveTurnData(curTurn);
+    }
+    #endregion
+
+    #region Get Phase
+    // When get phase started, set get phase
+    public void SetGetPhase(int get1, int get2)
+    {
+        view.RPC("RPC_SetGetPhase", RpcTarget.All, get1, get2);
     }
 
     [PunRPC]
@@ -69,70 +132,29 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
     }
 
-    [PunRPC] private void RPC_SavePlayerMissionData(int playerNum) => DatabaseManager.Instance.SavePlayerMissionData(playerNum);
-
-    [PunRPC]
-    private void RPC_SuggestGold(int playerNum, int otherPlayerNum, int proposeGold)
+    // In th end, select get or out the gold
+    public void GetOutGold()
     {
-        gd.turnData[gd.curTurn].gold[playerNum] = proposeGold;
-        gd.turnData[gd.curTurn].isProposer[playerNum] = true;
-
-        gd.turnData[gd.curTurn].gold[otherPlayerNum] = proposeGold;
-        gd.turnData[gd.curTurn].isProposer[otherPlayerNum] = false;
-
-        DatabaseManager.Instance.SaveTurnData((int)gd.curTurn);
+        int otherPlayerNum = (int)gd.turnData[DatabaseManager.curTurn].matchWith[playerNum];
+        bool isGet = DatabaseManager.isGet;
+        view.RPC("RPC_GetOutGold", RpcTarget.All, playerNum, otherPlayerNum, isGet);
     }
-
-    [PunRPC]
-    private void RPC_GetGold(int playerNum, int otherPlayerNum, bool isAchieved)
+    [PunRPC] private void RPC_GetOutGold(int playerNum, int otherPlayerNum, bool isGet)
     {
-        gd.turnData[gd.curTurn].success[playerNum] = isAchieved;
-        gd.turnData[gd.curTurn].success[otherPlayerNum] = isAchieved;
+        int curTurn = DatabaseManager.curTurn;
+        gd.turnData[curTurn].success[playerNum] = isGet;
+        gd.turnData[curTurn].success[otherPlayerNum] = isGet;
 
         DatabaseManager.Instance.SaveGameData();
     }
     #endregion
 
-    #region For RPC Functions
-    public void TogglePlayerReady()
-    {
-        view.RPC("RPC_ReadyForGame", RpcTarget.All, playerNum);
-    }
-
-    public void SetGameData()
-    {
-        view.RPC("RPC_SetGameData", RpcTarget.All, gd);
-    }
-
-    public void SetGamePhase(GamePhase gamePhase)
+    #region other Phase
+    public void SetGamePhase(GamePhase gamePhase)   // common phase
     {
         view.RPC("RPC_SetGamePhase", RpcTarget.All, gd);
     }
-
-    public void SetGetPhase(int get1, int get2)
-    {
-        view.RPC("RPC_SetGetPhase", RpcTarget.All, get1, get2);
-    }
-
-    public void SetSuggestPhase(int suggest1, int suggest2)
-    {
-        view.RPC("RPC_SetSuggestPhase", RpcTarget.All, suggest1, suggest2);
-    }
-
-    public void SavePlayerMissionData()
-    {
-        view.RPC("RPC_SavePlayerMissionData", RpcTarget.All, playerNum);
-    }
-
-    public void SuggestGold(int otherNum, int proposeGold)
-    {
-        view.RPC("RPC_SuggestGold", RpcTarget.All, playerNum, otherNum, proposeGold);
-    }
-
-    public void GetOutGold(int otherPlayerNum, bool isAchieved)
-    {
-        view.RPC("RPC_GetGold", RpcTarget.All, playerNum, otherPlayerNum, DatabaseManager.gameData.curTurn, isAchieved);
-    }
+    [PunRPC] private void RPC_SetGamePhase(GamePhase gamePhase) => DatabaseManager.gamePhase = gamePhase;
     #endregion
 
     #region Set Game
@@ -250,8 +272,7 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     private void InitGameData(ref TurnMatchData tmd)
     {
         GameData gd = DatabaseManager.gameData;
-        gd.curTurn = -1;
-        gd.isProposerTurn = false;
+        DatabaseManager.curTurn = -1;
         for (int i = 0; i < 6; i++)
         {
             Debug.Log($"i : {i}, tmd.turn[i].R1P : {tmd.turn[i].R1S}, tmd.turn[i].R1G : {tmd.turn[i].R1G}");
@@ -261,10 +282,10 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
             gd.turnData[i].matchWith[tmd.turn[i].R2S] = tmd.turn[i].R2G;
             gd.turnData[i].matchWith[tmd.turn[i].R2G] = tmd.turn[i].R2S;
 
-            gd.turnData[i].isProposer[tmd.turn[i].R1S] = true;
-            gd.turnData[i].isProposer[tmd.turn[i].R1G] = false;
-            gd.turnData[i].isProposer[tmd.turn[i].R2S] = true;
-            gd.turnData[i].isProposer[tmd.turn[i].R2G] = false;
+            gd.turnData[i].isSuggestor[tmd.turn[i].R1S] = true;
+            gd.turnData[i].isSuggestor[tmd.turn[i].R1G] = false;
+            gd.turnData[i].isSuggestor[tmd.turn[i].R2S] = true;
+            gd.turnData[i].isSuggestor[tmd.turn[i].R2G] = false;
         }
 
         int length = PhotonNetwork.PlayerList.Length;

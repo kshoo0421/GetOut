@@ -66,7 +66,7 @@ public class S03_CustomMatching : Scenes
     public void ToggleReady()
     {
         GamePlayer gamePlayer = DatabaseManager.MyPlayer.GetComponent<GamePlayer>();
-        gamePlayer.TogglePlayerReady();
+        gamePlayer.ToggleGameReady();
     }
 
     #endregion
@@ -102,7 +102,8 @@ public class S03_CustomMatching : Scenes
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            if (DatabaseManager.gameData.playerReady[i] == false) return false;
+            if (DatabaseManager.gameData.playerReady[i] == false) 
+                return false;
         }
         return true;
     }

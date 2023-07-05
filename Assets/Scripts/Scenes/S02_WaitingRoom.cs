@@ -33,6 +33,7 @@ public class S02_WaitingRoom : Scenes
         PhotonManager.RoomString = randomNum.ToString();
         photonManager.CreateRoom();
         databaseManager.InitGameData();
+        DatabaseManager.randomOrCustom = RandomOrCustom.Custom;
         ChangeToScene(3);
     }
 
@@ -40,6 +41,7 @@ public class S02_WaitingRoom : Scenes
     {
         PhotonManager.RoomString = customRoomNumField.text;
         photonManager.JoinRoom();
+        DatabaseManager.randomOrCustom = RandomOrCustom.Custom;
         ChangeToScene(3);
     }
     #endregion
@@ -50,6 +52,7 @@ public class S02_WaitingRoom : Scenes
         int randomNum = Random.Range(0, 999999999);
         PhotonManager.RoomString = randomNum.ToString();
         photonManager.RandomMatch();
+        DatabaseManager.randomOrCustom = RandomOrCustom.Random;
         ChangeToScene(4);
     }
     #endregion
