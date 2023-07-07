@@ -1,4 +1,4 @@
-public class S11_Tutorial : Scenes
+public class S12_Friends : Scenes
 {
     #region monobehaviour
     private void Start()

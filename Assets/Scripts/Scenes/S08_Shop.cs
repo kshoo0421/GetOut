@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S09_Shop : Scenes
+public class S08_Shop : Scenes
 {
     #region Field
     /* Ads */

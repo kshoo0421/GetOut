@@ -4,11 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class S06_Game : Scenes
+public class S05_Game : Scenes
 {
     #region Field
     [SerializeField] private TMP_Text TurnNumText;  // 몇 번째 턴인지
     [SerializeField] private TMP_Text LeftTime;
+    [SerializeField] private TMP_Text CurGold;
 
     /* Panels */
     [SerializeField] private GameObject SuggestPanel;
@@ -37,27 +38,36 @@ public class S06_Game : Scenes
         gd = DatabaseManager.gameData;
         curGamePhase = GamePhase.Default;
         DatabaseManager.gamePhase = GamePhase.InitGame;
-        PhotonNetwork.AutomaticallySyncScene = false;
-
         MyPlayer = DatabaseManager.MyPlayer;
-        if (MyPlayer == null) Debug.Log("mp : null");
-        else Debug.Log("mp : not null");
-
+        if (MyPlayer.isMasterClient) databaseManager.SaveGameData();
     }
 
     private void Update()
     {
         ForUpdate();
-        TurnTextUpdate();
-        CheckGamePhase();
-       
+        UpdateText();
+        UpdatePanel();
+        if(MyPlayer.isMasterClient)
+        {
+            CheckGamePhase();
+        }
+        Debug.Log($"Game Phase : {DatabaseManager.gamePhase}");
     }
     #endregion
 
     #region Update for Game Scene
-    private void TurnTextUpdate() => TurnNumText.text = (DatabaseManager.curTurn + 1).ToString();
+    private void UpdateText()
+    {
+        TurnTextUpdate();
+        TimeTextUpdate();
+        CurGoldUpdate();
+    }
 
-    private void CheckGamePhase()
+    private void TurnTextUpdate() => TurnNumText.text = (DatabaseManager.curTurn + 1).ToString();
+    private void TimeTextUpdate() => LeftTime.text = DatabaseManager.leftTime;
+    private void CurGoldUpdate() => CurGold.text = DatabaseManager.curGold.ToString();
+
+    private void UpdatePanel()
     {
         if (curGamePhase != DatabaseManager.gamePhase)
         {
@@ -70,7 +80,10 @@ public class S06_Game : Scenes
                 NextPhaseFunction(curGamePhase);
             }
         }
+    }
 
+    private void CheckGamePhase()
+    {
         if (curGamePhase == GamePhase.GetPhase || curGamePhase == GamePhase.SetMission ||
             curGamePhase == GamePhase.WaitingGetPhase || curGamePhase == GamePhase.SuggestPhase
             || curGamePhase == GamePhase.WaitingSuggestPhase)
@@ -194,62 +207,26 @@ public class S06_Game : Scenes
         if (diff.Seconds > 0)
         {
             DatabaseManager.leftTime = diff.Seconds.ToString();
+            if (DatabaseManager.leftTime.Length == 2)
+            {
+                LeftTime.text = DatabaseManager.leftTime;
+            }
+            else
+            {
+                LeftTime.text = "0" + DatabaseManager.leftTime;
+            }
         }
         else
         {
             TimeOut();
         }
+        MyPlayer.SynchronizeLeftTime(LeftTime.text);
     }
 
-    void TimeOut()
+    
+
+    private void CheckWhoIsSuggestor(ref int tmp1, ref int tmp2)
     {
-        DatabaseManager.leftTime = "0";
-        switch (curGamePhase)
-        {
-            case GamePhase.SetMission:
-                MyPlayer.SavePlayerMissionData();
-                if (MyPlayer.isMasterClient)
-                {
-                    MyPlayer.SynchronizeTurn(0);
-                    MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
-                }
-                break;
-
-            case GamePhase.SuggestPhase:
-            case GamePhase.WaitingSuggestPhase:
-                if (curGamePhase == GamePhase.SuggestPhase)
-                {
-                    MyPlayer.SuggestGold();
-                }
-
-                if (MyPlayer.isMasterClient)
-                {
-                    int tmp1, tmp2;
-                    CheckWhoIsSuggestor(out tmp1, out tmp2);
-                    MyPlayer.SetGetPhase(tmp1, tmp2);
-                }
-                break;
-
-            case GamePhase.GetPhase:
-            case GamePhase.WaitingGetPhase:
-                if (curGamePhase == GamePhase.GetPhase)
-                {
-                    MyPlayer.GetOutGold();
-                }
-
-                if (MyPlayer.isMasterClient)
-                {
-                    UpdateTurn();   
-                }
-                break;
-        }
-        MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
-    }
-
-    private void CheckWhoIsSuggestor(out int tmp1, out int tmp2)
-    {
-        tmp1 = -1; 
-        tmp2 = -1;
         for (int i = 0; i < 4; i++)
         {
             if (!gd.turnData[DatabaseManager.curTurn].isSuggestor[i])
@@ -278,7 +255,7 @@ public class S06_Game : Scenes
     }
     #endregion
 
-    #region Game
+    #region Phase Start
     private void NextPhaseFunction(GamePhase curGamePhase)
     {
         switch (curGamePhase)
@@ -302,6 +279,10 @@ public class S06_Game : Scenes
                 SuggestPhaseBehaviour();
                 break;
 
+            case GamePhase.WaitingSuggestPhase:
+                WaitingSuggestPhaseBehaviour();
+                break;
+
             case GamePhase.GetPhase:
                 GetPhaseBehaviour();
                 break;
@@ -314,8 +295,8 @@ public class S06_Game : Scenes
                 WaitingGetPhaseBehaviour();
                 break;
 
-            case GamePhase.WaitingSuggestPhase:
-                WaitingSuggestPhaseBehaviour();
+            default:
+                Debug.Log("Error");
                 break;
         }
     }
@@ -326,13 +307,19 @@ public class S06_Game : Scenes
 
     private void MissionSetPhaseBehaviour()
     {
-        ToggleMissionSetPanel(true);
-        setNewTime(30);
+        // setNewTime(30);
+        setNewTime(10); // develop mode
     }
 
     private void SuggestPhaseBehaviour()
     {
-        setNewTime(20);
+        // setNewTime(20);
+        setNewTime(10); // develop mode
+    }
+    private void WaitingSuggestPhaseBehaviour()
+    {
+        //setNewTime(20);
+        setNewTime(10); // develop mode
     }
 
     private void GetPhaseBehaviour()
@@ -344,18 +331,7 @@ public class S06_Game : Scenes
     {
         databaseManager.SaveTurnData(DatabaseManager.curTurn);
         int tmp1 = -1, tmp2 = -1;
-        for (int i = 0; i < 4; i++)
-        {
-            if (gd.turnData[DatabaseManager.curTurn].isSuggestor[i])
-            {
-                if (tmp1 == -1) tmp1 = i;
-                else
-                {
-                    tmp2 = i;
-                    break;
-                }
-            }
-        }
+        CheckWhoIsSuggestor(ref tmp1, ref tmp2);
         MyPlayer.SetSuggestPhase(tmp1, tmp2);
     }
 
@@ -368,10 +344,43 @@ public class S06_Game : Scenes
     {
 
     }
+    #endregion
 
-    private void WaitingSuggestPhaseBehaviour()
+    #region Phase End
+    void TimeOut()
     {
+        Debug.Log("Time Out");
+        DatabaseManager.leftTime = "00";
+        int tmp1 = -1, tmp2 = -1;
+        switch (curGamePhase)
+        {
+            case GamePhase.SetMission:
+                MyPlayer.SavePlayerMissionData();
+                MyPlayer.SynchronizeTurn(0);
+                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                break;
+        
+            case GamePhase.SuggestPhase:
+            case GamePhase.WaitingSuggestPhase:
+                CheckWhoIsSuggestor(ref tmp1, ref tmp2);
+                MyPlayer.SuggestGold(tmp1, tmp2);
+                MyPlayer.SetGetPhase(tmp1, tmp2);
+                break;
 
+            case GamePhase.GetPhase:
+            case GamePhase.WaitingGetPhase:
+                CheckWhoIsSuggestor(ref tmp1, ref tmp2);
+                MyPlayer.GetOutGold(tmp1, tmp2);
+
+                UpdateTurn();
+                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                break;
+
+            case GamePhase.LoadingPhase:
+                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                break;
+        }
     }
+
     #endregion
 }

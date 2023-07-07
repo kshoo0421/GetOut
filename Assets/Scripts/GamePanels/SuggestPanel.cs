@@ -16,6 +16,8 @@ public class SuggestPanel : MonoBehaviour
     private void OnEnable()
     {
         SuggestGoldInputField.text = "00";
+        SuggestBtn.interactable = true;
+        SuggestGoldInputField.interactable = true;
     }
 
     private void Update()

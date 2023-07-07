@@ -19,7 +19,7 @@ public class S03_CustomMatching : Scenes
     {
         InitialSet();
         databaseManager.InitGameData();
-        Debug.Log($"gameData.turnData[0] : {DatabaseManager.gameData.turnData[0]}");
+        Debug.Log($"DatabaseManager.gameData.playerMissionData[0].low.missionNum : {DatabaseManager.gameData.playerMissionData[0].low.missionNum}");
         roomNumber.text = PhotonManager.RoomString;
         DatabaseManager.randomOrCustom = RandomOrCustom.Custom;
     }

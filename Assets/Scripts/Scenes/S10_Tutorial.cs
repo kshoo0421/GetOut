@@ -1,4 +1,4 @@
-public class S10_Guide : Scenes
+public class S10_Tutorial : Scenes
 {
     #region monobehaviour
     private void Start()

@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System;
 using UnityEngine.Playables;
 
@@ -17,16 +16,8 @@ public struct GameData
         gameIndex = index;
         playerReady = new bool[4] { false, false, false, false };
         playerId = new string[4] { "AI1", "AI2", "AI3", "AI4" };
-        playerMissionData = new PlayerMissionData[4];
-        for (int i = 0; i < 4; i++)
-        {
-            playerMissionData[i] = new PlayerMissionData(0);
-        }
-        turnData = new TurnData[6];
-        for(int i = 0; i < 6; i++)
-        {
-            turnData[i] = new TurnData(0);
-        }
+        playerMissionData = new PlayerMissionData[4] { new PlayerMissionData(0), new PlayerMissionData(0), new PlayerMissionData(0), new PlayerMissionData(0) };
+        turnData = new TurnData[6] { new TurnData(0) , new TurnData(0) , new TurnData(0) , new TurnData(0), new TurnData(0), new TurnData(0) };
     }
 }
 
@@ -54,11 +45,18 @@ public struct PlayerMissionData  // 개인 미션 데이터
     public MissionData mid; // 난이도 중
     public MissionData high;    // 난이도 상
 
-    public PlayerMissionData(int i)
+    public PlayerMissionData(long i)
     {
-        low = new MissionData(0, false);
-        mid = new MissionData(0, false);
-        high = new MissionData(0, false);
+        low = new MissionData(i, false);
+        mid = new MissionData(i, false);
+        high = new MissionData(i, false);
+    }
+
+    public PlayerMissionData(long l, long m, long h)
+    {
+        low = new MissionData(l, false);
+        mid = new MissionData(m, false);
+        high = new MissionData(h, false);
     }
 }
 

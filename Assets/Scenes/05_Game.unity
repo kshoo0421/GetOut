@@ -379,6 +379,7 @@ MonoBehaviour:
   QuitPanel: {fileID: 0}
   TurnNumText: {fileID: 2034893502}
   LeftTime: {fileID: 1772498456}
+  CurGold: {fileID: 1961369076}
   SuggestPanel: {fileID: 1007166584}
   GetPanel: {fileID: 1905775799}
   LoadingPanel: {fileID: 1084306611}
@@ -548,6 +549,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 76933342}
+  - component: {fileID: 76933343}
   m_Layer: 5
   m_Name: WaitingPanel
   m_TagString: Untagged
@@ -577,6 +579,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &76933343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76933341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa392294a6b108d4eb9791c58d63ee6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaitingTMP: {fileID: 763862773}
 --- !u!1 &83053365
 GameObject:
   m_ObjectHideFlags: 0
@@ -14270,7 +14285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1006797946
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14333,7 +14348,7 @@ RectTransform:
   - {fileID: 715938392}
   - {fileID: 198496186}
   m_Father: {fileID: 1620933430}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15216,7 +15231,7 @@ RectTransform:
   - {fileID: 401944157}
   - {fileID: 1151415854}
   m_Father: {fileID: 1620933430}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15235,6 +15250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03f6ba1083c69d24f912b6722d6904eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FixButton: {fileID: 1151415855}
   RerollBtns:
   - {fileID: 971030091}
   - {fileID: 83053367}
@@ -15547,7 +15563,7 @@ RectTransform:
   - {fileID: 452527480}
   - {fileID: 1837939413}
   m_Father: {fileID: 1620933430}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16082,8 +16098,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 58786077}
-        m_TargetAssemblyTypeName: S06_Game, Assembly-CSharp
+      - m_Target: {fileID: 1062332815}
+        m_TargetAssemblyTypeName: MissionSetPanel, Assembly-CSharp
         m_MethodName: MissionFix
         m_Mode: 1
         m_Arguments:
@@ -22801,10 +22817,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1062332814}
   - {fileID: 1007166585}
   - {fileID: 1905775800}
   - {fileID: 1084306612}
-  - {fileID: 1062332814}
   - {fileID: 1421389852}
   - {fileID: 76933342}
   m_Father: {fileID: 1644643381}
@@ -25593,7 +25609,7 @@ RectTransform:
   - {fileID: 2089001793}
   - {fileID: 1707683876}
   m_Father: {fileID: 1620933430}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -26091,7 +26107,7 @@ GameObject:
   - component: {fileID: 1961369077}
   - component: {fileID: 1961369076}
   m_Layer: 5
-  m_Name: MyGoldNum_TMP
+  m_Name: CurGold_TMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

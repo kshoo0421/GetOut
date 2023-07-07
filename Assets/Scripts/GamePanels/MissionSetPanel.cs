@@ -7,7 +7,9 @@ public class MissionSetPanel : MonoBehaviour
     #region Fields
     private GameData gd;    // game data
     private GamePlayer mp;  // my player
+    MissionSupporter mi;
 
+    [SerializeField] private Button FixButton;
     [SerializeField] private Button[] RerollBtns;
     [SerializeField] private TMP_Text[] MissionInfoTMPs;
     [SerializeField] private TMP_Text[] MissionGoldTMPs;
@@ -18,7 +20,9 @@ public class MissionSetPanel : MonoBehaviour
     {
         gd = DatabaseManager.gameData;
         mp = DatabaseManager.MyPlayer;
+        mi =  new MissionSupporter();
         InitMissionSet();
+        MissionSetTextUpdate();
     }
     #endregion
 
@@ -29,23 +33,33 @@ public class MissionSetPanel : MonoBehaviour
         {
             RerollBtns[i].interactable = true;
         }
-        // Mission Low, Mid, High Update
-        MissionSetTextUpdate();
     }
 
-    private void MissionSetTextUpdate() // need to change
+    private void MissionSetTextUpdate()
     {
-        MissionSupporter mi = new MissionSupporter();
+        LowMissionTextUpdate();
+        MidMissionTextUpdate();
+        HighMissionTextUpdate();
+    }
 
-        int[] missionNum = new int[3];
-        missionNum[0] = (int)gd.playerMissionData[mp.playerNum].low.missionNum;
-        missionNum[1] = (int)gd.playerMissionData[mp.playerNum].mid.missionNum;
-        missionNum[2] = (int)gd.playerMissionData[mp.playerNum].high.missionNum;
-        for (int i = 0; i < 3; i++)
-        {
-            MissionInfoTMPs[0].text = mi.GetMissionInfo((MissionLevel)i, missionNum[i]);
-            MissionGoldTMPs[0].text = mi.GetMissionGold((MissionLevel)i, missionNum[i]).ToString() + "G";
-        }
+    private void LowMissionTextUpdate()
+    {
+        int missionNum = (int)gd.playerMissionData[mp.playerNum].low.missionNum;
+        MissionInfoTMPs[0].text = mi.GetMissionInfo(MissionLevel.Low, missionNum);
+        MissionGoldTMPs[0].text = mi.GetMissionGold(MissionLevel.Low, missionNum).ToString() + "G";
+    }
+
+    private void MidMissionTextUpdate()
+    {
+        int missionNum = (int)gd.playerMissionData[mp.playerNum].mid.missionNum;
+        MissionInfoTMPs[1].text = mi.GetMissionInfo(MissionLevel.Mid, missionNum);
+        MissionGoldTMPs[1].text = mi.GetMissionGold(MissionLevel.Mid, missionNum).ToString() + "G";
+    }
+    private void HighMissionTextUpdate()
+    {
+        int missionNum = (int)gd.playerMissionData[mp.playerNum].high.missionNum;
+        MissionInfoTMPs[2].text = mi.GetMissionInfo(MissionLevel.High, missionNum);
+        MissionGoldTMPs[2].text = mi.GetMissionGold(MissionLevel.High, missionNum).ToString() + "G";
     }
 
     public void MissionReroll(int i)
@@ -55,12 +69,15 @@ public class MissionSetPanel : MonoBehaviour
         {
             case 0:
                 mp.SetPlayerMission(MissionLevel.Low);
+                LowMissionTextUpdate();
                 break;
             case 1:
                 mp.SetPlayerMission(MissionLevel.Mid);
+                MidMissionTextUpdate();
                 break;
             case 2:
                 mp.SetPlayerMission(MissionLevel.High);
+                HighMissionTextUpdate();
                 break;
         }
         RerollBtns[i].interactable = false;
@@ -73,6 +90,7 @@ public class MissionSetPanel : MonoBehaviour
         {
             RerollBtns[i].interactable = false;
         }
+        FixButton.interactable = false;
     }
     #endregion
 

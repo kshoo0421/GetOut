@@ -41,6 +41,7 @@ public class GetPanel : MonoBehaviour
 
     private void SetGetGoldTMP()    // initial
     {
+        DatabaseManager.goldAmount = (int)DatabaseManager.gameData.turnData[DatabaseManager.curTurn].gold[DatabaseManager.MyPlayer.playerNum];
         GetGoldTMP.color = Color.black;
         GetGoldTMP.text = DatabaseManager.goldAmount.ToString();
     }
@@ -55,6 +56,8 @@ public class GetPanel : MonoBehaviour
     public void OutBtn()
     {
         OutConfirmPanel.SetActive(true);
+        OutConfirmTMP.text = $"Do you really refuse {DatabaseManager.goldAmount} gold?" +
+            $"\n(opponent : {100 - DatabaseManager.goldAmount} gold)";
     }
 
     public void GetConfirmYesBtn()

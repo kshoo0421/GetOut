@@ -1,4 +1,4 @@
-public class S12_RuleRoom : Scenes
+public class S09_Guide : Scenes
 {
     #region monobehaviour
     private void Start()

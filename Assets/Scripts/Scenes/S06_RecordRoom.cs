@@ -1,4 +1,4 @@
-public class S08_GameRecords : Scenes
+public class S06_RecordRoom : Scenes
 {
     #region monobehaviour
     private void Start()

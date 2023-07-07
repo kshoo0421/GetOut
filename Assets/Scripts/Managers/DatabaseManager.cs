@@ -28,7 +28,8 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public static GameData gameData;
     public static UserData userData;
     public static DateTime gameTime;
-    public static string leftTime = "0";
+    public static string leftTime = "00";
+    public static long curGold = 0;
 
     /* Data For Game */
     public static GamePlayer MyPlayer;
@@ -218,12 +219,12 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         });
     }
 
-    public async void SavePlayerMissionData(int playerNum)
+    public async void SavePlayerMissionData(int playerNum, PlayerMissionData pmd)
     {
-        string json = JsonUtility.ToJson(gameData.playerMissionData);
+        string json = JsonUtility.ToJson(pmd);
 
         await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString())
-            .Child("PlayerMissionData").Child(playerNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+            .Child("playerMissionData").Child(playerNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
             if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
         });
@@ -393,4 +394,16 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         }
     }
     #endregion
+
+    public void UpdateCurGold()
+    {
+        curGold = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (gameData.turnData[i].success[MyPlayer.playerNum])
+            {
+                curGold += gameData.turnData[i].gold[MyPlayer.playerNum];
+            } 
+        }
+    }
 }
