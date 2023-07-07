@@ -71,11 +71,11 @@ public class S01_Lobby : Scenes
     #endregion
 
     #region test2
-    public new void Test()    // 데이터베이스 테스트용
+    public void Test()    // 데이터베이스 테스트용
     {
         // ResultDataSave();
         // UserDataSave();
-        // MinusTicket();
+        MinusTicket();
     }
 
     private void MinusTicket()

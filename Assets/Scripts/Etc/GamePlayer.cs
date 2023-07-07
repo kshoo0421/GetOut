@@ -1,24 +1,24 @@
 using Photon.Pun;
 using System.Linq;
-using System.Transactions;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
+public class GamePlayer : MonoBehaviour
 {
     #region Field
     public int playerNum;
-    public bool isPlayerCaptain;
+    public bool isMasterClient;
 
     public PhotonView view;
     private GameData gd;
     private GamePhase gp;
+    DatabaseManager databaseManager;
     #endregion
 
     #region MonoBehabiour
     private void OnEnable()
     {
-        view = GetComponent<PhotonView>();
+        databaseManager =  DatabaseManager.Instance;
+        
         if (view.IsMine == true)
         {
             DatabaseManager.MyPlayer = this;
@@ -26,6 +26,8 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         }
         gd = DatabaseManager.gameData;
         gp = DatabaseManager.gamePhase;
+
+        CheckIsMasterClient();
     }
 
     private void OnDestroy()
@@ -34,13 +36,13 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     }
     #endregion
 
-    #region IPunInstantiateMagicCallback
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    private void CheckIsMasterClient()
     {
-        // e.g. store this gameobject as this player's charater in Player.TagObject
-        info.Sender.TagObject = this.GameObject();
+        if (PhotonNetwork.MasterClient == PhotonNetwork.LocalPlayer)
+        {
+            isMasterClient = true;
+        }
     }
-    #endregion
 
     #region Random / Custom Room
     public void ToggleGameReady()   // ready or not to start game
@@ -160,20 +162,20 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     #region Set Game
     public void SetGame()
     {
-        isPlayerCaptain = (view.ViewID == 1001) ? true : false;
-        if (isPlayerCaptain)
+        if (isMasterClient)
         {
-            DatabaseManager.gameData = new GameData();
-            TurnMatchData tmd;
-            SetOpponent(out tmd);
+            gd = new GameData();
+            TurnMatchData tmd = new TurnMatchData();
+            SetOpponent(ref tmd);
             InitGameData(ref tmd);
             InitPlayerMissions();
             SetGamePhase(GamePhase.SetMission);
         }
     }
 
-    private void SetOpponent(out TurnMatchData tmd)
+    private void SetOpponent(ref TurnMatchData tmd)
     {
+        Debug.Log("Set Opponent");
         tmd.turn = new Turn[6];
         Turn[] turns = InitTurns();
         System.Random random = new System.Random();
@@ -192,15 +194,6 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
             }
         }
         tmd.turn = tmd.turn.OrderBy(x => random.Next()).ToArray();
-
-        for (int i = 0; i < 6; i++)
-        {
-            Debug.Log($"tmd.turn[{i}].R1S : {tmd.turn[i].R1S}");
-            Debug.Log($"tmd.turn[{i}].R1G : {tmd.turn[i].R1G}");
-            Debug.Log($"tmd.turn[{i}].R2S : {tmd.turn[i].R2S}");
-            Debug.Log($"tmd.turn[{i}].R2G : {tmd.turn[i].R2G}");
-            Debug.Log($"-------------------------------------");
-        }
     }
 
     private Turn[] InitTurns()
@@ -275,17 +268,15 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
         DatabaseManager.curTurn = -1;
         for (int i = 0; i < 6; i++)
         {
-            Debug.Log($"i : {i}, tmd.turn[i].R1P : {tmd.turn[i].R1S}, tmd.turn[i].R1G : {tmd.turn[i].R1G}");
-            Debug.Log($"gd.turnData[i].matchWith[tmd.turn[i].R1S] : {gd.turnData[i].matchWith[tmd.turn[i].R1S]}");
-            gd.turnData[i].matchWith[tmd.turn[i].R1S] = tmd.turn[i].R1G;
-            gd.turnData[i].matchWith[tmd.turn[i].R1G] = tmd.turn[i].R1S;
-            gd.turnData[i].matchWith[tmd.turn[i].R2S] = tmd.turn[i].R2G;
-            gd.turnData[i].matchWith[tmd.turn[i].R2G] = tmd.turn[i].R2S;
+            gd.turnData[i].matchWith[(int)tmd.turn[i].R1S] = tmd.turn[i].R1G;
+            gd.turnData[i].matchWith[(int)tmd.turn[i].R1G] = tmd.turn[i].R1S;
+            gd.turnData[i].matchWith[(int)tmd.turn[i].R2S] = tmd.turn[i].R2G;
+            gd.turnData[i].matchWith[(int)tmd.turn[i].R2G] = tmd.turn[i].R2S;
 
-            gd.turnData[i].isSuggestor[tmd.turn[i].R1S] = true;
-            gd.turnData[i].isSuggestor[tmd.turn[i].R1G] = false;
-            gd.turnData[i].isSuggestor[tmd.turn[i].R2S] = true;
-            gd.turnData[i].isSuggestor[tmd.turn[i].R2G] = false;
+            gd.turnData[i].isSuggestor[(int)tmd.turn[i].R1S] = true;
+            gd.turnData[i].isSuggestor[(int)tmd.turn[i].R1G] = false;
+            gd.turnData[i].isSuggestor[(int)tmd.turn[i].R2S] = true;
+            gd.turnData[i].isSuggestor[(int)tmd.turn[i].R2G] = false;
         }
 
         int length = PhotonNetwork.PlayerList.Length;
@@ -312,29 +303,30 @@ public class GamePlayer : MonoBehaviour, IPunInstantiateMagicCallback
     public void SetPlayerMission(MissionLevel missionLevel)
     {
         System.Random random = new System.Random();
-        int tmp = random.Next(1, 10);
+        long tmp = random.Next(1, 10);
         switch (missionLevel)
         {
             case MissionLevel.Low:
-                while (DatabaseManager.gameData.playerMissionData[playerNum].low.missionNum == tmp)
+                Debug.Log($"playerNum : {playerNum}");//, gd.playerMissionData[playerNum] : {gd.playerMissionData[playerNum]}");
+                while (gd.playerMissionData[playerNum].low.missionNum == tmp)
                 {
                     tmp = random.Next(1, 10);
                 }
-                DatabaseManager.gameData.playerMissionData[playerNum].low.missionNum = tmp;
+                gd.playerMissionData[playerNum].low.missionNum = tmp;
                 break;
             case MissionLevel.Mid:
-                while (DatabaseManager.gameData.playerMissionData[playerNum].mid.missionNum == tmp)
+                while (gd.playerMissionData[playerNum].mid.missionNum == tmp)
                 {
                     tmp = random.Next(1, 10);
                 }
-                DatabaseManager.gameData.playerMissionData[playerNum].mid.missionNum = tmp;
+                gd.playerMissionData[playerNum].mid.missionNum = tmp;
                 break;
             case MissionLevel.High:
-                while (DatabaseManager.gameData.playerMissionData[playerNum].high.missionNum == tmp)
+                while (gd.playerMissionData[playerNum].high.missionNum == tmp)
                 {
                     tmp = random.Next(1, 10);
                 }
-                DatabaseManager.gameData.playerMissionData[playerNum].high.missionNum = tmp;
+                gd.playerMissionData[playerNum].high.missionNum = tmp;
                 break;
             default: break;
         }

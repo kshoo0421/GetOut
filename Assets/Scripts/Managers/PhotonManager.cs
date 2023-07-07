@@ -1,5 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Threading;
 using UnityEngine;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
@@ -94,14 +95,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             photonView.TransferOwnership(PhotonNetwork.PlayerListOthers[0]);
         }
+        DatabaseManager.enteredRoom = false;
         PhotonNetwork.LeaveRoom();
     }
     public override void OnCreatedRoom() => Debug.Log("방 만들기 완료");
 
     public override void OnJoinedRoom()
     {
-        SpawnMyPlayerEverywhere();
+        DatabaseManager.enteredRoom = true;
         Debug.Log("방 참가 완료");
+        SpawnPlayerPrefab();    
     }
     public override void OnCreateRoomFailed(short returnCode, string message) => Debug.Log("방 만들기 실패");
 
@@ -120,9 +123,26 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
-    #region Spawn
-    public void SpawnMyPlayerEverywhere()
+    #region LoadScene
+    public void LoadScene(int sceneNum)
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.LoadLevel(sceneNum);
+        SpawnPlayerPrefab();
+    }
+    #endregion
+
+    #region Spawn
+    public void SpawnPlayerPrefab()
+    {
+        int i = 0;
+        while ((!DatabaseManager.enteredRoom) && i < 11)
+        {
+            Debug.Log("Delayed");
+            i++;
+            Thread.Sleep(1000);
+
+        }
         PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
         Debug.Log("instance 생성 완료");
     }
@@ -146,34 +166,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public void ReadyOrNot(int playerNum, bool ready)
     {
         playerReady[playerNum - 1] = ready;
-    }
-    #endregion
-
-    #region Information
-    [ContextMenu("정보")]
-    public void Info()
-    {
-        if (PhotonNetwork.InRoom)
-        {
-            Debug.Log("현재 방 이름 : " + PhotonNetwork.CurrentRoom.Name);
-            Debug.Log("현재 방 인원수 : " + PhotonNetwork.CurrentRoom.PlayerCount);
-            Debug.Log("현재 방 최대인원수 : " + PhotonNetwork.CurrentRoom.MaxPlayers);
-
-            string playerStr = "방에 있는 플레이어 목록 : ";
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++) playerStr += PhotonNetwork.PlayerList[i].NickName + ", ";
-            Debug.Log($"Length : {PhotonNetwork.PlayerList.Length}");
-            Debug.Log($"NickName : {PhotonNetwork.PlayerList[0].NickName}");
-
-            Debug.Log(playerStr);
-        }
-        else
-        {
-            Debug.Log("접속한 인원 수 : " + PhotonNetwork.CountOfPlayers);
-            Debug.Log("방 개수 : " + PhotonNetwork.CountOfRooms);
-            Debug.Log("모든 방에 있는 인원 수 : " + PhotonNetwork.CountOfPlayersInRooms);
-            Debug.Log("로비에 있는지? : " + PhotonNetwork.InLobby);
-            Debug.Log("연결됐는지? : " + PhotonNetwork.IsConnected);
-        }
     }
     #endregion
 }

@@ -21,6 +21,9 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public static bool IsFirebaseReady { get; set; }
     private static bool IsSignInOnProgress { get; set; }
 
+    /* Photon */
+    public static bool enteredRoom = false;
+
     /* database */
     public static GameData gameData;
     public static UserData userData;
@@ -71,22 +74,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     public void InitGameData()
     {
-        gameData = new GameData();
-        gameData.playerReady = new bool[4] { false, false, false, false };
-        gameData.playerId = new string[4] { "AI1", "AI2", "AI3", "AI4" };
-        gameData.playerMissionData = new PlayerMissionData[4];
-
-        TurnData turnData = new TurnData();
-        turnData.matchWith = new long[4] { -1, -1, -1, -1 };
-        turnData.gold = new long[4] { 0, 0, 0, 0 };
-        turnData.success = new bool[4] { false, false, false, false };
-        turnData.isSuggestor = new bool[4] { false, false, false, false };
-
-        gameData.turnData = new TurnData[6];
-        for (int i = 0; i < 6; i++)
-        {
-            gameData.turnData[i] = turnData;
-        }
+        gameData = new GameData(0);
     }
     #endregion
 

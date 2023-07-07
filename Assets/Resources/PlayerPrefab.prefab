@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 0
-  isPlayerCaptain: 0
-  view: {fileID: 0}
+  isMasterClient: 0
+  view: {fileID: 6514034069998027462}
 --- !u!114 &6514034069998027462
 MonoBehaviour:
   m_ObjectHideFlags: 0

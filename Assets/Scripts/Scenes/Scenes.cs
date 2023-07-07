@@ -219,11 +219,4 @@ public class Scenes : MonoBehaviour
         Application.Quit();
     }
     #endregion
-
-    #region Test
-    public void Test()
-    {
-        photonManager.Info();
-    }
-    #endregion
 }

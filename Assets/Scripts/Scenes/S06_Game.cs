@@ -1,8 +1,8 @@
+using Photon.Pun;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class S06_Game : Scenes
 {
@@ -33,25 +33,39 @@ public class S06_Game : Scenes
     private void Start()
     {
         InitialSet();
-        databaseManager.InitGameData();
-        MyPlayer = DatabaseManager.MyPlayer;
+        photonManager.SpawnPlayerPrefab();
         gd = DatabaseManager.gameData;
         curGamePhase = GamePhase.Default;
-        Debug.Log($"gd.turnData[0].matchWith[0] : {gd.turnData[0].matchWith[0]}");
+        DatabaseManager.gamePhase = GamePhase.InitGame;
+        PhotonNetwork.AutomaticallySyncScene = false;
+
+        MyPlayer = DatabaseManager.MyPlayer;
+        if (MyPlayer == null) Debug.Log("mp : null");
+        else Debug.Log("mp : not null");
+
     }
 
     private void Update()
     {
         ForUpdate();
-        TurnNumText.text = (DatabaseManager.curTurn + 1).ToString();
+        TurnTextUpdate();
+        CheckGamePhase();
+       
+    }
+    #endregion
 
+    #region Update for Game Scene
+    private void TurnTextUpdate() => TurnNumText.text = (DatabaseManager.curTurn + 1).ToString();
+
+    private void CheckGamePhase()
+    {
         if (curGamePhase != DatabaseManager.gamePhase)
         {
             curGamePhase = DatabaseManager.gamePhase;
             AllPanelOff();
             OpenSelectedPanel(curGamePhase);
 
-            if (MyPlayer.isPlayerCaptain)
+            if (MyPlayer.isMasterClient)
             {
                 NextPhaseFunction(curGamePhase);
             }
@@ -96,9 +110,6 @@ public class S06_Game : Scenes
         switch (gamePhase)
         {
             case GamePhase.Default:
-                ToggleLoadingPanel(true);
-                break;
-
             case GamePhase.InitGame:
             case GamePhase.LoadingPhase:
                 ToggleLoadingPanel(true);
@@ -147,8 +158,6 @@ public class S06_Game : Scenes
     public void ToggleResultBtn() => ToggleResultPanel(!ResultPanel.activeSelf);
     public void ToggleWaitingBtn() => ToggleWaitingPanel(!WaitingPanel.activeSelf);
     #endregion
-
-
 
     #region Quit/MissionCheck Panel On/Off
     public void MissionCheckBtn() => ToggleMissionCheckPanel(true);
@@ -199,7 +208,7 @@ public class S06_Game : Scenes
         {
             case GamePhase.SetMission:
                 MyPlayer.SavePlayerMissionData();
-                if (MyPlayer.isPlayerCaptain)
+                if (MyPlayer.isMasterClient)
                 {
                     MyPlayer.SynchronizeTurn(0);
                     MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
@@ -213,7 +222,7 @@ public class S06_Game : Scenes
                     MyPlayer.SuggestGold();
                 }
 
-                if (MyPlayer.isPlayerCaptain)
+                if (MyPlayer.isMasterClient)
                 {
                     int tmp1, tmp2;
                     CheckWhoIsSuggestor(out tmp1, out tmp2);
@@ -228,7 +237,7 @@ public class S06_Game : Scenes
                     MyPlayer.GetOutGold();
                 }
 
-                if (MyPlayer.isPlayerCaptain)
+                if (MyPlayer.isMasterClient)
                 {
                     UpdateTurn();   
                 }

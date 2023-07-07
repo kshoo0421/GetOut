@@ -1,6 +1,7 @@
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class S03_CustomMatching : Scenes
 {
@@ -17,7 +18,10 @@ public class S03_CustomMatching : Scenes
     private void Start()
     {
         InitialSet();
+        databaseManager.InitGameData();
+        Debug.Log($"gameData.turnData[0] : {DatabaseManager.gameData.turnData[0]}");
         roomNumber.text = PhotonManager.RoomString;
+        DatabaseManager.randomOrCustom = RandomOrCustom.Custom;
     }
 
     private void Update()
@@ -65,7 +69,7 @@ public class S03_CustomMatching : Scenes
     #region Button
     public void ToggleReady()
     {
-        GamePlayer gamePlayer = DatabaseManager.MyPlayer.GetComponent<GamePlayer>();
+        GamePlayer gamePlayer = DatabaseManager.MyPlayer;
         gamePlayer.ToggleGameReady();
     }
 
@@ -112,8 +116,9 @@ public class S03_CustomMatching : Scenes
     {
         if (CheckAllPlayerReady())
         {
-            PhotonNetwork.AutomaticallySyncScene = true;
-            PhotonNetwork.LoadLevel(6);
+            DatabaseManager.MyPlayer = null;
+            ChangeToScene(5);
+//            photonManager.LoadScene(5);
         }
         else
         {
@@ -126,6 +131,12 @@ public class S03_CustomMatching : Scenes
         PhotonNetwork.AutomaticallySyncScene = false;
         photonManager.LeaveRoom();
         ChangeToScene(2);
+    }
+    #endregion
+
+    #region Test
+    public void Test()
+    {
     }
     #endregion
 }
