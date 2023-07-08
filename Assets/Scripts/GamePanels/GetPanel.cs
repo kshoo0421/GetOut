@@ -36,6 +36,7 @@ public class GetPanel : MonoBehaviour
     {
         GetButton.interactable = true;
         OutButton.interactable = true;
+        DatabaseManager.isGet = true;
         SetGetGoldTMP();
     }
 

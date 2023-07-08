@@ -1,7 +1,7 @@
-using Photon.Pun;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class S05_Game : Scenes
@@ -20,6 +20,7 @@ public class S05_Game : Scenes
     [SerializeField] private GameObject WaitingPanel;
 
 
+    [SerializeField] private Button MissionCheckBtn;
     [SerializeField] private GameObject MissionCheckPanel;
     [SerializeField] private GameObject QuitBtnPanel;
 
@@ -28,6 +29,9 @@ public class S05_Game : Scenes
     private GamePhase curGamePhase;
     private GameData gd;
     private GamePlayer MyPlayer;
+
+    /* test */
+    private GamePhase test_gp = GamePhase.Default;
     #endregion
 
     #region monobehaviour
@@ -39,11 +43,17 @@ public class S05_Game : Scenes
         curGamePhase = GamePhase.Default;
         DatabaseManager.gamePhase = GamePhase.InitGame;
         MyPlayer = DatabaseManager.MyPlayer;
+        MissionCheckBtn.interactable = false;
         if (MyPlayer.isMasterClient) databaseManager.SaveGameData();
     }
 
     private void Update()
     {
+        if(test_gp != curGamePhase)
+        {
+            test_gp = curGamePhase;
+            Debug.Log($"turn {DatabaseManager.curTurn + 1}, cur GamePhase : {test_gp}");
+        }
         ForUpdate();
         UpdateText();
         UpdatePanel();
@@ -51,7 +61,6 @@ public class S05_Game : Scenes
         {
             CheckGamePhase();
         }
-        Debug.Log($"Game Phase : {DatabaseManager.gamePhase}");
     }
     #endregion
 
@@ -173,7 +182,7 @@ public class S05_Game : Scenes
     #endregion
 
     #region Quit/MissionCheck Panel On/Off
-    public void MissionCheckBtn() => ToggleMissionCheckPanel(true);
+    public void ToggleMissionCheckPanel() => ToggleMissionCheckPanel(true);
 
     public void CloseMissionCheck() => ToggleMissionCheckPanel(false);
 
@@ -342,7 +351,7 @@ public class S05_Game : Scenes
 
     private void WaitingGetPhaseBehaviour()
     {
-
+        setNewTime(10);
     }
     #endregion
 
@@ -355,6 +364,7 @@ public class S05_Game : Scenes
         switch (curGamePhase)
         {
             case GamePhase.SetMission:
+                MissionCheckBtn.interactable = true;
                 MyPlayer.SavePlayerMissionData();
                 MyPlayer.SynchronizeTurn(0);
                 MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
@@ -370,6 +380,7 @@ public class S05_Game : Scenes
             case GamePhase.GetPhase:
             case GamePhase.WaitingGetPhase:
                 CheckWhoIsSuggestor(ref tmp1, ref tmp2);
+                Debug.Log($"tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.GetOutGold(tmp1, tmp2);
 
                 UpdateTurn();
@@ -381,6 +392,5 @@ public class S05_Game : Scenes
                 break;
         }
     }
-
     #endregion
 }

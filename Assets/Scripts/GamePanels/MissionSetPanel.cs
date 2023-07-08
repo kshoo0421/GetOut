@@ -20,7 +20,7 @@ public class MissionSetPanel : MonoBehaviour
     {
         gd = DatabaseManager.gameData;
         mp = DatabaseManager.MyPlayer;
-        mi =  new MissionSupporter();
+        mi =  MissionSupporter.Instance;
         InitMissionSet();
         MissionSetTextUpdate();
     }
@@ -93,5 +93,4 @@ public class MissionSetPanel : MonoBehaviour
         FixButton.interactable = false;
     }
     #endregion
-
 }

@@ -5,7 +5,7 @@ public class WaitingPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text WaitingTMP;
 
-    void Start()
+    void OnEnable() 
     {
         if(DatabaseManager.gamePhase == GamePhase.WaitingSuggestPhase)
         {

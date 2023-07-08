@@ -84,6 +84,7 @@ public class GamePlayer : MonoBehaviour
     // Save Player Mission Data
     public void SavePlayerMissionData()
     {
+        Debug.Log($"Save Player Mission : {playerNum}");
         view.RPC("RPC_SavePlayerMissionData", RpcTarget.All);
 
         if(isMasterClient)  // for AI
@@ -176,7 +177,7 @@ public class GamePlayer : MonoBehaviour
         DatabaseManager.gameData.turnData[curTurn].gold[aiNum] = goldAmount;
         DatabaseManager.gameData.turnData[curTurn].isSuggestor[aiNum] = true;
 
-        DatabaseManager.gameData.turnData[curTurn].gold[otherPlayerNum] = goldAmount;
+        DatabaseManager.gameData.turnData[curTurn].gold[otherPlayerNum] = 100 - goldAmount;
         DatabaseManager.gameData.turnData[curTurn].isSuggestor[otherPlayerNum] = false;
 
         DatabaseManager.Instance.SaveTurnData(curTurn);
@@ -212,16 +213,17 @@ public class GamePlayer : MonoBehaviour
 
     [PunRPC] private void RPC_GetOutGold(int playerNum, int suggest1, int suggest2)
     {
-        if(suggest1 != playerNum &&  suggest2 != playerNum) // if player is getter and not ai
+        if(suggest1 != playerNum &&  suggest2 != playerNum) // if player is getter
         {
             int curTurn = DatabaseManager.curTurn;
             int otherPlayerNum = (int)DatabaseManager.gameData.turnData[curTurn].matchWith[playerNum];
             bool isGet = DatabaseManager.isGet;
+            Debug.Log($"is Get : {DatabaseManager.isGet}");
             DatabaseManager.gameData.turnData[curTurn].success[playerNum] = isGet;
             DatabaseManager.gameData.turnData[curTurn].success[otherPlayerNum] = isGet;
-            DatabaseManager.Instance.UpdateCurGold();
-            DatabaseManager.Instance.UpdateGameData();
+            DatabaseManager.Instance.SaveTurnData(curTurn);
         }
+        DatabaseManager.Instance.UpdateCurGold();
     }
 
     private void GetOutGoldForAi(int suggest1, int suggest2)
@@ -233,7 +235,7 @@ public class GamePlayer : MonoBehaviour
             {
                 int otherPlayerNum = (int)DatabaseManager.gameData.turnData[curTurn].matchWith[i];
                 bool isGet = AiGet(i, (int)DatabaseManager.gameData.turnData[curTurn].gold[i]);
-                view.RPC("RPC_GetOutGold", RpcTarget.All, i, otherPlayerNum, isGet);
+                view.RPC("RPC_GetOutGoldForAi", RpcTarget.All, i, otherPlayerNum, isGet);
             }
         }
     }
@@ -243,7 +245,7 @@ public class GamePlayer : MonoBehaviour
         int curTurn = DatabaseManager.curTurn;
         DatabaseManager.gameData.turnData[curTurn].success[aiNum] = isGet;
         DatabaseManager.gameData.turnData[curTurn].success[otherPlayerNum] = isGet;
-        DatabaseManager.Instance.UpdateGameData();
+        DatabaseManager.Instance.SaveTurnData(curTurn);
     }
     #endregion
 

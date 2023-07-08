@@ -33,11 +33,11 @@ public class MissionCheckPanel : MonoBehaviour
         MissionGold[0].text = ms.GetMissionGold(MissionLevel.Low, pmd.low.missionNum) + "G"; 
         MissionInformation[0].text = ms.GetMissionInfo(MissionLevel.Low, pmd.low.missionNum);
 
-        MissionGold[1].text = ms.GetMissionGold(MissionLevel.Low, pmd.low.missionNum) + "G";
-        MissionInformation[1].text = ms.GetMissionInfo(MissionLevel.Low, pmd.low.missionNum);
+        MissionGold[1].text = ms.GetMissionGold(MissionLevel.Mid, pmd.mid.missionNum) + "G";
+        MissionInformation[1].text = ms.GetMissionInfo(MissionLevel.Mid, pmd.mid.missionNum);
 
-        MissionGold[2].text = ms.GetMissionGold(MissionLevel.Low, pmd.low.missionNum) + "G";
-        MissionInformation[2].text = ms.GetMissionInfo(MissionLevel.Low, pmd.low.missionNum);
+        MissionGold[2].text = ms.GetMissionGold(MissionLevel.High, pmd.high.missionNum) + "G";
+        MissionInformation[2].text = ms.GetMissionInfo(MissionLevel.High, pmd.high.missionNum);
     }
     #endregion
 }

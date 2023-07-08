@@ -23,6 +23,7 @@ public class SuggestPanel : MonoBehaviour
     private void Update()
     {
         CheckGoldAmount();
+        DatabaseManager.goldAmount = int.Parse(SuggestGoldInputField.text);
     }
 
     #endregion
