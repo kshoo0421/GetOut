@@ -232,10 +232,28 @@ public class S05_Game : Scenes
         MyPlayer.SynchronizeLeftTime(LeftTime.text);
     }
 
-    
-
     private void CheckWhoIsSuggestor(ref int tmp1, ref int tmp2)
     {
+        tmp1 = -1;
+        tmp2 = -1;
+        for (int i = 0; i < 4; i++)
+        {
+            if (gd.turnData[DatabaseManager.curTurn].isSuggestor[i])
+            {
+                if (tmp1 == -1) tmp1 = i;
+                else
+                {
+                    tmp2 = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void CheckWhoIsGetter(ref int tmp1, ref int tmp2)
+    {
+        tmp1 = -1;
+        tmp2 = -1;
         for (int i = 0; i < 4; i++)
         {
             if (!gd.turnData[DatabaseManager.curTurn].isSuggestor[i])
@@ -341,6 +359,7 @@ public class S05_Game : Scenes
         databaseManager.SaveTurnData(DatabaseManager.curTurn);
         int tmp1 = -1, tmp2 = -1;
         CheckWhoIsSuggestor(ref tmp1, ref tmp2);
+        Debug.Log($"Who is Suggestor? tmp1 : {tmp1}, tmp2 : {tmp2}");
         MyPlayer.SetSuggestPhase(tmp1, tmp2);
     }
 
@@ -373,16 +392,18 @@ public class S05_Game : Scenes
             case GamePhase.SuggestPhase:
             case GamePhase.WaitingSuggestPhase:
                 CheckWhoIsSuggestor(ref tmp1, ref tmp2);
+                Debug.Log($"Who is Suggestor? tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.SuggestGold(tmp1, tmp2);
+                CheckWhoIsGetter(ref tmp1, ref tmp2);
+                Debug.Log($"Who is Getter? tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.SetGetPhase(tmp1, tmp2);
                 break;
 
             case GamePhase.GetPhase:
             case GamePhase.WaitingGetPhase:
-                CheckWhoIsSuggestor(ref tmp1, ref tmp2);
-                Debug.Log($"tmp1 : {tmp1}, tmp2 : {tmp2}");
+                CheckWhoIsGetter(ref tmp1, ref tmp2);
+                Debug.Log($"Who is Getter? tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.GetOutGold(tmp1, tmp2);
-
                 UpdateTurn();
                 MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
                 break;

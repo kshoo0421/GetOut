@@ -135,6 +135,7 @@ public class GamePlayer : MonoBehaviour
 
     public void SuggestGold(int suggest1, int suggest2)
     {
+        Debug.Log($"Suggest Gold - s1 : {suggest1} / s2 : {suggest2}");
         view.RPC("RPC_SuggestGold", RpcTarget.All, suggest1, suggest2);
         SuggestGoldForAi(suggest1, suggest2);
     }
@@ -186,39 +187,40 @@ public class GamePlayer : MonoBehaviour
 
     #region Get Phase
     // When get phase started, set get phase
-    public void SetGetPhase(int suggest1, int suggest2)
+    public void SetGetPhase(int getter1, int getter2)
     {
-        view.RPC("RPC_SetGetPhase", RpcTarget.All, suggest1, suggest2);
+        view.RPC("RPC_SetGetPhase", RpcTarget.All, getter1, getter2);
     }
 
     [PunRPC]
-    private void RPC_SetGetPhase(int suggest1, int suggest2)
+    private void RPC_SetGetPhase(int getter1, int getter2)
     {
-        if (playerNum == suggest1 || playerNum == suggest2)
+        if (playerNum == getter1 || playerNum == getter2)
         {
-            DatabaseManager.gamePhase = GamePhase.WaitingGetPhase;
+            DatabaseManager.gamePhase = GamePhase.GetPhase;
         }
         else
         {
-            DatabaseManager.gamePhase = GamePhase.GetPhase;
+            DatabaseManager.gamePhase = GamePhase.WaitingGetPhase;
         }
     }
 
     // In th end, select get or out the gold
-    public void GetOutGold(int suggest1, int suggest2)
+    public void GetOutGold(int getter1, int getter2)
     {
-        view.RPC("RPC_GetOutGold", RpcTarget.All, playerNum, suggest1, suggest2);
-        GetOutGoldForAi(suggest1, suggest2);
+        Debug.Log($"GetOut Gold - g1 : {getter1} / g2 : {getter2}");
+        view.RPC("RPC_GetOutGold", RpcTarget.All, playerNum, getter1, getter2);
+        GetOutGoldForAi(getter1, getter2);
     }
 
-    [PunRPC] private void RPC_GetOutGold(int playerNum, int suggest1, int suggest2)
+    [PunRPC] private void RPC_GetOutGold(int playerNum, int getter1, int getter2)
     {
-        if(suggest1 != playerNum &&  suggest2 != playerNum) // if player is getter
+        if(playerNum == getter1 || playerNum == getter2) // if player is getter
         {
             int curTurn = DatabaseManager.curTurn;
             int otherPlayerNum = (int)DatabaseManager.gameData.turnData[curTurn].matchWith[playerNum];
             bool isGet = DatabaseManager.isGet;
-            Debug.Log($"is Get : {DatabaseManager.isGet}");
+            Debug.Log($"Turn {DatabaseManager.curTurn}, is Get : {DatabaseManager.isGet}");
             DatabaseManager.gameData.turnData[curTurn].success[playerNum] = isGet;
             DatabaseManager.gameData.turnData[curTurn].success[otherPlayerNum] = isGet;
             DatabaseManager.Instance.SaveTurnData(curTurn);
@@ -226,12 +228,12 @@ public class GamePlayer : MonoBehaviour
         DatabaseManager.Instance.UpdateCurGold();
     }
 
-    private void GetOutGoldForAi(int suggest1, int suggest2)
+    private void GetOutGoldForAi(int getter1, int getter2)
     {
         int curTurn = DatabaseManager.curTurn;
         for (int i = playerLength; i < 4; i++)
         {
-            if (suggest1 != playerNum && suggest2 != playerNum) // if player is getter and not ai
+            if (i == getter1 || i == getter2) // if player is getter
             {
                 int otherPlayerNum = (int)DatabaseManager.gameData.turnData[curTurn].matchWith[i];
                 bool isGet = AiGet(i, (int)DatabaseManager.gameData.turnData[curTurn].gold[i]);
