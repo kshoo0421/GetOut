@@ -1,5 +1,7 @@
+using Firebase.Auth;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class S02_WaitingRoom : Scenes
 {
@@ -12,6 +14,7 @@ public class S02_WaitingRoom : Scenes
     private void Start()
     {
         InitialSet();
+        photonManager.SetUserNickName();
     }
 
     private void Update()

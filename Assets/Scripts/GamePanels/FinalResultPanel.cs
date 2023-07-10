@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class ResultPanel : MonoBehaviour
+public class FinalResultPanel : MonoBehaviour
 {
     #region Fields
     private GameData gd;
@@ -20,6 +20,7 @@ public class ResultPanel : MonoBehaviour
     #region Monobehaviour
     private void OnEnable()
     {
+        Debug.Log("Final OnEnable");
         gd = DatabaseManager.gameData;
         ms = MissionSupporter.Instance;
         photonManager = PhotonManager.Instance;
@@ -37,7 +38,7 @@ public class ResultPanel : MonoBehaviour
         {
             SetPlayerData(i);
         }
-        SetRankText();
+        // SetRankText();
     }
 
     private void SetPlayerData(int playerNum)
@@ -45,7 +46,6 @@ public class ResultPanel : MonoBehaviour
         long sum = 0;
         TMP_Text[] temp_text = SetTempTMP(playerNum);
         SetPlayerMameText(ref temp_text, playerNum);
-        SetTurnText(ref temp_text, playerNum, ref sum);
         SetTurnText(ref temp_text, playerNum, ref sum);
         SetMissionText(ref temp_text, playerNum, ref sum);
         SetSumText(ref temp_text, playerNum, ref sum);
@@ -66,7 +66,7 @@ public class ResultPanel : MonoBehaviour
         return new TMP_Text[11];
     }
 
-    private void SetPlayerMameText(ref TMP_Text[] temp_text, int playerNum) => temp_text[playerNum].text = gd.playerId[playerNum];
+    private void SetPlayerMameText(ref TMP_Text[] temp_text, int playerNum) => temp_text[playerNum].text = DatabaseManager.gameData.playerId[playerNum];
 
     private void SetTurnText(ref TMP_Text[] tmp_text, int playerNum, ref long sum)
     {
@@ -152,7 +152,7 @@ public class ResultPanel : MonoBehaviour
         int rank = 1;
         bool[] isDone = new bool[4] { false, false, false, false };
 
-        while (rank != 5)
+        while (rank < 5)
         {
             for (int i = 0; i < 4; i++) // find biggest
             {
@@ -166,7 +166,7 @@ public class ResultPanel : MonoBehaviour
                     UpdatePlayerRank(i, rank.ToString());
                 }
             }
-            rank = CountRankedPlayer(ref isDone) + 1;
+            rank += CountRankedPlayer(ref isDone);
         }
     }
 

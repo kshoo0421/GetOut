@@ -10,7 +10,8 @@ public class GetPanel : MonoBehaviour
     private GameData gd;    // game data
     private GamePlayer mp;  // my player
 
-    [SerializeField] private TMP_Text GetGoldTMP;
+    [SerializeField] private TMP_Text MyGoldTMP;
+    [SerializeField] private TMP_Text OpponentGoldTMP;
 
     [SerializeField] private GameObject GetConfirmPanel;
     [SerializeField] private TMP_Text GetConfirmTMP;
@@ -29,6 +30,12 @@ public class GetPanel : MonoBehaviour
         gd = DatabaseManager.gameData;
         mp = DatabaseManager.MyPlayer;
     }
+
+    private void OnDisable()
+    {
+        GetConfirmPanel.SetActive(false);
+        OutConfirmPanel.SetActive(false);
+    }
     #endregion
 
     #region Functions
@@ -43,8 +50,10 @@ public class GetPanel : MonoBehaviour
     private void SetGetGoldTMP()    // initial
     {
         DatabaseManager.goldAmount = (int)DatabaseManager.gameData.turnData[DatabaseManager.curTurn].gold[DatabaseManager.MyPlayer.playerNum];
-        GetGoldTMP.color = Color.black;
-        GetGoldTMP.text = DatabaseManager.goldAmount.ToString();
+        MyGoldTMP.color = Color.black;
+        MyGoldTMP.text = DatabaseManager.goldAmount.ToString();
+        OpponentGoldTMP.color = Color.black;
+        OpponentGoldTMP.text = (100 - DatabaseManager.goldAmount).ToString();
     }
 
     public void GetBtn()
@@ -65,7 +74,8 @@ public class GetPanel : MonoBehaviour
     {
         DatabaseManager.isGet = true;
         GetConfirmPanel.SetActive(false);
-        GetGoldTMP.color = Color.blue;
+        MyGoldTMP.color = Color.blue;
+        OpponentGoldTMP.color= Color.blue;
 
         GetButton.interactable = false;
         OutButton.interactable = false;
@@ -80,7 +90,8 @@ public class GetPanel : MonoBehaviour
     {
         DatabaseManager.isGet = false;
         OutConfirmPanel.SetActive(false);
-        GetGoldTMP.color = Color.red;
+        MyGoldTMP.color = Color.red;
+        OpponentGoldTMP.color = Color.red;
 
         GetButton.interactable = false;
         OutButton.interactable = false;

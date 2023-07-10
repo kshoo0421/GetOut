@@ -35,11 +35,6 @@ public class GamePlayer : MonoBehaviour
             InitAi();
         }
     }
-
-    private void OnDestroy()
-    {
-        Debug.Log($"player {playerNum} : Destroyed");
-    }
     #endregion
 
     private void CheckIsMasterClient()
@@ -75,16 +70,15 @@ public class GamePlayer : MonoBehaviour
 
 
     // Synchronize GameData
-    public void SynchronizeGameData()
+    public void SaveGameData()
     {
-        view.RPC("RPC_SynchronizeGameData", RpcTarget.All, playerNum);
+        view.RPC("RPC_SaveGameData", RpcTarget.All);
     }
-    [PunRPC] private void RPC_SynchronizeGameData() => DatabaseManager.Instance.UpdateGameData();
+    [PunRPC] private void RPC_SaveGameData() => DatabaseManager.Instance.SaveGameData();
 
     // Save Player Mission Data
     public void SavePlayerMissionData()
     {
-        Debug.Log($"Save Player Mission : {playerNum}");
         view.RPC("RPC_SavePlayerMissionData", RpcTarget.All);
 
         if(isMasterClient)  // for AI
@@ -125,17 +119,16 @@ public class GamePlayer : MonoBehaviour
     {
         if (playerNum == suggest1 || playerNum == suggest2)
         {
-            DatabaseManager.gamePhase = GamePhase.SuggestPhase;
+            DatabaseManager.gamePhase = GamePhase.Suggest;
         }
         else
         {
-            DatabaseManager.gamePhase = GamePhase.WaitingSuggestPhase;
+            DatabaseManager.gamePhase = GamePhase.WaitingSuggest;
         }
     }
 
     public void SuggestGold(int suggest1, int suggest2)
     {
-        Debug.Log($"Suggest Gold - s1 : {suggest1} / s2 : {suggest2}");
         view.RPC("RPC_SuggestGold", RpcTarget.All, suggest1, suggest2);
         SuggestGoldForAi(suggest1, suggest2);
     }
@@ -165,7 +158,7 @@ public class GamePlayer : MonoBehaviour
             if (i == suggest1 || i == suggest2)
             {
                 int otherPlayerNum = (int)gd.turnData[DatabaseManager.curTurn].matchWith[i];
-                int goldAmount = Random.Range(aiSuggestMin[i], aiSuggestMax[i] + 1);
+                int goldAmount = AiSuggest(i);
                 view.RPC("RPC_SuggestGoldForAi", RpcTarget.All, i, otherPlayerNum, goldAmount);
             }        
         }
@@ -197,18 +190,17 @@ public class GamePlayer : MonoBehaviour
     {
         if (playerNum == getter1 || playerNum == getter2)
         {
-            DatabaseManager.gamePhase = GamePhase.GetPhase;
+            DatabaseManager.gamePhase = GamePhase.Get;
         }
         else
         {
-            DatabaseManager.gamePhase = GamePhase.WaitingGetPhase;
+            DatabaseManager.gamePhase = GamePhase.WaitingGet;
         }
     }
 
     // In th end, select get or out the gold
     public void GetOutGold(int getter1, int getter2)
     {
-        Debug.Log($"GetOut Gold - g1 : {getter1} / g2 : {getter2}");
         view.RPC("RPC_GetOutGold", RpcTarget.All, playerNum, getter1, getter2);
         GetOutGoldForAi(getter1, getter2);
     }
@@ -220,12 +212,10 @@ public class GamePlayer : MonoBehaviour
             int curTurn = DatabaseManager.curTurn;
             int otherPlayerNum = (int)DatabaseManager.gameData.turnData[curTurn].matchWith[playerNum];
             bool isGet = DatabaseManager.isGet;
-            Debug.Log($"Turn {DatabaseManager.curTurn}, is Get : {DatabaseManager.isGet}");
             DatabaseManager.gameData.turnData[curTurn].success[playerNum] = isGet;
             DatabaseManager.gameData.turnData[curTurn].success[otherPlayerNum] = isGet;
             DatabaseManager.Instance.SaveTurnData(curTurn);
         }
-        DatabaseManager.Instance.UpdateCurGold();
     }
 
     private void GetOutGoldForAi(int getter1, int getter2)
@@ -266,15 +256,15 @@ public class GamePlayer : MonoBehaviour
         {
             TurnMatchData tmd = new TurnMatchData();
             SetOpponent(ref tmd);
-            InitGameData(ref tmd);
+            InitGdWithTmd(ref tmd);
             InitPlayerMissions();
             SetGamePhase(GamePhase.SetMission);
         }
+        databaseManager.SaveGameData();
     }
 
     private void SetOpponent(ref TurnMatchData tmd)
     {
-        Debug.Log("Set Opponent");
         tmd.turn = new Turn[6];
         Turn[] turns = InitTurns();
         System.Random random = new System.Random();
@@ -360,9 +350,8 @@ public class GamePlayer : MonoBehaviour
         return turns;
     }
 
-    private void InitGameData(ref TurnMatchData tmd)
+    private void InitGdWithTmd(ref TurnMatchData tmd)
     {
-        GameData gd = DatabaseManager.gameData;
         DatabaseManager.curTurn = -1;
         for (int i = 0; i < 6; i++)
         {
@@ -375,19 +364,6 @@ public class GamePlayer : MonoBehaviour
             gd.turnData[i].isSuggestor[(int)tmd.turn[i].R1G] = false;
             gd.turnData[i].isSuggestor[(int)tmd.turn[i].R2S] = true;
             gd.turnData[i].isSuggestor[(int)tmd.turn[i].R2G] = false;
-        }
-
-        int length = PhotonNetwork.PlayerList.Length;
-        for (int i = 0; i < 4; i++)
-        {
-            if (i < length)
-            {
-                gd.playerId[i] = PhotonNetwork.PlayerList[i].UserId;
-            }
-            else
-            {
-                gd.playerId[i] = "AI" + (i - length);
-            }
         }
     }
 
@@ -474,6 +450,13 @@ public class GamePlayer : MonoBehaviour
             return false;
         }
     }
+
+    [PunRPC]
+    private void RPC_SetUserNickName(string nickName, int playerNum)
+    {
+        DatabaseManager.gameData.playerId[playerNum] = nickName;
+    }
+
 
     #endregion
 }

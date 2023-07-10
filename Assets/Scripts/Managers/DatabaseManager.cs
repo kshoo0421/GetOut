@@ -38,6 +38,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public static bool isGet;
     public static int goldAmount;
     public static int curTurn;
+    public static int suggestCount, getCount;
     #endregion
 
     #region Monobehavior
@@ -147,6 +148,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
                     int index = User.Email.IndexOf("@");
                     PhotonManager.NickNameString = User.Email.Substring(0, index);
                     PhotonManager.Instance.SetUserID(User.UserId);
+                    Debug.Log($"NickName : {PhotonManager.NickNameString}");
                 }
             });
         await SetUserData();
@@ -275,7 +277,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
                     userData = JsonUtility.FromJson<UserData>(temp);
                     PrefsBundle.Instance.SetPrefsData(userData.prefsdata);
                 }
-                //SaveUserData();
+                // SaveUserData();
             });
         }
         else // initialize user data and save

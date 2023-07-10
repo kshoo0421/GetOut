@@ -36,14 +36,7 @@ public class S03_CustomMatching : Scenes
     {
         for (int i = 0; i < 4; i++)
         {
-            if (i < PhotonNetwork.PlayerList.Length)
-            {
-                playerNames[i].text = photonManager.GetPlayerInformation(i);
-            }
-            else
-            {
-                playerNames[i].text = "AI";
-            }
+            playerNames[i].text = photonManager.GetPlayerInformation(i);
         }
     }
     #endregion
@@ -115,9 +108,13 @@ public class S03_CustomMatching : Scenes
     {
         if (CheckAllPlayerReady())
         {
+            for(int i = 0;i<4; i++)
+            {
+                DatabaseManager.gameData.playerId[i] = playerNames[i].text;
+            }
+
             DatabaseManager.MyPlayer = null;
             ChangeToScene(5);
-//            photonManager.LoadScene(5);
         }
         else
         {
@@ -136,6 +133,7 @@ public class S03_CustomMatching : Scenes
     #region Test
     public void Test()
     {
+        Debug.Log($"NickName : {PhotonNetwork.LocalPlayer.NickName}");
     }
     #endregion
 }

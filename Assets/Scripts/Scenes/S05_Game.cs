@@ -10,13 +10,16 @@ public class S05_Game : Scenes
     [SerializeField] private TMP_Text TurnNumText;  // 몇 번째 턴인지
     [SerializeField] private TMP_Text LeftTime;
     [SerializeField] private TMP_Text CurGold;
+    [SerializeField] private TMP_Text[] TurnTexts;
+    [SerializeField] private TMP_Text[] GoldTexts;
 
     /* Panels */
+    [SerializeField] private GameObject MissionSetPanel;
+    [SerializeField] private GameObject StartTurnPanel;
     [SerializeField] private GameObject SuggestPanel;
     [SerializeField] private GameObject GetPanel;
-    [SerializeField] private GameObject LoadingPanel;
-    [SerializeField] private GameObject MissionSetPanel;
-    [SerializeField] private GameObject ResultPanel;
+    [SerializeField] private GameObject TurnResultPanel;
+    [SerializeField] private GameObject FinalResultPanel;
     [SerializeField] private GameObject WaitingPanel;
 
 
@@ -24,11 +27,13 @@ public class S05_Game : Scenes
     [SerializeField] private GameObject MissionCheckPanel;
     [SerializeField] private GameObject QuitBtnPanel;
 
+    
     /* Game */
     private string[] playerName = new string[4];
     private GamePhase curGamePhase;
     private GameData gd;
     private GamePlayer MyPlayer;
+
 
     /* test */
     private GamePhase test_gp = GamePhase.Default;
@@ -38,13 +43,8 @@ public class S05_Game : Scenes
     private void Start()
     {
         InitialSet();
-        photonManager.SpawnPlayerPrefab();
-        gd = DatabaseManager.gameData;
-        curGamePhase = GamePhase.Default;
-        DatabaseManager.gamePhase = GamePhase.InitGame;
-        MyPlayer = DatabaseManager.MyPlayer;
-        MissionCheckBtn.interactable = false;
-        if (MyPlayer.isMasterClient) databaseManager.SaveGameData();
+        InitGame();
+        SetGameInfo();
     }
 
     private void Update()
@@ -52,7 +52,6 @@ public class S05_Game : Scenes
         if(test_gp != curGamePhase)
         {
             test_gp = curGamePhase;
-            Debug.Log($"turn {DatabaseManager.curTurn + 1}, cur GamePhase : {test_gp}");
         }
         ForUpdate();
         UpdateText();
@@ -64,17 +63,80 @@ public class S05_Game : Scenes
     }
     #endregion
 
+    #region Init Game
+    private void InitGame()
+    {
+        photonManager.SpawnPlayerPrefab();
+        gd = DatabaseManager.gameData;
+        curGamePhase = GamePhase.Default;
+        DatabaseManager.gamePhase = GamePhase.InitGame;
+        MyPlayer = DatabaseManager.MyPlayer;
+        MissionCheckBtn.interactable = false;
+        if (MyPlayer.isMasterClient) databaseManager.SaveGameData();
+    }
+    #endregion
+
+    #region Set Game Info
+    private void SetGameInfo()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            TurnTexts[i].text = "T" + (i + 1).ToString();
+            GoldTexts[i].text = "";
+        }
+        DatabaseManager.suggestCount = 1;
+        DatabaseManager.getCount = 1;
+    }
+
+    private void UpdateTurnText(int curTurn)
+    {
+        if (curTurn == 6) return;
+
+        for(int i = 0; i < 6; i++)
+        {
+            TurnTexts[i].color = Color.black;
+        }
+
+        if (gd.turnData[curTurn].isSuggestor[MyPlayer.playerNum])
+        {
+            TurnTexts[curTurn].text = "S" + DatabaseManager.suggestCount.ToString();
+            DatabaseManager.suggestCount++;
+        }
+        else
+        {
+            TurnTexts[curTurn].text = "G" + DatabaseManager.getCount.ToString();
+            DatabaseManager.getCount++;
+        }
+        TurnTexts[curTurn].color = Color.yellow;
+    }
+
+    private void UpdateGoldText(int curTurn)
+    {
+        GoldTexts[curTurn].text = gd.turnData[curTurn].gold[MyPlayer.playerNum].ToString();
+    }
+
+    private void UpdateGoldColor(int curTurn)
+    {
+        if (gd.turnData[curTurn].success[MyPlayer.playerNum])
+        {
+            GoldTexts[curTurn].color = Color.blue;
+        }
+        else
+        {
+            GoldTexts[curTurn].color = Color.red;
+        }
+    }
+    #endregion
+
     #region Update for Game Scene
     private void UpdateText()
     {
         TurnTextUpdate();
         TimeTextUpdate();
-        CurGoldUpdate();
     }
 
     private void TurnTextUpdate() => TurnNumText.text = (DatabaseManager.curTurn + 1).ToString();
     private void TimeTextUpdate() => LeftTime.text = DatabaseManager.leftTime;
-    private void CurGoldUpdate() => CurGold.text = DatabaseManager.curGold.ToString();
 
     private void UpdatePanel()
     {
@@ -83,19 +145,19 @@ public class S05_Game : Scenes
             curGamePhase = DatabaseManager.gamePhase;
             AllPanelOff();
             OpenSelectedPanel(curGamePhase);
-
-            if (MyPlayer.isMasterClient)
-            {
-                NextPhaseFunction(curGamePhase);
-            }
+            //if (MyPlayer.isMasterClient)
+            //{
+            NextPhaseFunction(curGamePhase);
+            //}
         }
     }
 
     private void CheckGamePhase()
     {
-        if (curGamePhase == GamePhase.GetPhase || curGamePhase == GamePhase.SetMission ||
-            curGamePhase == GamePhase.WaitingGetPhase || curGamePhase == GamePhase.SuggestPhase
-            || curGamePhase == GamePhase.WaitingSuggestPhase)
+        if (curGamePhase == GamePhase.SetMission || curGamePhase == GamePhase.StartTurn 
+            || curGamePhase == GamePhase.Suggest || curGamePhase == GamePhase.WaitingSuggest
+            || curGamePhase == GamePhase.Get || curGamePhase == GamePhase.WaitingGet
+            || curGamePhase == GamePhase.TurnResult)
         {
             UpdateTime();
         }
@@ -109,20 +171,15 @@ public class S05_Game : Scenes
     #endregion
 
     #region Toggle Panels
-    private void ToggleSuggestPanel(bool b) => SuggestPanel.SetActive(b);
-
-    private void ToggleGetPanel(bool b) => GetPanel.SetActive(b);
-
-    private void ToggleLoadingPanel(bool b) => LoadingPanel.SetActive(b);
-
     private void ToggleMissionSetPanel(bool b) => MissionSetPanel.SetActive(b);
-
-    private void ToggleResultPanel(bool b) => ResultPanel.SetActive(b);
-
+    private void ToggleStartTurnPanel(bool b) => StartTurnPanel.SetActive(b);
+    private void ToggleSuggestPanel(bool b) => SuggestPanel.SetActive(b);
+    private void ToggleGetPanel(bool b) => GetPanel.SetActive(b);
+    private void ToggleTurnResultPanel(bool b) => TurnResultPanel.SetActive(b);
     private void ToggleWaitingPanel(bool b) => WaitingPanel.SetActive(b);
+    private void ToggleFinalResultPanel(bool b) => FinalResultPanel.SetActive(b);
 
     private void ToggleMissionCheckPanel(bool b) => MissionCheckPanel.SetActive(b);
-
     private void ToggleQuitPanel(bool b) => QuitBtnPanel.SetActive(b);
     #endregion
 
@@ -133,51 +190,59 @@ public class S05_Game : Scenes
         {
             case GamePhase.Default:
             case GamePhase.InitGame:
-            case GamePhase.LoadingPhase:
-                ToggleLoadingPanel(true);
                 break;
 
             case GamePhase.SetMission:
                 ToggleMissionSetPanel(true);
                 break;
 
-            case GamePhase.SuggestPhase:
+            case GamePhase.StartTurn:
+                ToggleStartTurnPanel(true); 
+                break;
+
+            case GamePhase.TurnResult:
+                ToggleTurnResultPanel(true);
+                break;
+
+
+            case GamePhase.Suggest:
                 ToggleSuggestPanel(true);
                 break;
 
-            case GamePhase.GetPhase:
+            case GamePhase.Get:
                 DatabaseManager.isGet = true;
                 ToggleGetPanel(true);
                 break;
 
-            case GamePhase.ResultPhase:
-                ToggleResultPanel(true);
+            case GamePhase.WaitingGet:
+            case GamePhase.WaitingSuggest:
+                ToggleWaitingPanel(true);
                 break;
 
-            case GamePhase.WaitingGetPhase:
-            case GamePhase.WaitingSuggestPhase:
-                ToggleWaitingPanel(true);
+            case GamePhase.FinalResult:
+                ToggleFinalResultPanel(true);
                 break;
         }
     }
 
     private void AllPanelOff()
     {
-        ToggleLoadingPanel(false);
+        ToggleMissionSetPanel(false);
+        ToggleStartTurnPanel(false);
         ToggleSuggestPanel(false);
         ToggleGetPanel(false);
-        ToggleMissionSetPanel(false);
-        ToggleResultPanel(false);
         ToggleWaitingPanel(false);
+        ToggleTurnResultPanel(false);
+        ToggleFinalResultPanel(false);
     }
     #endregion
 
     #region Test Toggle Panel
     public void ToggleGetBtn() => ToggleGetPanel(!GetPanel.activeSelf);
     public void ToggleSuggestBtn() => ToggleSuggestPanel(!SuggestPanel.activeSelf);
-    public void ToggleLoadingBtn() => ToggleLoadingPanel(!LoadingPanel.activeSelf);
+    public void ToggleLoadingBtn() => ToggleTurnResultPanel(!TurnResultPanel.activeSelf);
     public void ToggleMissionBtn() => ToggleMissionSetPanel(!MissionSetPanel.activeSelf);
-    public void ToggleResultBtn() => ToggleResultPanel(!ResultPanel.activeSelf);
+    public void ToggleResultBtn() => ToggleFinalResultPanel(!FinalResultPanel.activeSelf);
     public void ToggleWaitingBtn() => ToggleWaitingPanel(!WaitingPanel.activeSelf);
     #endregion
 
@@ -267,19 +332,6 @@ public class S05_Game : Scenes
             }
         }
     }
-
-    private void UpdateTurn()
-    {
-        if (DatabaseManager.curTurn < 5)
-        {
-            MyPlayer.SynchronizeTurn(DatabaseManager.curTurn + 1);
-            MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
-        }
-        else
-        {
-            MyPlayer.SetGamePhase(GamePhase.ResultPhase);
-        }
-    }
     #endregion
 
     #region Phase Start
@@ -288,38 +340,43 @@ public class S05_Game : Scenes
         switch (curGamePhase)
         {
             case GamePhase.Default:
-                DefaultPhaseBehaviour();
+                DefaultBehaviour();
                 break;
 
             case GamePhase.InitGame:
-                InitPhaseBehaviour();
-                break;
-            case GamePhase.LoadingPhase:
-                LoadingPhaseBehaviour();
+                InitGameBehaviour();
                 break;
 
             case GamePhase.SetMission:
-                MissionSetPhaseBehaviour();
+                SetMissionBehaviour();
                 break;
 
-            case GamePhase.SuggestPhase:
-                SuggestPhaseBehaviour();
+            case GamePhase.StartTurn:
+                StartTurnBehaviour();
                 break;
 
-            case GamePhase.WaitingSuggestPhase:
-                WaitingSuggestPhaseBehaviour();
+            case GamePhase.Suggest:
+                SuggestBehaviour();
                 break;
 
-            case GamePhase.GetPhase:
-                GetPhaseBehaviour();
+            case GamePhase.WaitingSuggest:
+                WaitingSuggestBehaviour();
                 break;
 
-            case GamePhase.ResultPhase:
-                ResultPhaseBehaviour();
+            case GamePhase.Get:
+                GetBehaviour();
                 break;
 
-            case GamePhase.WaitingGetPhase:
-                WaitingGetPhaseBehaviour();
+            case GamePhase.WaitingGet:
+                WaitingGetBehaviour();
+                break;
+
+            case GamePhase.TurnResult:
+                TurnResultBehaviour();
+                break;
+
+            case GamePhase.FinalResult:
+                FinalResultBehaviour();
                 break;
 
             default:
@@ -328,56 +385,69 @@ public class S05_Game : Scenes
         }
     }
 
-    private void DefaultPhaseBehaviour() => MyPlayer.SetGamePhase(GamePhase.InitGame);
+    private void DefaultBehaviour()
+    {
+        MyPlayer.SetGamePhase(GamePhase.InitGame);
+    }
 
-    private void InitPhaseBehaviour() => MyPlayer.SetGame();
-
-    private void MissionSetPhaseBehaviour()
+    private void InitGameBehaviour()
+    {
+        MyPlayer.SetGame();
+    }
+    private void SetMissionBehaviour()
     {
         // setNewTime(30);
         setNewTime(10); // develop mode
     }
+    private void StartTurnBehaviour()
+    {
+        UpdateTurnText(DatabaseManager.curTurn);
+        setNewTime(5);
+    }
 
-    private void SuggestPhaseBehaviour()
+    private void SuggestBehaviour()
     {
         // setNewTime(20);
-        setNewTime(10); // develop mode
+        setNewTime(20); // develop mode
     }
-    private void WaitingSuggestPhaseBehaviour()
+    private void WaitingSuggestBehaviour()
     {
         //setNewTime(20);
-        setNewTime(10); // develop mode
+        setNewTime(20); // develop mode
     }
 
-    private void GetPhaseBehaviour()
+    private void GetBehaviour()
     {
+        UpdateGoldText(DatabaseManager.curTurn);
+        // setNewTime(10);
         setNewTime(10);
     }
 
-    private void LoadingPhaseBehaviour()
+    private void WaitingGetBehaviour()
     {
+        UpdateGoldText(DatabaseManager.curTurn);
+        // setNewTime(10);
+        setNewTime(10);
+    }
+
+    private void TurnResultBehaviour()
+    {
+        databaseManager.UpdateCurGold();
+        CurGold.text = DatabaseManager.curGold.ToString();
+        UpdateGoldColor(DatabaseManager.curTurn);
         databaseManager.SaveTurnData(DatabaseManager.curTurn);
-        int tmp1 = -1, tmp2 = -1;
-        CheckWhoIsSuggestor(ref tmp1, ref tmp2);
-        Debug.Log($"Who is Suggestor? tmp1 : {tmp1}, tmp2 : {tmp2}");
-        MyPlayer.SetSuggestPhase(tmp1, tmp2);
+        setNewTime(5);
     }
 
-    private void ResultPhaseBehaviour()
+    private void FinalResultBehaviour()
     {
-
-    }
-
-    private void WaitingGetPhaseBehaviour()
-    {
-        setNewTime(10);
+        LeftTime.text = "00";
     }
     #endregion
 
     #region Phase End
     void TimeOut()
     {
-        Debug.Log("Time Out");
         DatabaseManager.leftTime = "00";
         int tmp1 = -1, tmp2 = -1;
         switch (curGamePhase)
@@ -385,31 +455,38 @@ public class S05_Game : Scenes
             case GamePhase.SetMission:
                 MissionCheckBtn.interactable = true;
                 MyPlayer.SavePlayerMissionData();
-                MyPlayer.SynchronizeTurn(0);
-                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                MyPlayer.SetGamePhase(GamePhase.StartTurn);
                 break;
-        
-            case GamePhase.SuggestPhase:
-            case GamePhase.WaitingSuggestPhase:
+
+            case GamePhase.StartTurn:
                 CheckWhoIsSuggestor(ref tmp1, ref tmp2);
-                Debug.Log($"Who is Suggestor? tmp1 : {tmp1}, tmp2 : {tmp2}");
+                MyPlayer.SetSuggestPhase(tmp1, tmp2);
+                break;
+
+            case GamePhase.Suggest:
+            case GamePhase.WaitingSuggest:
+                CheckWhoIsSuggestor(ref tmp1, ref tmp2);
                 MyPlayer.SuggestGold(tmp1, tmp2);
                 CheckWhoIsGetter(ref tmp1, ref tmp2);
-                Debug.Log($"Who is Getter? tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.SetGetPhase(tmp1, tmp2);
                 break;
 
-            case GamePhase.GetPhase:
-            case GamePhase.WaitingGetPhase:
+            case GamePhase.Get:
+            case GamePhase.WaitingGet:
                 CheckWhoIsGetter(ref tmp1, ref tmp2);
-                Debug.Log($"Who is Getter? tmp1 : {tmp1}, tmp2 : {tmp2}");
                 MyPlayer.GetOutGold(tmp1, tmp2);
-                UpdateTurn();
-                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+                MyPlayer.SetGamePhase(GamePhase.TurnResult);
                 break;
 
-            case GamePhase.LoadingPhase:
-                MyPlayer.SetGamePhase(GamePhase.LoadingPhase);
+            case GamePhase.TurnResult:
+                if (DatabaseManager.curTurn < 5)
+                {
+                    MyPlayer.SetGamePhase(GamePhase.StartTurn);
+                }
+                else
+                {
+                    MyPlayer.SetGamePhase(GamePhase.FinalResult);
+                }
                 break;
         }
     }

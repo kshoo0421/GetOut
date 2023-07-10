@@ -69,7 +69,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public void SetUserID(string id)
     {
         PhotonNetwork.AuthValues.UserId = id;
-        PhotonNetwork.LocalPlayer.NickName = NickNameString;
+    }
+
+    public void SetUserNickName()
+    {
+        PhotonNetwork.LocalPlayer.NickName = DatabaseManager.userData.nickName;
     }
 
     public void SignOutID()
@@ -118,8 +122,16 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #region Get Players Information In Room
     public string GetPlayerInformation(int num)
     {
-        string player = PhotonNetwork.PlayerList[num].NickName.ToString();
-        return player;
+        if(num >= PhotonNetwork.PlayerList.Length)
+        {
+            return "AI" + (num + 1 - PhotonNetwork.PlayerList.Length).ToString();
+        }
+        else
+        {
+            string player = PhotonNetwork.PlayerList[num].NickName.ToString();
+            Debug.Log($"player {num} : {player}");
+            return player;
+        }
     }
     #endregion
 

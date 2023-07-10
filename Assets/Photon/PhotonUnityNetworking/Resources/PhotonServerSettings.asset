@@ -69,6 +69,8 @@ MonoBehaviour:
   - RPC_SuggestGoldForAi
   - RPC_SynchronizeLeftTime
   - RPC_SavePlayerMissionDataForAi
+  - RPC_SetUserNickName
+  - RPC_SaveGameData
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

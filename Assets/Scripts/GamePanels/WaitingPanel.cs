@@ -7,11 +7,11 @@ public class WaitingPanel : MonoBehaviour
 
     void OnEnable() 
     {
-        if(DatabaseManager.gamePhase == GamePhase.WaitingSuggestPhase)
+        if(DatabaseManager.gamePhase == GamePhase.WaitingSuggest)
         {
             WaitingTMP.text = "Waiting For Opponent's Suggestion.";
         }
-        else if(DatabaseManager.gamePhase == GamePhase.WaitingGetPhase)
+        else if(DatabaseManager.gamePhase == GamePhase.WaitingGet)
         {
             WaitingTMP.text = "Waiting For Opponent's Get/Out Choice.";
         }

@@ -26,6 +26,10 @@ public class SuggestPanel : MonoBehaviour
         DatabaseManager.goldAmount = int.Parse(SuggestGoldInputField.text);
     }
 
+    private void OnDisable()
+    {
+        SuggestConfirmPanel.SetActive(false);
+    }
     #endregion
 
     #region Functions
