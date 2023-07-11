@@ -12,6 +12,10 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #region Field
     private static FirebaseUser User;
 
+    /* Authentication */
+    public static string SignInMessage;
+    public static string SignUpMessage;
+
     /* Base Set */
     private static FirebaseApp firebaseApp;
     private static FirebaseAuth firebaseAuth;
@@ -46,6 +50,8 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     {
         FirebaseApp.Create();
         InitializeFM();
+        SignUpMessage = "";
+        SignInMessage = "";
     }
 
     private void OnDestroy() => SignOut();
@@ -83,6 +89,11 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #region SignUp
     public bool checkEmailOverlap() // 이메일 중복여부 체크, 구현 필요
     {
+        //FirebaseUser userRecord;
+        
+        //UserRecord userRecord;
+        //await firebaseAuth.GetUserByEmailAsync(emailText).;
+        
         return true;
     }
 
@@ -97,18 +108,18 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         {
             if (task.IsCanceled)
             {
-                Debug.LogError("회원가입 취소");
+                SignUpMessage = task.Exception.Message;
                 return;
             }
             if (task.IsFaulted)
             {
-                // 회원가입 실패 이유 => 이메일이 비정상 / 비밀번호가 너무 간단 / 이미 가입된 이메일 등등...
-                Debug.LogError("회원가입 실패");
+                SignUpMessage = task.Exception.Message;
                 return;
             }
-
             FirebaseUser newUser = task.Result.User;
-            Debug.LogError("회원가입 완료");
+            SignUpMessage = "Sign Up Success";
+            int index = emailText.IndexOf("@");
+            UpdateUserProfile(emailText.Substring(0, index));
         });
     }
     #endregion
@@ -136,14 +147,15 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
                 if (task.IsFaulted)
                 {
-                    Debug.LogError(task.Exception);
+                    SignInMessage = task.Exception.Message;
                 }
                 else if (task.IsCanceled)
                 {
-                    Debug.LogError(message: "Sign-in canceled");
+                    SignInMessage = task.Exception.Message;
                 }
                 else
                 {
+                    SignInMessage = "Log In Success";
                     User = task.Result.User;
                     int index = User.Email.IndexOf("@");
                     PhotonManager.NickNameString = User.Email.Substring(0, index);
@@ -154,6 +166,33 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         await SetUserData();
     }
     #endregion
+
+    private void UpdateUserProfile(string UserName)
+    {
+        FirebaseUser user = firebaseAuth.CurrentUser;
+        if(user != null)
+        {
+            UserProfile profile = new UserProfile
+            {
+                DisplayName = UserName
+            };
+            user.UpdateUserProfileAsync(profile).ContinueWith(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.LogError("UpdateUserProfileAsync was canceled.");
+                    return;
+                }
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("UpdateUserProfileAsync encountered an error : " + task.Exception);
+                    return;
+                }
+
+                Debug.Log("User profile updated successfully.");
+            });
+        }
+    }
 
     #region SignOut
     public void SignOut()
