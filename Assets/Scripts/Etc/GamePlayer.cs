@@ -37,6 +37,7 @@ public class GamePlayer : MonoBehaviour
     }
     #endregion
 
+    #region Check Master Client
     private void CheckIsMasterClient()
     {
         if (PhotonNetwork.MasterClient == PhotonNetwork.LocalPlayer)
@@ -44,6 +45,7 @@ public class GamePlayer : MonoBehaviour
             isMasterClient = true;
         }
     }
+    #endregion
 
     #region Random / Custom Room
     public void ToggleGameReady()   // ready or not to start game

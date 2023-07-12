@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -7,7 +5,7 @@ public class FindPasswordPanel : InitPanels
 {
     #region Fields
     [SerializeField] private TMP_InputField EmailInputField;
-    [SerializeField] private TMP_Text FindPasswordMessage, notif_Title_Text, notif_MessageText;
+    [SerializeField] private TMP_Text FindPasswordMessage;
     #endregion
 
     #region Monobehaviour

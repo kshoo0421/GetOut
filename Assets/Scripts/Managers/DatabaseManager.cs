@@ -3,14 +3,18 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net.Http;
 using UnityEngine;
+using Google;
+using UnityEngine.UI;
 
 public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
     #region Field
-    private static FirebaseUser User;
+    private static FirebaseUser User;    // need to change to private
 
     /* Authentication */
     public static string SignInMessage;
@@ -18,7 +22,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     /* Base Set */
     private static FirebaseApp firebaseApp;
-    private static FirebaseAuth firebaseAuth;
+    private static FirebaseAuth firebaseAuth;    // need to change to private
     private static FirebaseDatabase firebaseDatabase;
     private static DatabaseReference reference;
 
@@ -49,16 +53,18 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     private void Awake()
     {
         FirebaseApp.Create();
-        InitializeFM();
+        InitializeDM();
+        GoogleAwake();
         SignUpMessage = "";
         SignInMessage = "";
     }
+
 
     private void OnDestroy() => SignOut();
     #endregion
 
     #region Initialize  
-    private void InitializeFM()
+    private void InitializeDM()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(continuation: task =>
         {
@@ -86,7 +92,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     }
     #endregion
 
-    #region SignUp
+    #region Email Sign Up
     public bool checkEmailOverlap() // 이메일 중복여부 체크, 구현 필요
     {
         //FirebaseUser userRecord;
@@ -122,55 +128,11 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             UpdateUserProfile(emailText.Substring(0, index));
         });
     }
-    #endregion
-
-    #region SignIn
-    public bool checkSignIn()
-    {
-        if (!IsFirebaseReady || IsSignInOnProgress || User != null)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public async Task SignIn(string emailText, string passwordText)
-    {
-        IsSignInOnProgress = true;
-
-        await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
-            task =>
-            {
-                Debug.Log(message: $"Sign in status : {task.Status}");
-
-                IsSignInOnProgress = false;
-
-                if (task.IsFaulted)
-                {
-                    SignInMessage = task.Exception.Message;
-                }
-                else if (task.IsCanceled)
-                {
-                    SignInMessage = task.Exception.Message;
-                }
-                else
-                {
-                    SignInMessage = "Log In Success";
-                    User = task.Result.User;
-                    int index = User.Email.IndexOf("@");
-                    PhotonManager.NickNameString = User.Email.Substring(0, index);
-                    PhotonManager.Instance.SetUserID(User.UserId);
-                    Debug.Log($"NickName : {PhotonManager.NickNameString}");
-                }
-            });
-        await SetUserData();
-    }
-    #endregion
 
     private void UpdateUserProfile(string UserName)
     {
         FirebaseUser user = firebaseAuth.CurrentUser;
-        if(user != null)
+        if (user != null)
         {
             UserProfile profile = new UserProfile
             {
@@ -193,6 +155,119 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             });
         }
     }
+    #endregion
+
+    #region Email Sign In
+    public bool checkSignIn()
+    {
+        if (!IsFirebaseReady || IsSignInOnProgress || User != null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public async Task SignIn(string emailText, string passwordText)
+    {
+        IsSignInOnProgress = true;
+
+        await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
+            task =>
+            {
+                Debug.Log(message: $"Sign in status : {task.Status}");
+
+                IsSignInOnProgress = false;
+
+                if (task.IsCanceled)
+                {
+                    SignInMessage = task.Exception.Message;
+                }
+                else if (task.IsFaulted)
+                {
+                    Exception exception = task.Exception;
+                    FirebaseException firebaseEx = exception as FirebaseException;
+                    if(firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        SignInMessage = "Error : " + GetErrorMessage(errorCode);
+                    }
+                }
+                else
+                {
+                    SignInMessage = "Log In Success";
+                    User = task.Result.User;
+                    SetPhotonNickName();
+                }
+            });
+        await SetUserData();
+    }
+    #endregion
+
+    #region Google Login
+    public string GoogleWebAPI = "767643581180-cpaa2vtm8cjvi32pss5i315nkmk9tah6.apps.googleusercontent.com";
+    private GoogleSignInConfiguration configuration;
+
+    private void GoogleAwake()
+    {
+        configuration = new GoogleSignInConfiguration
+        {
+            WebClientId = GoogleWebAPI,
+            RequestIdToken = true
+        };
+    }
+
+    public void GoogleSignInClick()
+    {
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration.UseGameSignIn = false;
+        GoogleSignIn.Configuration.RequestIdToken = true;
+        GoogleSignIn.Configuration.RequestEmail = true;
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnGoogleAuthenticatedFinished);
+    }
+
+    private void OnGoogleAuthenticatedFinished(Task<GoogleSignInUser> task)
+    {
+        if (task.IsFaulted)
+        {
+            Debug.LogError("Fault");
+        }
+        else if (task.IsCanceled)
+        {
+            Debug.LogError("Login Cancel");
+        }
+        else
+        {
+            Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
+
+            firebaseAuth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCanceled)
+                {
+                    Debug.LogError("SignInWithCredentialAsync was canceled.");
+                    return;
+                }
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("SignInWithCredentialAsync encountered am error: " + task.Exception);
+                    return;
+                }
+                User = firebaseAuth.CurrentUser;
+                SetPhotonNickName();
+            });
+        }
+    }
+    #endregion
+
+    #region Siggin Common Functions
+    private void SetPhotonNickName()
+    {
+        int index = User.Email.IndexOf("@");
+        PhotonManager.NickNameString = User.Email.Substring(0, index);
+        PhotonManager.Instance.SetUserID(User.UserId);
+        Debug.Log($"NickName : {PhotonManager.NickNameString}");
+    }
+    #endregion
 
     #region SignOut
     public void SignOut()
@@ -215,6 +290,38 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             User = firebaseAuth.CurrentUser;
         }
         return User;
+    }
+    #endregion
+
+    #region Get Error Message
+    private static string GetErrorMessage(AuthError errorCode)
+    {
+        string message = "";
+        switch(errorCode)
+        {
+            case AuthError.AccountExistsWithDifferentCredentials:
+                message = "Account Not Exist";
+                break;
+            case AuthError.MissingPassword:
+                message = "Missing Password";
+                break;
+            case AuthError.WrongPassword:
+                message = "Wrong Password";
+                break;
+            case AuthError.EmailAlreadyInUse:
+                message = "Your Email Already in Use";
+                break;
+            case AuthError.InvalidEmail:
+                message = "Your Email Invalid";
+                break;
+            case AuthError.MissingEmail:
+                message = "Your Email Missing";
+                break;
+            default:
+                message = "Invalid Error";
+                break;
+        }
+        return message;
     }
     #endregion
 
@@ -446,5 +553,5 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
                 curGold += gameData.turnData[i].gold[MyPlayer.playerNum];
             } 
         }
-    }
+    }  
 }
