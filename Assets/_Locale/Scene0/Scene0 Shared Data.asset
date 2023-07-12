@@ -60,7 +60,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 301040245256192
-    m_Key: LogIn
+    m_Key: Email Login
     m_Metadata:
       m_Items: []
   - m_Id: 5137676283813888
@@ -133,6 +133,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 13371935339687936
     m_Key: Loading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21385124116643840
+    m_Key: Sign In
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21385253636751360
+    m_Key: Google Login
+    m_Metadata:
+      m_Items: []
+  - m_Id: 21395563626053632
+    m_Key: Find PW
     m_Metadata:
       m_Items: []
   m_Metadata:
