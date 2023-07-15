@@ -5,6 +5,7 @@ public class S01_Lobby : Scenes
 {
     #region Field
     /* Check Sign In*/
+    [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text ticketCount;
     [SerializeField] private TMP_Text restTime;
     [SerializeField] private TMP_Text extraTicketCount;
@@ -15,7 +16,7 @@ public class S01_Lobby : Scenes
     private void Start()
     {
         InitialSet();
-        ShowHiText();
+        ShowNickNameText();
     }
 
     private void Update()
@@ -56,16 +57,15 @@ public class S01_Lobby : Scenes
     #endregion
 
     #region test1
-    [SerializeField] private TMP_Text nameText;
-    public void ShowHiText()
+    public void ShowNickNameText()
     {
         if (databaseManager.GetCurUser() != null)
         {
-            nameText.text = $"Hi! {databaseManager.GetCurUser().Email}";
+            nameText.text = $"{databaseManager.GetCurUser().UserId}";
         }
         else
         {
-            nameText.text = "ERROR : AuthManager.User == null";
+            nameText.text = "ERROR : null";
         }
     }
     #endregion

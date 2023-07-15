@@ -9,7 +9,6 @@ public class S03_CustomMatching : Scenes
     private int curUserNum;
 
     [SerializeField] private TMP_Text roomNumber; // room number
-    [SerializeField] private TMP_Text curState; // current state
     [SerializeField] private TMP_Text[] playerNames;
     [SerializeField] private TMP_Text[] playerOX;
     #endregion
