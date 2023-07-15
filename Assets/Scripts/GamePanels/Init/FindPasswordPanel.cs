@@ -24,6 +24,4 @@ public class FindPasswordPanel : InitPanels
     }
 
     #endregion
-
-
 }

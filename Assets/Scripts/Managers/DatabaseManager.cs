@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
     #region Field
-    private static FirebaseUser User;    // need to change to private
+    private static FirebaseUser User;
 
     /* Authentication */
     public static string SignInMessage;
@@ -22,7 +22,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     /* Base Set */
     private static FirebaseApp firebaseApp;
-    private static FirebaseAuth firebaseAuth;    // need to change to private
+    private static FirebaseAuth auth; 
     private static FirebaseDatabase firebaseDatabase;
     private static DatabaseReference reference;
 
@@ -54,7 +54,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     {
         FirebaseApp.Create();
         InitializeDM();
-        GoogleAwake();
         SignUpMessage = "";
         SignInMessage = "";
     }
@@ -78,7 +77,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             {
                 IsFirebaseReady = true;
                 firebaseApp = FirebaseApp.DefaultInstance;
-                firebaseAuth = FirebaseAuth.DefaultInstance;
+                auth = FirebaseAuth.DefaultInstance;
                 firebaseDatabase = FirebaseDatabase.DefaultInstance;
                 reference = firebaseDatabase.GetReference("/"); // Default
             }
@@ -110,7 +109,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     public void SignUp(string emailText, string passwordText)    // 회원가입
     {
-        firebaseAuth.CreateUserWithEmailAndPasswordAsync(emailText, passwordText).ContinueWith(task =>
+        auth.CreateUserWithEmailAndPasswordAsync(emailText, passwordText).ContinueWith(task =>
         {
             if (task.IsCanceled)
             {
@@ -131,7 +130,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 
     private void UpdateUserProfile(string UserName)
     {
-        FirebaseUser user = firebaseAuth.CurrentUser;
+        FirebaseUser user = auth.CurrentUser;
         if (user != null)
         {
             UserProfile profile = new UserProfile
@@ -171,7 +170,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     {
         IsSignInOnProgress = true;
 
-        await firebaseAuth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
+        await auth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
             task =>
             {
                 Debug.Log(message: $"Sign in status : {task.Status}");
@@ -204,58 +203,49 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #endregion
 
     #region Google Login
-    public string GoogleWebAPI = "767643581180-cpaa2vtm8cjvi32pss5i315nkmk9tah6.apps.googleusercontent.com";
-    private GoogleSignInConfiguration configuration;
-
-    private void GoogleAwake()
+    public async Task GoogleSignInMethod()
     {
-        configuration = new GoogleSignInConfiguration
+        GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
-            WebClientId = GoogleWebAPI,
-            RequestIdToken = true
+            RequestIdToken = true,
+            WebClientId = "767643581180-cpaa2vtm8cjvi32pss5i315nkmk9tah6.apps.googleusercontent.com"
         };
-    }
 
-    public void GoogleSignInClick()
-    {
-        GoogleSignIn.Configuration = configuration;
-        GoogleSignIn.Configuration.UseGameSignIn = false;
-        GoogleSignIn.Configuration.RequestIdToken = true;
-        GoogleSignIn.Configuration.RequestEmail = true;
+        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
 
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnGoogleAuthenticatedFinished);
-    }
-
-    private void OnGoogleAuthenticatedFinished(Task<GoogleSignInUser> task)
-    {
-        if (task.IsFaulted)
+        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
+        await signIn.ContinueWith(async task =>
         {
-            Debug.LogError("Fault");
-        }
-        else if (task.IsCanceled)
-        {
-            Debug.LogError("Login Cancel");
-        }
-        else
-        {
-            Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
-
-            firebaseAuth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(task =>
+            if (task.IsCanceled)
             {
-                if (task.IsCanceled)
+                signInCompleted.SetCanceled();
+            }
+            else if (task.IsFaulted)
+            {
+                signInCompleted.SetException(task.Exception);
+            }
+            else
+            {
+
+                Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
+                await auth.SignInWithCredentialAsync(credential).ContinueWith(authTask =>
                 {
-                    Debug.LogError("SignInWithCredentialAsync was canceled.");
-                    return;
-                }
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("SignInWithCredentialAsync encountered am error: " + task.Exception);
-                    return;
-                }
-                User = firebaseAuth.CurrentUser;
-                SetPhotonNickName();
-            });
-        }
+                    if (authTask.IsCanceled)
+                    {
+                        signInCompleted.SetCanceled();
+                    }
+                    else if (authTask.IsFaulted)
+                    {
+                        signInCompleted.SetException(authTask.Exception);
+                    }
+                    else
+                    {
+                        signInCompleted.SetResult(((Task<FirebaseUser>)authTask).Result);
+                    }
+                });
+                // await SetUserData();
+            }
+        });
     }
     #endregion
 
@@ -272,7 +262,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #region SignOut
     public void SignOut()
     {
-        firebaseAuth.SignOut();
+        auth.SignOut();
         User = null;
         userData.id = "0";
         PhotonManager.Instance.SignOutID();
@@ -283,11 +273,11 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #region Get User Information
     public FirebaseUser GetCurUser()
     {
-        if (firebaseAuth.CurrentUser != User)
+        if (auth.CurrentUser != User)
         {
-            bool signedIn = (User != firebaseAuth.CurrentUser) && (firebaseAuth.CurrentUser != null);
+            bool signedIn = (User != auth.CurrentUser) && (auth.CurrentUser != null);
             if (!signedIn && User != null) return null;
-            User = firebaseAuth.CurrentUser;
+            User = auth.CurrentUser;
         }
         return User;
     }

@@ -7323,7 +7323,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2087221800}
-  - component: {fileID: 2087221799}
   m_Layer: 0
   m_Name: E_GooglePayManager
   m_TagString: Untagged
@@ -7331,18 +7330,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2087221799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2087221798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2371deb50cab13a45813232a8d2b52db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2087221800
 Transform:
   m_ObjectHideFlags: 0
