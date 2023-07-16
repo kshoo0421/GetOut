@@ -26,7 +26,7 @@ public class S04_RandomMatching : Scenes
     public void ExitRandomMatching()
     {
         photonManager.LeaveRoom();
-        ChangeToScene(2);
+        ChangeToScene("WaitingRoom");
     }
     #endregion
 }

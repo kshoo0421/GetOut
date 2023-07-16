@@ -113,7 +113,7 @@ public class S03_CustomMatching : Scenes
             }
 
             DatabaseManager.MyPlayer = null;
-            ChangeToScene(5);
+            ChangeToScene("Game");
         }
         else
         {
@@ -125,7 +125,7 @@ public class S03_CustomMatching : Scenes
     {
         PhotonNetwork.AutomaticallySyncScene = false;
         photonManager.LeaveRoom();
-        ChangeToScene(2);
+        ChangeToScene("WaitingRoom");
     }
     #endregion
 

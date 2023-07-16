@@ -79,7 +79,7 @@ public class EmailSignInPanel : InitPanels
             {
                 Debug.Log("로그인 성공");
             }
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene("Lobby");
         }
     }
     #endregion

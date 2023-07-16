@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S00_Initial : Scenes
+public class S00_Init : Scenes
 {
     #region Field
     /* Initialize */

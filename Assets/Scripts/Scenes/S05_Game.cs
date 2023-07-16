@@ -165,9 +165,9 @@ public class S05_Game : Scenes
     #endregion
 
     #region SceneChange
-    public void BackToCustom() => ChangeToScene(3);
+    public void BackToCustom() => ChangeToScene("CustomMatching");
 
-    public void BackToRandom() => ChangeToScene(4);
+    public void BackToRandom() => ChangeToScene("RandomMatching");
     #endregion
 
     #region Toggle Panels

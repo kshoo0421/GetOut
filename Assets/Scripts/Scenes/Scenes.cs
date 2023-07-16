@@ -39,7 +39,7 @@ public class Scenes : MonoBehaviour
     #endregion
 
     #region Change Scene
-    public void ChangeToScene(int sceneIndex) => UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
+    public void ChangeToScene(string sceneName) => UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     #endregion
 
     #region InitialSet

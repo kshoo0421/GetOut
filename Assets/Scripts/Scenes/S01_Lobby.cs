@@ -37,7 +37,7 @@ public class S01_Lobby : Scenes
     public void SignOut()
     {
         databaseManager.SignOut();
-        ChangeToScene(0);
+        ChangeToScene("Init");
     }
     #endregion
 
