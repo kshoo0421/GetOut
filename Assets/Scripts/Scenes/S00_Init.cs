@@ -14,6 +14,7 @@ public class S00_Init : Scenes
     [SerializeField] private GameObject SignInPanel;
     [SerializeField] private GameObject ErrorPanel;
 
+    [SerializeField] private GameObject OptionPanel;
     #endregion
 
     #region MonoBehaviour
@@ -38,10 +39,39 @@ public class S00_Init : Scenes
     #endregion
 
     #region Panels Control
-    public void OpenSignInPanel() => SignInPanel.SetActive(true);
-    public void CloseSignInPanel() => SignInPanel.SetActive(false);
+    public void OpenOptionPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        OptionPanel.SetActive(true);
+    }
 
-    public void OpenErrorPanel() => ErrorPanel.SetActive(true);
-    public void CloseErrorPanel() => ErrorPanel.SetActive(false);
+    public void CloseOptionPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        OptionPanel.SetActive(false);
+    }
+
+    public void OpenSignInPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        SignInPanel.SetActive(true);
+    }
+    public void CloseSignInPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        SignInPanel.SetActive(false);
+    }
+
+    public void OpenErrorPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        ErrorPanel.SetActive(true);
+    }
+
+    public void CloseErrorPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        ErrorPanel.SetActive(false);
+    }
     #endregion
 }

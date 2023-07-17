@@ -17,5 +17,4 @@ public class InitPanels : MonoBehaviour
         notif_Title_Text.text = "" + title;
         notif_MessageText.text = "" + message;
     }
-
 }

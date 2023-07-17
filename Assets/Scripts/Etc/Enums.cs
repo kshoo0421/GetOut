@@ -7,3 +7,8 @@ public enum GamePhase
 }
 
 public enum RandomOrCustom { Default, Custom, Random };
+
+public enum Sound
+{
+    Button, Suggest, Get, Out, TimeOut
+}

@@ -30,7 +30,6 @@ public class EmailSignUpPanel : InitPanels
 
     private void Update()
     {
-        showNotificationMessage("Error", DatabaseManager.SignUpMessage);
         SignUpFieldFocus();
     }
 

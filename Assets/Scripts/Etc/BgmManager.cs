@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class BGM : MonoBehaviour
+public class BgmManager : MonoBehaviour
 {
-    private static BGM _instance;
+    private static BgmManager _instance;
     public static AudioSource bgm;
 
     private void Awake()

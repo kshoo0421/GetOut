@@ -14,7 +14,6 @@ public class EmailSignInPanel : InitPanels
 
     [SerializeField] private TMP_Text signInMessage;
 
-
     [SerializeField] private GameObject SignUpPanel;
     [SerializeField] private GameObject FindPasswordPanel;
     #endregion
@@ -29,7 +28,6 @@ public class EmailSignInPanel : InitPanels
     private void Update()
     {
         SignInFieldFocus();
-        signInMessage.text = DatabaseManager.SignInMessage;
     }
     #endregion
 
