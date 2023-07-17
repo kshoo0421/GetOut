@@ -22,6 +22,7 @@ public class EmailSignUpPanel : InitPanels
     [SerializeField] private Button checkPasswordOverlapBtn;
     #endregion
 
+    #region Monobehaviour
     private void OnEnable()
     {
         SelectInputField();
@@ -32,6 +33,7 @@ public class EmailSignUpPanel : InitPanels
     {
         SignUpFieldFocus();
     }
+    #endregion
 
     #region Select InputField 
     private void SelectInputField()
@@ -61,6 +63,7 @@ public class EmailSignUpPanel : InitPanels
     #region Sign Up
     public void CheckEmailOverlap()
     {
+        SoundEffectManager.PlaySound(Sound.Button);
         if (databaseManager.checkEmailOverlap())
         {
             showNotificationMessage("Error", "This e-mail is already exist");
@@ -75,6 +78,7 @@ public class EmailSignUpPanel : InitPanels
 
     public void CheckPasswordOverlap()
     {
+        SoundEffectManager.PlaySound(Sound.Button);
         if (databaseManager.checkEmailOverlap())
         {
             showNotificationMessage("Error", "You can't use this Password");
@@ -89,6 +93,7 @@ public class EmailSignUpPanel : InitPanels
 
     public async void EmailSignUp()
     {
+        SoundEffectManager.PlaySound(Sound.Button);
         if (string.IsNullOrEmpty(signUpInputFields[0].text) && string.IsNullOrEmpty(signUpInputFields[1].text))
         {
             showNotificationMessage("Error", "Fields Empty! Please Input Details In All Fields");

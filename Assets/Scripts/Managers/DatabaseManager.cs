@@ -3,13 +3,10 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Net.Http;
 using UnityEngine;
 using Google;
-using UnityEngine.UI;
 
 public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
@@ -461,25 +458,23 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         userData.itemData.ticket = 5;
         userData.itemData.ticketTime = DateTime.Now.ToString();
         userData.itemData.gold = 5000;
-        Debug.Log("initItemData ");
     }
 
     public async void SaveItemData()
     {
-        if (userData.id != "0")
+        string json = JsonUtility.ToJson(userData.itemData);
+        await reference.Child("UserData").Child(User.UserId).Child("itemData").SetRawJsonValueAsync(json).ContinueWith(task =>
         {
-            string json = JsonUtility.ToJson(userData.itemData);
-            await reference.Child("UserData").Child(User.UserId).Child("itemData").SetRawJsonValueAsync(json);
-        }
-        else return;
+            if (task.IsFaulted) Debug.LogError("Failed to save itemdata: " + task.Exception);
+        }); ;
     }
     #endregion
 
     #region ticket
     public static string restMinute = "00", restSecond = "00";
 
-    public bool isFullTicket() => (userData.itemData.ticket == 5) ? true : false;
-    public bool CanUseTicket() => (userData.itemData.ticket > 0) ? true : false;
+    public bool isFullTicket() => (userData.itemData.ticket == 5);
+    public bool CanUseTicket() => (userData.itemData.ticket > 0);
     public void UseTicket()
     {
         userData.itemData.ticket -= 1;
@@ -494,7 +489,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public void AutoFillTicket()   // cooltime : 1 hour
     {
         DateTime currentTime = DateTime.Now;
-        Debug.Log($"{userData.itemData.ticketTime}");
         DateTime tmpDT = Convert.ToDateTime(userData.itemData.ticketTime);
         TimeSpan diff = currentTime - tmpDT;
         if (diff.Hours > 0)  // 1시간 넘게 차이난다면
@@ -521,7 +515,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     {
         if (isFullTicket())
         {
-            Debug.Log("isFullTicket");
             restMinute = "00";
             restSecond = "00";
         }

@@ -73,6 +73,14 @@ public class Scenes : MonoBehaviour
     }
     #endregion
 
+    #region SoundEffect
+    public void ButtonSound()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+    }
+
+    #endregion
+
     #region Quit Game
     public void ToggleQuitPanel()
     {

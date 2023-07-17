@@ -59,6 +59,7 @@ public class EmailSignInPanel : InitPanels
     #region Sign In
     public async void EmailSignIn()
     {
+        SoundEffectManager.PlaySound(Sound.Button);
         if (string.IsNullOrEmpty(signInInputFields[0].text) && string.IsNullOrEmpty(signInInputFields[1].text))
         {
             showNotificationMessage("Error", "Fields Empty! Please Input Details In All Fields");
@@ -83,10 +84,28 @@ public class EmailSignInPanel : InitPanels
     #endregion
 
     #region Panels Control
-    public void OpenSignUpPanel() => SignUpPanel.SetActive(true);
-    public void CloseSignUpPanel() => SignUpPanel.SetActive(false);
+    public void OpenSignUpPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        SignUpPanel.SetActive(true);
+    }
 
-    public void OpenFindPasswordPanel() => FindPasswordPanel.SetActive(true);
-    public void CloseFindPasswordPanel() => FindPasswordPanel.SetActive(false);
+    public void CloseSignUpPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        SignUpPanel.SetActive(false);
+    }
+
+    public void OpenFindPasswordPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        FindPasswordPanel.SetActive(true); 
+    }
+
+    public void CloseFindPasswordPanel()
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        FindPasswordPanel.SetActive(false); 
+    }
     #endregion
 }

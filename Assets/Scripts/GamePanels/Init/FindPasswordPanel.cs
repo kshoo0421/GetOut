@@ -16,7 +16,8 @@ public class FindPasswordPanel : InitPanels
     #region FindPassword
     public void ForgetPass()
     {
-        if(string.IsNullOrEmpty(EmailInputField.text))
+        SoundEffectManager.PlaySound(Sound.Button);
+        if (string.IsNullOrEmpty(EmailInputField.text))
         {
             showNotificationMessage("Error", "Forget Email Empty");
             return;

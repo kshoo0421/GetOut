@@ -61,7 +61,9 @@ public class OptionPanel : MonoBehaviour
     #region Option - Sound
     public void SetSEVolume(float value)    // for slider
     {
-        optionManager.SetSEVolume(value);
+        if (value == 0) return; // prevent initialization when destroy
+        SoundEffectManager.volume = value;
+        PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, SoundEffectManager.volume);
     }
 
     public void ToggleSeMute()
@@ -73,7 +75,10 @@ public class OptionPanel : MonoBehaviour
 
     public void SetBGMVolume(float value)   // for slider
     {
-        optionManager.SetBGMVolume(value);
+        if (value == 0) return; // prevent initialization when destroy
+        BgmManager.bgm.volume = value;
+        PrefsBundle.Instance.SetFloat(FloatPrefs.BGMVolume, BgmManager.bgm.volume);
+
     }
 
     public void ToggleBgmMute()
@@ -91,6 +96,4 @@ public class OptionPanel : MonoBehaviour
         optionManager.ChangeLocale(index);
     }
     #endregion
-
-
 }

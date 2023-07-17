@@ -38,24 +38,10 @@ public class OptionManager : BehaviorSingleton<OptionManager>
         }
     }
 
-    public void SetSEVolume(float value)    // for slider
-    {
-        if (value == 0) return; // prevent initialization when destroy
-        SoundEffectManager.volume = value;
-        PrefsBundle.Instance.SetFloat(FloatPrefs.SEVolume, SoundEffectManager.volume);
-    }
-
     public void MakeSEMute(bool b)
     {
         PrefsBundle.Instance.SetInt(IntPrefs.isSEMute, b ? 1 : 0);
         SoundEffectManager.isMute = b;
-    }
-
-    public void SetBGMVolume(float value)   // for slider
-    {
-        if (value == 0) return; // prevent initialization when destroy
-        BgmManager.bgm.volume = value;
-        PrefsBundle.Instance.SetFloat(FloatPrefs.BGMVolume, BgmManager.bgm.volume);
     }
 
     public void MakeBGMMute(bool b)

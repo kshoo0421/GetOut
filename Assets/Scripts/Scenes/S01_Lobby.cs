@@ -4,11 +4,6 @@ using UnityEngine;
 public class S01_Lobby : Scenes
 {
     #region Field
-    /* Check Sign In*/
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text ticketCount;
-    [SerializeField] private TMP_Text restTime;
-    [SerializeField] private TMP_Text extraTicketCount;
     [SerializeField] private GameObject BackBtnPanel;
     #endregion
 
@@ -16,21 +11,13 @@ public class S01_Lobby : Scenes
     private void Start()
     {
         InitialSet();
-        ShowNickNameText();
     }
 
     private void Update()
     {
         ForUpdate();
-        ticketCount.text = DatabaseManager.userData.itemData.ticket.ToString();
-        extraTicketCount.text = DatabaseManager.userData.itemData.extraTicket.ToString();
-        restTime.text = DatabaseManager.restMinute + ":" + DatabaseManager.restSecond;
     }
 
-    private void OnDestroy()
-    {
-        restTime.text = "00:00";
-    }
     #endregion
 
     #region Sign Out
@@ -44,6 +31,7 @@ public class S01_Lobby : Scenes
     #region Btn
     public void ToggleBackBtnPanel()
     {
+        SoundEffectManager.PlaySound(Sound.Button);
         if (BackBtnPanel.activeSelf)
         {
             BackBtnPanel.SetActive(false);
@@ -51,21 +39,6 @@ public class S01_Lobby : Scenes
         else
         {
             BackBtnPanel.SetActive(true);
-        }
-    }
-
-    #endregion
-
-    #region test1
-    public void ShowNickNameText()
-    {
-        if (databaseManager.GetCurUser() != null)
-        {
-            nameText.text = $"{databaseManager.GetCurUser().UserId}";
-        }
-        else
-        {
-            nameText.text = "ERROR : null";
         }
     }
     #endregion

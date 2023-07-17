@@ -8,7 +8,11 @@ public class SignInPanel : MonoBehaviour
     #endregion
 
     #region Toggle Panels
-    public void ToggleEmailPanel(bool b) => EmailPanel.SetActive(b);
+    public void ToggleEmailPanel(bool b)
+    {
+        SoundEffectManager.PlaySound(Sound.Button);
+        EmailPanel.SetActive(b);
+    }
     #endregion
 
     #region Google Login
