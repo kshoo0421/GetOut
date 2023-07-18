@@ -52,7 +52,7 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
                 }
              );
 
-        UnityPurchasing.Initialize(this, builder);
+        // UnityPurchasing.Initialize(this, builder);
     }
 
     public bool IsInitialized => storeController != null && storeExtensionProvider != null;
@@ -128,8 +128,7 @@ public class PaymentManager : BehaviorSingleton<PaymentManager>, IStoreListener
 
             var appleExt = storeExtensionProvider.GetExtension<IAppleExtensions>();
 
-            appleExt.RestoreTransactions(
-                    result => Debug.Log($"구매 복구 시도 결과 - {result}")); // 기존 구매 내역 복구
+            // appleExt.RestoreTransactions(result => Debug.Log($"구매 복구 시도 결과 - {result}")); // 기존 구매 내역 복구
         }
     }
 

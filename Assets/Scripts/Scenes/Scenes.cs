@@ -63,6 +63,8 @@ public class Scenes : MonoBehaviour
 
     public void OpenNumberKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad);
 
+    public void OpenPasswordKeyboard() => keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, true);
+
     public void CloseKeyboard()
     {
         if (keyboard != null)
