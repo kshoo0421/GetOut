@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using UnityEngine;
 using UnityEngine.Localization.Settings;
 
 public class OptionManager : BehaviorSingleton<OptionManager>
@@ -8,6 +7,7 @@ public class OptionManager : BehaviorSingleton<OptionManager>
     #region Field
     /* Change Locale */
     private bool isChanging;
+    public static int curLocale = 0;
     #endregion
 
     #region Monobehaviour
@@ -64,10 +64,9 @@ public class OptionManager : BehaviorSingleton<OptionManager>
     private IEnumerator ChangeRoutine(int index)
     {
         isChanging = true;
-
+        curLocale = index;
         yield return LocalizationSettings.InitializationOperation;
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
-
         isChanging = false;
     }
     #endregion
