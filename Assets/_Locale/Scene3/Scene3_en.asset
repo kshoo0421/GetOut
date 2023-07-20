@@ -70,6 +70,11 @@ MonoBehaviour:
     m_Localized: Room Num
     m_Metadata:
       m_Items: []
+  - m_Id: 16629406939430912
+    m_Localized: All Players have to ready for Game. Please check the ready state
+      of the players.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

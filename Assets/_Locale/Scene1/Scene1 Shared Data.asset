@@ -51,6 +51,54 @@ MonoBehaviour:
     m_Key: Sign Out
     m_Metadata:
       m_Items: []
+  - m_Id: 16619059302055936
+    m_Key: Ticket Charge Successed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619389813211136
+    m_Key: 'Extra Ticket :'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619478560489472
+    m_Key: New Entry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619500068880384
+    m_Key: Ticket is already full!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619710752964608
+    m_Key: How many extra tickets do you want to exchange to ticket?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620301365493760
+    m_Key: (You can buy extra tickets by gold at shop.)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620469976514560
+    m_Key: Exchange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620595231014912
+    m_Key: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620832829947904
+    m_Key: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621262829993984
+    m_Key: Quit Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621406967250944
+    m_Key: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622475759796224
+    m_Key: 'Ticket :'
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

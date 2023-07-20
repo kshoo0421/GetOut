@@ -54,6 +54,50 @@ MonoBehaviour:
     m_Localized: Sign Out
     m_Metadata:
       m_Items: []
+  - m_Id: 16619059302055936
+    m_Localized: Ticket Charge Successed!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619389813211136
+    m_Localized: 'Extra Ticket :'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619500068880384
+    m_Localized: Ticket is already full!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619710752964608
+    m_Localized: How many extra tickets do you want to exchange to ticket?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620301365493760
+    m_Localized: (You can buy extra tickets by gold at shop.)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620469976514560
+    m_Localized: Exchange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620595231014912
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620832829947904
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621262829993984
+    m_Localized: Quit Game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621406967250944
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622475759796224
+    m_Localized: 'Ticket :'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -35,6 +35,18 @@ MonoBehaviour:
     m_Key: Create Room
     m_Metadata:
       m_Items: []
+  - m_Id: 16647870601183232
+    m_Key: Join Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16648643032596480
+    m_Key: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16648777678143488
+    m_Key: Leave Room
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

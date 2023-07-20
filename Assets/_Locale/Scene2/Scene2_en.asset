@@ -38,6 +38,18 @@ MonoBehaviour:
     m_Localized: Create Room
     m_Metadata:
       m_Items: []
+  - m_Id: 16647870601183232
+    m_Localized: Join Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16648643032596480
+    m_Localized: Ready
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16648777678143488
+    m_Localized: Leave Room
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

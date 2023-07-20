@@ -34,6 +34,157 @@ MonoBehaviour:
     m_Localized: Start Game
     m_Metadata:
       m_Items: []
+  - m_Id: 16615355337359360
+    m_Localized: Game Again
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16615617561051136
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16616796273721344
+    m_Localized: Game Result
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16616864556990464
+    m_Localized: Get
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16616974816854016
+    m_Localized: GET
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16617149870325760
+    m_Localized: Reroll
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16617741489487872
+    m_Localized: Mission 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16618172856877056
+    m_Localized: Mission 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16618735086551040
+    m_Localized: Mission 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619082236510208
+    m_Localized: Mission Check
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619333961859072
+    m_Localized: Look All Missions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16619551855951872
+    m_Localized: My Gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620188576464896
+    m_Localized: Other's
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620383724847104
+    m_Localized: OUT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620594144690176
+    m_Localized: Gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16620819890520064
+    m_Localized: "Do you really want to quit this game? \nThe gold that you got in
+      this game will be lost, and your rank of this game will be 4th.\n(AI will play
+      the remain game instead)"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621520871964672
+    m_Localized: Rank
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621804193005568
+    m_Localized: Suggest
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16621998703853568
+    m_Localized: "If you do not suggest certain amount of gold in 20 second, then
+      automatically 50 gold (opponent also 50 gold) \nwill be suggested."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622289616584704
+    m_Localized: Sum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622579593986048
+    m_Localized: Exchange
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622676197195776
+    m_Localized: Fix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622885786566656
+    m_Localized: T1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16622984621146112
+    m_Localized: Turn 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623094109257728
+    m_Localized: Turn 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623192495046656
+    m_Localized: T2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623302914293760
+    m_Localized: Turn 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623428646944768
+    m_Localized: T3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623502928068608
+    m_Localized: T4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623621815615488
+    m_Localized: Turn 4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623681638973440
+    m_Localized: T5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623755957846016
+    m_Localized: Turn 5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623852930154496
+    m_Localized: Turn 6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16623938296823808
+    m_Localized: T6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16624018013765632
+    m_Localized: Turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16624170317332480
+    m_Localized: Opponent's Turn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16624404116226048
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -38,8 +38,8 @@ public class MissionSupporter : MonoBehaviour
         "내 제안에서 60G 이상 획득하기",    // 3
         "상대가 내 제안을 1회 이상 거절하기",    // 4
         "상대가 내 제안을 1회 이상 수락하기",    // 5
-        "모든 협상 중 2회 이상 거절하기",    // 6
-        "모든 협상 중 3회 이상 수락하기",    // 7
+        "모든 협상 중 2회 이상 거래 실패하기",    // 6
+        "모든 협상 중 3회 이상 거래 성공하기",    // 7
         "내 제안 차례에서 70(나):30(상대) 제안하기",    // 8
         "상대 제안에서 30G 이상 획득하기",    // 9
         "내 제안 차례에서 40G 이하 제안하기"     // 10
@@ -66,7 +66,7 @@ public class MissionSupporter : MonoBehaviour
     "In my 'Suggest Phase', success(opponent's 'Get' action) 2 times or more",    // 5
     "In all game, fail(opponent's / my 'Out' action) 3 times or more",    // 6
     "In all game, success(opponent's / my 'Get' action) 4 times or more",    // 7
-    "temp",    // 8
+    "In my all 'Suggest Phase', suggest 60G or less",    // 8
     "In my 'Suggest Phase', suggest 30G or less 1 time or more",    // 9
     "In my 'Get Phase', get 40G or more 1 time or more"     // 10
     };
@@ -77,10 +77,10 @@ public class MissionSupporter : MonoBehaviour
     "내 제안에서 75G 이상 획득하기",    // 3
     "상대가 내 제안을 2회 이상 거절하기",    // 4
     "상대가 내 제안을 2회 이상 수락하기",    // 5
-    "모든 협상 중 3회 이상 거절하기",    // 6
-    "모든 협상 중 4회 이상 수락하기",    // 7
-    "temp",    // 8
-    "내 제안 차례에서 30G 이하 제안하기",    // 9
+    "모든 협상 중 3회 이상 거래 실패하기",    // 6
+    "모든 협상 중 4회 이상 거래 성공하기",    // 7
+    "내 모든 제안에서 60G 이하 제안하기",    // 8
+    "내 제안에서 1회 이상 30G 이하 제안하기",    // 9
     "상대 제안에서 40G 이상 획득하기"     // 10
     };
 
@@ -138,6 +138,8 @@ public class MissionSupporter : MonoBehaviour
     #endregion
 
     #region Fields
+    private int playerNum, curTurn;
+
     private static readonly Mission[] LowMission = new Mission[10] {
         new Mission(lowGoldsInfo[0], enLowMissionInfo[0], koLowMissionInfo[0]),
         new Mission(lowGoldsInfo[1], enLowMissionInfo[1], koLowMissionInfo[1]),
@@ -244,11 +246,750 @@ public class MissionSupporter : MonoBehaviour
         return 0;
     }
 
-    public bool CheckMissionDone(MissionLevel ml, long missionNum)
+    public void CheckMissionDone(MissionLevel ml, long missionNum, int playerNum)
     {
+        this.playerNum = playerNum;
+        curTurn = DatabaseManager.curTurn;
+        switch (ml)
+        {
+            case MissionLevel.Low:
+                switch(missionNum)
+                {
+                    case 0:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission0();
+                        break;
+                    case 1:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission1();
+                        break;
+                    case 2:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission2();
+                        break;
+                    case 3:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission3();
+                        break;
+                    case 4:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission4();
+                        break;
+                    case 5:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission5();
+                        break;
+                    case 6:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission6();
+                        break;
+                    case 7:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission7();
+                        break;
+                    case 8:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission8();
+                        break;
+                    case 9:
+                        DatabaseManager.gameData.playerMissionData[playerNum].low.isAchieved = CheckLowMission9();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case MissionLevel.Mid:
+                switch (missionNum)
+                {
+                    case 0:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission0();
+                        break;
+                    case 1:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission1();
+                        break;
+                    case 2:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission2();
+                        break;
+                    case 3:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission3();
+                        break;
+                    case 4:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission4();
+                        break;
+                    case 5:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission5();
+                        break;
+                    case 6:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission6();
+                        break;
+                    case 7:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission7();
+                        break;
+                    case 8:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission8();
+                        break;
+                    case 9:
+                        DatabaseManager.gameData.playerMissionData[playerNum].mid.isAchieved = CheckMidMission9();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case MissionLevel.High:
+                switch (missionNum)
+                {
+                    case 0:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission0();
+                        break;
+                    case 1:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission1();
+                        break;
+                    case 2:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission2();
+                        break;
+                    case 3:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission3();
+                        break;
+                    case 4:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission4();
+                        break;
+                    case 5:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission5();
+                        break;
+                    case 6:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission6();
+                        break;
+                    case 7:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission7();
+                        break;
+                    case 8:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission8();
+                        break;
+                    case 9:
+                        DatabaseManager.gameData.playerMissionData[playerNum].high.isAchieved = CheckHighMission9();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+        DatabaseManager.Instance.SaveGameData();
+    }
+    #endregion
+
+    #region Check Low Missions
+    // "상대 제안 1회 이상 거절하기"
+    private bool CheckLowMission0()
+    {
+        for(int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    // "상대 제안 2회 이상 수락하기"
+    private bool CheckLowMission1()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                {
+                    count++;
+                }
+                if(count == 2)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // "내 제안에서 60G 이상 획득하기"
+    private bool CheckLowMission2()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                {
+                    if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 60)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // "상대가 내 제안을 1회 이상 거절하기"
+    private bool CheckLowMission3()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    // "상대가 내 제안을 1회 이상 수락하기"
+    private bool CheckLowMission4()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    return true;
+            }
+        }
+        return false;
+    }
+    // "모든 협상 중 2회 이상 거래 실패하기"
+    private bool CheckLowMission5()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+            {
+                count++;
+            }
+            if(count == 2)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // "모든 협상 중 3회 이상 수락하기",    // 6
+    private bool CheckLowMission6()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+            {
+                count++;
+            }
+            if (count == 3)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // "내 제안 차례에서 70(나):30(상대) 제안하기",    // 7
+    private bool CheckLowMission7()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] == 70)
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    // "상대 제안에서 30G 이상 획득하기",    // 8
+    private bool CheckLowMission8()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 30)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        return true;
+
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    // "내 제안 차례에서 40G 이하 제안하기"     // 9
+    private bool CheckLowMission9()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] <= 40)
+                {
+                        return true;
+                }
+            }
+        }
         return false;
     }
     #endregion
+
+    #region Check Mid Missions
+    // "상대 제안 2회 이상 거절하기",    // 0
+    private bool CheckMidMission0()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                {
+                    count++;
+                }
+                if(count == 2)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대 제안 모두 수락하기",    // 1
+    private bool CheckMidMission1()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                {
+                    count++;
+                }
+                if (count == 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"내 제안에서 75G 이상 획득하기",    // 2
+    private bool CheckMidMission2()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 75)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대가 내 제안을 2회 이상 거절하기",    // 3
+    private bool CheckMidMission3()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                {
+                    count++;
+                }
+                if (count == 2)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대가 내 제안을 2회 이상 수락하기",    // 4
+    private bool CheckMidMission4()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                {
+                    count++;
+                }
+                if (count == 2)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"모든 협상 중 3회 이상 거절하기",    // 5
+    private bool CheckMidMission5()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+            {
+                count++;
+            }
+            if (count == 3)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //"모든 협상 중 4회 이상 수락하기",    // 6
+    private bool CheckMidMission6()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+            {
+                count++;
+            }
+            if (count == 4)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //"내 모든 제안에서 60G 이하 제안하기",    // 7
+    private bool CheckMidMission7()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] <= 60)
+                {
+                    count++;
+                }
+                if (count == 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"내 제안에서 1회 이상 30G 이하 제안하기",    // 8
+    private bool CheckMidMission8()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] <= 30)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대 제안에서 40G 이상 획득하기"     // 9
+    private bool CheckMidMission9()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 40)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    #endregion
+
+    #region Check High Missions
+    //"상대 제안 모두 거절하기",    // 0
+    private bool CheckHighMission0()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                {
+                    count++;
+                }
+                if (count == 3)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //"내 제안 차례에서 80G 이상 획득하기",    // 1
+    private bool CheckHighMission1()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 80)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대 제안에서 70G 이상 획득하기",    // 2
+    private bool CheckHighMission2()
+    {
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (DatabaseManager.gameData.turnData[i].gold[playerNum] >= 70)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //"상대가 내 제안을 모두 수락하기",    // 3
+    private bool CheckHighMission3()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                {
+                    count++;
+                }
+                if (count == 3)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    //"상대가 내 제안을 모두 거절하기",    // 4
+    private bool CheckHighMission4()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == true)
+            {
+                if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                {
+                    count++;
+                }
+                if (count == 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"모든 협상 중 4회 이상 거절하기",    // 5
+    private bool CheckHighMission5()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+            {
+                count++;
+            }
+            if (count == 4)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //"모든 협상 중 5회 이상 수락하기",    // 6
+    private bool CheckHighMission6()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+            {
+                count++;
+            }
+            if (count == 5)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //"수락을 ‘수락’ - ‘거절’ - ‘거절’ 순으로 하기",    // 7
+    private bool CheckHighMission7()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if(count == 0)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if(count == 1)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if(count == 2)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"수락을 ‘거절’ - ‘수락’ - ‘거절’ 순으로 하기",    // 8
+    private bool CheckHighMission8()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (count == 0)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if (count == 1)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if (count == 2)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    //"수락을 ‘거절’ - ‘거절’ - ‘수락’ 순으로 하기"     // 9
+    private bool CheckHighMission9()
+    {
+        int count = 0;
+        for (int i = 0; i <= curTurn; i++)
+        {
+            if (DatabaseManager.gameData.turnData[i].isSuggestor[playerNum] == false)
+            {
+                if (count == 0)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if (count == 1)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == false)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+                else if (count == 2)
+                {
+                    if (DatabaseManager.gameData.turnData[i].success[playerNum] == true)
+                    {
+                        count++;
+                    }
+                    else return false;
+                }
+            }
+        }
+        return false;
+    }
+    #endregion
+
 }
 
 internal struct Mission

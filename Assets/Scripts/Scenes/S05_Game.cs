@@ -81,7 +81,14 @@ public class S05_Game : Scenes
     {
         for (int i = 0; i < 6; i++)
         {
-            TurnTexts[i].text = "T" + (i + 1).ToString();
+            if (OptionManager.curLocale == 0)
+            {
+                TurnTexts[i].text = "T" + (i + 1).ToString();
+            }
+            else
+            {
+                TurnTexts[i].text = "ео" + (i + 1).ToString();
+            }
             GoldTexts[i].text = "";
         }
         DatabaseManager.suggestCount = 1;
@@ -490,5 +497,10 @@ public class S05_Game : Scenes
                 break;
         }
     }
+    #endregion
+
+    #region Option Panel
+    [SerializeField] GameObject OptionPanel;
+    public void ToggleOptionPanel() => OptionPanel.SetActive(!OptionPanel.activeSelf);
     #endregion
 }

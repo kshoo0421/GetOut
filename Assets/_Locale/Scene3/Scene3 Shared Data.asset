@@ -67,6 +67,11 @@ MonoBehaviour:
     m_Key: New Entry 1
     m_Metadata:
       m_Items: []
+  - m_Id: 16629406939430912
+    m_Key: All Players have to ready for Game. Please check the ready state of the
+      players.
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

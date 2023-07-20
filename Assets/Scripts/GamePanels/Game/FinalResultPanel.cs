@@ -20,7 +20,6 @@ public class FinalResultPanel : MonoBehaviour
     #region Monobehaviour
     private void OnEnable()
     {
-        Debug.Log("Final OnEnable");
         gd = DatabaseManager.gameData;
         ms = MissionSupporter.Instance;
         photonManager = PhotonManager.Instance;
@@ -47,8 +46,19 @@ public class FinalResultPanel : MonoBehaviour
         TMP_Text[] temp_text = SetTempTMP(playerNum);
         SetPlayerMameText(ref temp_text, playerNum);
         SetTurnText(ref temp_text, playerNum, ref sum);
+        SetMissionResult();
         SetMissionText(ref temp_text, playerNum, ref sum);
         SetSumText(ref temp_text, playerNum, ref sum);
+    }
+
+    private void SetMissionResult()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            ms.CheckMissionDone(MissionLevel.Low, gd.playerMissionData[i].low.missionNum, i);
+            ms.CheckMissionDone(MissionLevel.Mid, gd.playerMissionData[i].mid.missionNum, i);
+            ms.CheckMissionDone(MissionLevel.High, gd.playerMissionData[i].high.missionNum, i);
+        }
     }
 
     private TMP_Text[] SetTempTMP(int playerNum)

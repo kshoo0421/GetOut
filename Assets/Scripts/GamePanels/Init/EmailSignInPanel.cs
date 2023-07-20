@@ -62,7 +62,14 @@ public class EmailSignInPanel : InitPanels
         SoundEffectManager.PlaySound(Sound.Button);
         if (string.IsNullOrEmpty(signInInputFields[0].text) && string.IsNullOrEmpty(signInInputFields[1].text))
         {
-            showNotificationMessage("Error", "Fields Empty! Please Input Details In All Fields");
+            if (OptionManager.curLocale == 0)
+            {
+                showNotificationMessage("Error", "Fields Empty! Please Input Details In All Fields");
+            }
+            else
+            {
+                showNotificationMessage("경고", "아직 모든 입력이 이뤄지지 않았습니다. 다시 한 번 확인해주세요.");
+            }
             return;
         }
 

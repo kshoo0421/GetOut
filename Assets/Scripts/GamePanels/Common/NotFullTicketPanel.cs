@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Bson;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,7 +39,7 @@ public class NotFullTicketPanel : MonoBehaviour
         afterChargePanel.SetActive(false);
 
         extraTicketCount = (int)DatabaseManager.userData.itemData.extraTicket;
-        extraTicketCountTMP.text = $"You have {extraTicketCount} Extra Ticket";
+        setExtraTicketCount();
         int max = 5 - (int)DatabaseManager.userData.itemData.ticket;
 
         if (extraTicketCount > max)
@@ -54,6 +55,36 @@ public class NotFullTicketPanel : MonoBehaviour
         selectCount = 0;
     }
     #endregion
+
+    #region Text Set
+    private void setExtraTicketCount()
+    {
+        if(OptionManager.curLocale == 0)
+        {
+            extraTicketCountTMP.text = $"You have {extraTicketCount} Extra Ticket.";
+        }
+        else
+        {
+            extraTicketCountTMP.text = $"현재 여분 티켓이 {extraTicketCount}개 있습니다.";
+
+        }
+    }
+
+
+    private void SetConfirmInfoText()
+    {
+        if(OptionManager.curLocale == 0)
+        {
+            confirmInfoText.text = $"Do you really exchange {selectCount} extra ticket to ticket?";
+        }
+        else
+        {
+            confirmInfoText.text = $"여분 티켓 {selectCount}개를 일반 티켓으로 바꾸시겠습니까?";
+        }
+
+    }
+    #endregion
+
 
     #region slider
     public void SelectTicketCount(float amount)
@@ -72,7 +103,7 @@ public class NotFullTicketPanel : MonoBehaviour
     {
         confirmPanel.SetActive(true);
         int curTicket = (int)DatabaseManager.userData.itemData.ticket;
-        confirmInfoText.text = $"Do you really exchange {selectCount} extra ticket to ticket?";
+        SetConfirmInfoText();
         confirmTexts[0].text = extraTicketCount.ToString();
         confirmTexts[1].text = (extraTicketCount - selectCount).ToString();
         confirmTexts[2].text = curTicket.ToString();

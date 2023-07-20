@@ -59,15 +59,33 @@ public class GetPanel : MonoBehaviour
     public void GetBtn()
     {
         GetConfirmPanel.SetActive(true);
-        GetConfirmTMP.text = $"Do you really get {DatabaseManager.goldAmount} gold?" +
-            $"\n(opponent : {100 - DatabaseManager.goldAmount} gold)";
+        
+        if(OptionManager.curLocale == 0)
+        {
+            GetConfirmTMP.text = $"Do you really get {DatabaseManager.goldAmount} gold?" +
+                $"\n(opponent : {100 - DatabaseManager.goldAmount} gold)";
+        }
+        else
+        {
+            GetConfirmTMP.text = $"정말 {DatabaseManager.goldAmount} 골드를 획득하겠습니까??" +
+                $"\n(상대 : {100 - DatabaseManager.goldAmount} 골드)";
+
+        }
     }
 
     public void OutBtn()
     {
         OutConfirmPanel.SetActive(true);
-        OutConfirmTMP.text = $"Do you really refuse {DatabaseManager.goldAmount} gold?" +
-            $"\n(opponent : {100 - DatabaseManager.goldAmount} gold)";
+        if(OptionManager.curLocale == 0)
+        {
+            OutConfirmTMP.text = $"Do you really refuse {DatabaseManager.goldAmount} gold?" +
+                $"\n(opponent : {100 - DatabaseManager.goldAmount} gold)";
+        }
+        else
+        {
+            OutConfirmTMP.text = $"정말 {DatabaseManager.goldAmount} 골드를 거절하시겠습니까?" +
+                $"\n(상대 : {100 - DatabaseManager.goldAmount} 골드)";
+        }
     }
 
     public void GetConfirmYesBtn()

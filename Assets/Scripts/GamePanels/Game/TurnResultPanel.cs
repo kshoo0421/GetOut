@@ -16,7 +16,14 @@ public class TurnResultPanel : MonoBehaviour
     private void OnEnable()
     {
         InitData();
-        SetText();    
+        if (OptionManager.curLocale == 0)
+        {
+            SetEnText();
+        }
+        else
+        {
+            SetKoText();
+        }
     }
 
     private void InitData()
@@ -27,7 +34,7 @@ public class TurnResultPanel : MonoBehaviour
         myGold = (int)gd.turnData[curTurn].gold[player];
     }
 
-    private void SetText()
+    private void SetEnText()
     {
         InfoText.text = $"Turn {curTurn + 1} Result";
         MyGold.text = myGold.ToString();
@@ -45,4 +52,24 @@ public class TurnResultPanel : MonoBehaviour
             OpponentGold.color = Color.red;
         }
     }
+
+    private void SetKoText()
+    {
+        InfoText.text = $"턴 {curTurn + 1} 결과";
+        MyGold.text = myGold.ToString();
+        OpponentGold.text = (100 - myGold).ToString();
+        if (gd.turnData[curTurn].success[player])
+        {
+            ResultTMP.text = "수락";
+            MyGold.color = Color.blue;
+            OpponentGold.color = Color.blue;
+        }
+        else
+        {
+            ResultTMP.text = "거절";
+            MyGold.color = Color.red;
+            OpponentGold.color = Color.red;
+        }
+    }
+
 }

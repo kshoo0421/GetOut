@@ -48,14 +48,21 @@ public class TopPanel : MonoBehaviour
     {
         if (databaseManager.GetCurUser() != null)
         {
-            nameText.text = $"User : {DatabaseManager.userData.nickName}";
+            if(OptionManager.curLocale == 0)
+            {
+                nameText.text = $"User : {DatabaseManager.userData.nickName}";
+            }
+            else
+            {
+                nameText.text = $"»ç¿ëÀÚ : {DatabaseManager.userData.nickName}";
+            }
         }
         else
         {
             nameText.text = "ERROR : null";
         }
     }
-#endregion
+    #endregion
 
     #region Text Update
     private void UpdateTicketText()

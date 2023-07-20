@@ -39,8 +39,21 @@ public class SuggestPanel : MonoBehaviour
     {
         DatabaseManager.goldAmount = int.Parse(SuggestGoldInputField.text);
         ToggleSuggestConfirmPanel(true);
-        SuggestConfirmTMP.text = $"Do you really want to suggest {DatabaseManager.goldAmount} Gold?\n" +
-            $"(Opponent : {100 - DatabaseManager.goldAmount} Gold)";
+        SetSuggestConfirmText();
+    }
+
+    private void SetSuggestConfirmText()
+    {
+        if (OptionManager.curLocale == 0)
+        {
+            SuggestConfirmTMP.text = $"Do you really want to suggest {DatabaseManager.goldAmount} Gold?\n" +
+                $"(Opponent : {100 - DatabaseManager.goldAmount} Gold)";
+        }
+        else
+        {
+            SuggestConfirmTMP.text = $"정말 {DatabaseManager.goldAmount}골드를 제안하시겠습니까?\n" +
+               $"(상대 : {100 - DatabaseManager.goldAmount} 골드)";
+        }
     }
 
     private void CheckGoldAmount()
