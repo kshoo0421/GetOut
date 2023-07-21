@@ -342,9 +342,14 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         });
     }
 
-    public async void SaveGameData()
+    public async void FirstSaveGameData()
     {
         await SetGameIndex();
+        SaveGameData();
+    }
+
+    public async void SaveGameData()
+    {
         string json = JsonUtility.ToJson(gameData);
 
         reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).Push();

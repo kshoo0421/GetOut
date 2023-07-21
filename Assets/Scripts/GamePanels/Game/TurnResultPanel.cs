@@ -12,6 +12,7 @@ public class TurnResultPanel : MonoBehaviour
     private int curTurn;
     private int player;
     private int myGold;
+    private MissionSupporter missionSupporter;
 
     private void OnEnable()
     {
@@ -23,6 +24,12 @@ public class TurnResultPanel : MonoBehaviour
         else
         {
             SetKoText();
+        }
+
+        if(DatabaseManager.curTurn == 5)
+        {
+            missionSupporter = MissionSupporter.Instance;
+            SetMissionResult();
         }
     }
 
@@ -72,4 +79,13 @@ public class TurnResultPanel : MonoBehaviour
         }
     }
 
+    private void SetMissionResult()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            missionSupporter.CheckMissionDone(MissionLevel.Low, gd.playerMissionData[i].low.missionNum, i);
+            missionSupporter.CheckMissionDone(MissionLevel.Mid, gd.playerMissionData[i].mid.missionNum, i);
+            missionSupporter.CheckMissionDone(MissionLevel.High, gd.playerMissionData[i].high.missionNum, i);
+        }
+    }
 }

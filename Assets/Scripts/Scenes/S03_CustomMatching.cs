@@ -60,6 +60,11 @@ public class S03_CustomMatching : Scenes
     #region Button
     public void ToggleReady()
     {
+        if (DatabaseManager.userData.itemData.ticket == 0)
+        {
+            OpenCantReadyPanel();
+            return;
+        }
         GamePlayer gamePlayer = DatabaseManager.MyPlayer;
         gamePlayer.ToggleGameReady();
     }
@@ -68,11 +73,22 @@ public class S03_CustomMatching : Scenes
 
     #region Panels
     [SerializeField] private GameObject NotReadyPanel;
+    [SerializeField] private GameObject CantReadyPanel;
     [SerializeField] private GameObject BackToWaitingPanel;
 
     private void ToggleNotReadyPanel(bool b) => NotReadyPanel.SetActive(b);
 
     private void ToggleBackToWaitingPanel(bool b) => BackToWaitingPanel.SetActive(b);
+
+    private void OpenCantReadyPanel()
+    {
+        CantReadyPanel.SetActive(true);
+    }
+
+    public void CloseCantReadyPanel()
+    {
+        CantReadyPanel.SetActive(false);
+    }
 
     public void CloseNotReadyPanel()
     {
@@ -111,8 +127,8 @@ public class S03_CustomMatching : Scenes
             {
                 DatabaseManager.gameData.playerId[i] = playerNames[i].text;
             }
-
             DatabaseManager.MyPlayer = null;
+            databaseManager.UseTicket();
             ChangeToScene("Game");
         }
         else
@@ -126,13 +142,6 @@ public class S03_CustomMatching : Scenes
         PhotonNetwork.AutomaticallySyncScene = false;
         photonManager.LeaveRoom();
         ChangeToScene("WaitingRoom");
-    }
-    #endregion
-
-    #region Test
-    public void Test()
-    {
-        Debug.Log($"NickName : {PhotonNetwork.LocalPlayer.NickName}");
     }
     #endregion
 }

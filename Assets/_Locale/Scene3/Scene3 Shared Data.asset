@@ -72,6 +72,10 @@ MonoBehaviour:
       players.
     m_Metadata:
       m_Items: []
+  - m_Id: 16970304034390016
+    m_Key: You can't ready for game because you don't have any ticket.
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

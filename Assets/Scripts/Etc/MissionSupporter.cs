@@ -85,16 +85,16 @@ public class MissionSupporter : MonoBehaviour
     };
 
     private static readonly int[] midGoldsInfo = new int[10] {
-        151, // 1
-        152, // 2
-        153, // 3
-        154, // 4
-        155, // 5
-        156, // 6
-        157, // 7
-        158, // 8
-        159, // 9
-        160  // 10
+        90, // 1
+        90, // 2
+        90, // 3
+        100, // 4
+        100, // 5
+        100, // 6
+        100, // 7
+        110, // 8
+        110, // 9
+        110  // 10
     };
 
     private static readonly string[] enHighMissionInfo = new string[10] {
@@ -124,16 +124,16 @@ public class MissionSupporter : MonoBehaviour
     };
 
     private static readonly int[] highGoldsInfo = new int[10] {
-        251, // 1
-        252, // 2
-        253, // 3
-        254, // 4
-        255, // 5
-        256, // 6
-        257, // 7
-        258, // 8
-        259, // 9
-        260  // 10
+        140, // 1
+        140, // 2
+        140, // 3
+        150, // 4
+        150, // 5
+        150, // 6
+        150, // 7
+        160, // 8
+        160, // 9
+        160  // 10
     };
     #endregion
 

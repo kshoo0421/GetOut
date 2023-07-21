@@ -75,6 +75,11 @@ MonoBehaviour:
       \uD574\uC57C\uD569\uB2C8\uB2E4. \uB2E4\uC2DC \uD55C \uBC88 \uD655\uC778\uD558\uC138\uC694"
     m_Metadata:
       m_Items: []
+  - m_Id: 16970304034390016
+    m_Localized: "\uD2F0\uCF13\uC774 \uC5C6\uC73C\uBBC0\uB85C \uC900\uBE44\uB97C
+      \uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

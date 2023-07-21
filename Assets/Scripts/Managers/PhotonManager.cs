@@ -129,7 +129,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         else
         {
             string player = PhotonNetwork.PlayerList[num].NickName.ToString();
-            Debug.Log($"player {num} : {player}");
             return player;
         }
     }

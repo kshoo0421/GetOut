@@ -37,7 +37,7 @@ public class FinalResultPanel : MonoBehaviour
         {
             SetPlayerData(i);
         }
-        // SetRankText();
+        SetRankText();
     }
 
     private void SetPlayerData(int playerNum)
@@ -46,21 +46,11 @@ public class FinalResultPanel : MonoBehaviour
         TMP_Text[] temp_text = SetTempTMP(playerNum);
         SetPlayerMameText(ref temp_text, playerNum);
         SetTurnText(ref temp_text, playerNum, ref sum);
-        SetMissionResult();
         SetMissionText(ref temp_text, playerNum, ref sum);
         SetSumText(ref temp_text, playerNum, ref sum);
     }
 
-    private void SetMissionResult()
-    {
-        for(int i = 0; i < 4; i++)
-        {
-            ms.CheckMissionDone(MissionLevel.Low, gd.playerMissionData[i].low.missionNum, i);
-            ms.CheckMissionDone(MissionLevel.Mid, gd.playerMissionData[i].mid.missionNum, i);
-            ms.CheckMissionDone(MissionLevel.High, gd.playerMissionData[i].high.missionNum, i);
-        }
-    }
-
+    
     private TMP_Text[] SetTempTMP(int playerNum)
     {
         switch (playerNum)
@@ -80,8 +70,7 @@ public class FinalResultPanel : MonoBehaviour
 
     private void SetTurnText(ref TMP_Text[] tmp_text, int playerNum, ref long sum)
     {
-        long temp = ms.GetMissionGold(MissionLevel.Low, gd.playerMissionData[playerNum].low.missionNum);
-
+        long temp;
         for (int i = 0; i < 6; i++)
         {
             temp = gd.turnData[i].gold[playerNum];
@@ -98,6 +87,7 @@ public class FinalResultPanel : MonoBehaviour
         }
     }
 
+    
     private void SetMissionText(ref TMP_Text[] temp_text, int playerNum, ref long sum)
     {
         SetLowMissionText(ref temp_text, playerNum, ref sum);
@@ -107,7 +97,7 @@ public class FinalResultPanel : MonoBehaviour
 
     private void SetLowMissionText(ref TMP_Text[] temp_text, int playerNum, ref long sum)
     {
-        long tmp = ms.GetMissionGold(MissionLevel.Low, gd.playerMissionData[playerNum].low.missionNum);
+        int tmp = ms.GetMissionGold(MissionLevel.Low, gd.playerMissionData[playerNum].low.missionNum);
         temp_text[7].text = tmp.ToString();
         if (gd.playerMissionData[playerNum].low.isAchieved)
         {
@@ -122,7 +112,7 @@ public class FinalResultPanel : MonoBehaviour
 
     private void SetMidMissionText(ref TMP_Text[] temp_text, int playerNum, ref long sum)
     {
-        long tmp = ms.GetMissionGold(MissionLevel.Mid, gd.playerMissionData[playerNum].mid.missionNum);
+        int tmp = ms.GetMissionGold(MissionLevel.Mid, gd.playerMissionData[playerNum].mid.missionNum);
         temp_text[8].text = tmp.ToString();
         if (gd.playerMissionData[playerNum].mid.isAchieved)
         {
@@ -137,7 +127,7 @@ public class FinalResultPanel : MonoBehaviour
 
     private void SetHighMissionText(ref TMP_Text[] temp_text, int playerNum, ref long sum)
     {
-        long tmp = ms.GetMissionGold(MissionLevel.High, gd.playerMissionData[playerNum].high.missionNum);
+        int tmp = ms.GetMissionGold(MissionLevel.High, gd.playerMissionData[playerNum].high.missionNum);
         temp_text[9].text = tmp.ToString();
         if (gd.playerMissionData[playerNum].high.isAchieved)
         {

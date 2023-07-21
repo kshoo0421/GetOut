@@ -8459,7 +8459,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 600516784}
         m_TargetAssemblyTypeName: TopPanel, Assembly-CSharp
         m_MethodName: CloseOptionPanel
         m_Mode: 1

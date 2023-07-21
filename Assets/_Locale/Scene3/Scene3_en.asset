@@ -75,6 +75,10 @@ MonoBehaviour:
       of the players.
     m_Metadata:
       m_Items: []
+  - m_Id: 16970304034390016
+    m_Localized: You can't ready for game because you don't have any ticket.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

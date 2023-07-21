@@ -261,8 +261,8 @@ public class GamePlayer : MonoBehaviour
             InitGdWithTmd(ref tmd);
             InitPlayerMissions();
             SetGamePhase(GamePhase.SetMission);
+            databaseManager.FirstSaveGameData();
         }
-        databaseManager.SaveGameData();
     }
 
     private void SetOpponent(ref TurnMatchData tmd)

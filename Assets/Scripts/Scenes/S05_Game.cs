@@ -72,7 +72,7 @@ public class S05_Game : Scenes
         DatabaseManager.gamePhase = GamePhase.InitGame;
         MyPlayer = DatabaseManager.MyPlayer;
         MissionCheckBtn.interactable = false;
-        if (MyPlayer.isMasterClient) databaseManager.SaveGameData();
+        //if (MyPlayer.isMasterClient) databaseManager.FirstSaveGameData();
     }
     #endregion
 
@@ -415,26 +415,26 @@ public class S05_Game : Scenes
     private void SuggestBehaviour()
     {
         // setNewTime(20);
-        setNewTime(20); // develop mode
+        setNewTime(5); // develop mode
     }
     private void WaitingSuggestBehaviour()
     {
         //setNewTime(20);
-        setNewTime(20); // develop mode
+        setNewTime(5); // develop mode
     }
 
     private void GetBehaviour()
     {
         UpdateGoldText(DatabaseManager.curTurn);
         // setNewTime(10);
-        setNewTime(10);
+        setNewTime(5);
     }
 
     private void WaitingGetBehaviour()
     {
         UpdateGoldText(DatabaseManager.curTurn);
         // setNewTime(10);
-        setNewTime(10);
+        setNewTime(5);
     }
 
     private void TurnResultBehaviour()
