@@ -85,6 +85,7 @@ public class GamePlayer : MonoBehaviour
 
         if(isMasterClient)  // for AI
         {
+            Debug.Log("SavePlayerMissionData()");
             SavePlayerMissionDataForAi();
         }
     }

@@ -79,6 +79,10 @@ MonoBehaviour:
     m_Localized: You can't ready for game because you don't have any ticket.
     m_Metadata:
       m_Items: []
+  - m_Id: 17253827089743872
+    m_Localized: Do you really want to back to Lobby?
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

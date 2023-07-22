@@ -44,7 +44,7 @@ public class FinalResultPanel : MonoBehaviour
     {
         long sum = 0;
         TMP_Text[] temp_text = SetTempTMP(playerNum);
-        SetPlayerMameText(ref temp_text, playerNum);
+        SetPlayerNameText(ref temp_text, playerNum);
         SetTurnText(ref temp_text, playerNum, ref sum);
         SetMissionText(ref temp_text, playerNum, ref sum);
         SetSumText(ref temp_text, playerNum, ref sum);
@@ -66,7 +66,7 @@ public class FinalResultPanel : MonoBehaviour
         return new TMP_Text[11];
     }
 
-    private void SetPlayerMameText(ref TMP_Text[] temp_text, int playerNum) => temp_text[playerNum].text = DatabaseManager.gameData.playerId[playerNum];
+    private void SetPlayerNameText(ref TMP_Text[] temp_text, int playerNum) => temp_text[playerNum].text = DatabaseManager.gameData.playerId[playerNum];
 
     private void SetTurnText(ref TMP_Text[] tmp_text, int playerNum, ref long sum)
     {

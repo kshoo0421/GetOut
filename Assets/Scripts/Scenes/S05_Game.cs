@@ -152,10 +152,7 @@ public class S05_Game : Scenes
             curGamePhase = DatabaseManager.gamePhase;
             AllPanelOff();
             OpenSelectedPanel(curGamePhase);
-            //if (MyPlayer.isMasterClient)
-            //{
             NextPhaseFunction(curGamePhase);
-            //}
         }
     }
 

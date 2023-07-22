@@ -345,7 +345,13 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public async void FirstSaveGameData()
     {
         await SetGameIndex();
-        SaveGameData();
+        string json = JsonUtility.ToJson(gameData);
+
+        reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).Push();
+        await reference.Child("GamePlayData").Child("GPD").Child(gameData.gameIndex.ToString()).SetRawJsonValueAsync(json).ContinueWith(task =>
+        {
+            if (task.IsFaulted) Debug.LogError("Failed to save resultdata: " + task.Exception);
+        });
     }
 
     public async void SaveGameData()

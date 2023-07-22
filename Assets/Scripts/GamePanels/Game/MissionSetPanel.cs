@@ -81,7 +81,6 @@ public class MissionSetPanel : MonoBehaviour
                 break;
         }
         RerollBtns[i].interactable = false;
-        mp.SavePlayerMissionData();
     }
 
     public void MissionFix()
