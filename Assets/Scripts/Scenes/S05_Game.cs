@@ -22,18 +22,15 @@ public class S05_Game : Scenes
     [SerializeField] private GameObject FinalResultPanel;
     [SerializeField] private GameObject WaitingPanel;
 
-
     [SerializeField] private Button MissionCheckBtn;
     [SerializeField] private GameObject MissionCheckPanel;
     [SerializeField] private GameObject QuitBtnPanel;
 
-    
     /* Game */
     private string[] playerName = new string[4];
     private GamePhase curGamePhase;
     private GameData gd;
     private GamePlayer MyPlayer;
-
 
     /* test */
     private GamePhase test_gp = GamePhase.Default;
