@@ -35,6 +35,11 @@ public class GamePlayer : MonoBehaviour
             InitAi();
         }
     }
+
+    private void OnDestroy()
+    {
+        Debug.Log("Player destroyed");
+    }
     #endregion
 
     #region Check Master Client

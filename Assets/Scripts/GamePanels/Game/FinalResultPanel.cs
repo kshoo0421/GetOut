@@ -148,36 +148,32 @@ public class FinalResultPanel : MonoBehaviour
 
     private void SetRankText()
     {
-        long top = 0;
-        int rank = 1;
+        long top;
+        int rank = 1, count = 0;
         bool[] isDone = new bool[4] { false, false, false, false };
 
         while (rank < 5)
         {
+            top = 0;
             for (int i = 0; i < 4; i++) // find biggest
             {
-                if (top < sum[i] && !isDone[i]) top = sum[i];
+                if ((top < sum[i]) && (isDone[i] == false))
+                {
+                    top = sum[i];
+                }
             }
+            count = 0;
             for (int i = 0; i < 4; i++)
             {
                 if(top == sum[i])
                 {
+                    count++;
                     isDone[i] = true;
                     UpdatePlayerRank(i, rank.ToString());
                 }
             }
-            rank += CountRankedPlayer(ref isDone);
+            rank += count;
         }
-    }
-
-    private int CountRankedPlayer(ref bool[] isDone)
-    {
-        int count = 0;
-        for(int i = 0; i < 4; i++)
-        {
-            if (isDone[i]) count++;
-        }
-        return count;
     }
 
     private void UpdatePlayerRank(int playerNum, string text)
@@ -194,7 +190,7 @@ public class FinalResultPanel : MonoBehaviour
                 player3[11].text = text;
                 break;
             case 3:
-                player3[11].text = text;
+                player4[11].text = text;
                 break;
             default:
                 Debug.Log("Update Player Rank Error");

@@ -1,7 +1,9 @@
 using Photon.Pun;
 using Photon.Realtime;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
@@ -40,7 +42,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         SetPhoton();
     }
-
     #endregion
 
     #region Set Photon
@@ -110,6 +111,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("방 참가 완료");
         SpawnPlayerPrefab();    
     }
+
     public override void OnCreateRoomFailed(short returnCode, string message) => Debug.Log("방 만들기 실패");
 
     public override void OnJoinRoomFailed(short returnCode, string message) => Debug.Log("방 참가 실패");
@@ -117,6 +119,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message) => Debug.Log("방 랜덤 참가 실패");
 
     public void RandomMatch() => PhotonNetwork.JoinRandomOrCreateRoom();
+    #endregion
+
+    #region Spawn
+    public void SpawnPlayerPrefab()
+    {
+        PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        Debug.Log("instance 생성 완료");
+    }
     #endregion
 
     #region Get Players Information In Room
@@ -140,22 +150,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.LoadLevel(sceneNum);
         SpawnPlayerPrefab();
-    }
-    #endregion
-
-    #region Spawn
-    public void SpawnPlayerPrefab()
-    {
-        int i = 0;
-        while ((!DatabaseManager.enteredRoom) && i < 11)
-        {
-            Debug.Log("Delayed");
-            i++;
-            Thread.Sleep(1000);
-
-        }
-        PhotonNetwork.Instantiate("PlayerPrefab", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        Debug.Log("instance 생성 완료");
     }
     #endregion
 
