@@ -4,62 +4,43 @@ using UnityEngine.UI;
 
 public class S08_Shop : Scenes
 {
-    #region Field
-    /* Ads */
-    [SerializeField] private Button[] AdsBtns;  // 0 : 배너 광고, 
-    [SerializeField] private Button RewardAdsBtn;
-
-    /* CurState */
-    [SerializeField] private TMP_Text curStateTmp;
-
-    #endregion
-
     #region monobehaviour
     private void Start()
     {
         InitialSet();
-        SetAd();
+        OpenTicketPanel();
     }
 
     private void Update()
     {
         ForUpdate();
-        CanShowAd();
-        googleAdMobManager.ListenToAdEvents();
     }
     #endregion
 
-    #region Ads
-    private void SetAd()
+    #region Panels
+    [SerializeField] private GameObject TicketPanel;
+    [SerializeField] private GameObject AdPanel;
+    [SerializeField] private GameObject PurchasePanel;
+
+    public void OpenTicketPanel()
     {
-        googleAdMobManager.LoadRewardedAd();
+        TicketPanel.SetActive(true);
+        PurchasePanel.SetActive(false);
+        AdPanel.SetActive(false);
     }
 
-    private void CanShowAd() => RewardAdsBtn.interactable = googleAdMobManager.CanShowAd(); // 리워드 광고를 틀 수 있으면 활성화
-
-    public void ToggleBannerAd(bool b) => googleAdMobManager.ToggleBannerAd(b); // 배너 광고 설정/해제
-
-    public void ShowRewardedAd() => googleAdMobManager.ShowRewardedAd();
-
-    #endregion
-
-    #region Purchase
-    public string targetProductId;
-
-    public void HandleClick()
+    public void OpenAdPanel()
     {
-        if (targetProductId == PaymentManager.ProductCharacterSkin
-            || targetProductId == PaymentManager.ProductSubscription)
-        {
-            if (paymentManager.HadPurchased(targetProductId))
-            {
-                Debug.Log("이미 구매한 상품");
-                return;
-            }
-        }
-
-        paymentManager.Purchase(targetProductId);
+        TicketPanel.SetActive(false);
+        PurchasePanel.SetActive(false);
+        AdPanel.SetActive(true);
     }
 
+    public void OpenPurchasePanel()
+    {
+        TicketPanel.SetActive(false);
+        AdPanel.SetActive(false);
+        PurchasePanel.SetActive(true);
+    }
     #endregion
 }

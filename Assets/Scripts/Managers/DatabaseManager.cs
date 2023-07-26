@@ -35,6 +35,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public static DateTime gameTime;
     public static string leftTime = "00";
     public static long curGold = 0;
+    public static bool bannerAd = false;
 
     /* Data For Game */
     public static GamePlayer MyPlayer;

@@ -46,6 +46,22 @@ MonoBehaviour:
     m_Localized: Purchase
     m_Metadata:
       m_Items: []
+  - m_Id: 18733548105318400
+    m_Localized: Ads
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18740973868892160
+    m_Localized: Ticket
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18750045590601728
+    m_Localized: Buy Ticket
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18797654283862016
+    m_Localized: Purchase
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

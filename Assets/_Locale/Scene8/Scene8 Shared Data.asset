@@ -23,6 +23,58 @@ MonoBehaviour:
     m_Key: Game Records
     m_Metadata:
       m_Items: []
+  - m_Id: 18743194484424704
+    m_Key: 1000 Gold
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18743922036785152
+    m_Key: 1 Extra Ticket
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18752210849710080
+    m_Key: 'Price :'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18766164653195264
+    m_Key: Ticket Exchange Success!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18789958792986624
+    m_Key: Banner Ad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18790077026222080
+    m_Key: Reward Ad
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18791173710888960
+    m_Key: If you watch Reward Ad, you can get 100 Gold!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18791518054858752
+    m_Key: If you play game with banner, you can get 50% more gold from game.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18801505225359360
+    m_Key: Gold Purchase Success!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18810958763827200
+    m_Key: '10000G : 1000 won'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18811065081044992
+    m_Key: '33000G : 3000 won'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18811188460691456
+    m_Key: '60000G : 5000 won'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18811256446164992
+    m_Key: '150000G : 10000 won'
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
