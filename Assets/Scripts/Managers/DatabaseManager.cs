@@ -11,20 +11,17 @@ using Google;
 public class DatabaseManager : BehaviorSingleton<DatabaseManager>
 {
     #region Field
-    private static FirebaseUser User;
+    public static FirebaseUser User;
 
     /* Authentication */
-    public static string SignInMessage;
-    public static string SignUpMessage;
 
     /* Base Set */
     private static FirebaseApp firebaseApp;
-    private static FirebaseAuth auth; 
+    public static FirebaseAuth auth; 
     private static FirebaseDatabase firebaseDatabase;
     private static DatabaseReference reference;
 
     public static bool IsFirebaseReady { get; set; }
-    private static bool IsSignInOnProgress { get; set; }
 
     /* Photon */
     public static bool enteredRoom = false;
@@ -52,8 +49,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     {
         FirebaseApp.Create();
         InitializeDM();
-        SignUpMessage = "";
-        SignInMessage = "";
     }
 
 
@@ -86,117 +81,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     public void InitGameData()
     {
         gameData = new GameData(0);
-    }
-    #endregion
-
-    #region Email Sign Up
-    public bool checkEmailOverlap() // 이메일 중복여부 체크, 구현 필요
-    {
-        //FirebaseUser userRecord;
-        
-        //UserRecord userRecord;
-        //await firebaseAuth.GetUserByEmailAsync(emailText).;
-        
-        return true;
-    }
-
-    public bool checkPasswordOverlap()  // 비밀번호 조건 충족여부 체크, 구현 필요
-    {
-        return true;
-    }
-
-    public void SignUp(string emailText, string passwordText)    // 회원가입
-    {
-        auth.CreateUserWithEmailAndPasswordAsync(emailText, passwordText).ContinueWith(task =>
-        {
-            if (task.IsCanceled)
-            {
-                SignUpMessage = task.Exception.Message;
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                SignUpMessage = task.Exception.Message;
-                return;
-            }
-            FirebaseUser newUser = task.Result.User;
-            SignUpMessage = "Sign Up Success";
-            int index = emailText.IndexOf("@");
-            UpdateUserProfile(emailText.Substring(0, index));
-        });
-    }
-
-    private void UpdateUserProfile(string UserName)
-    {
-        FirebaseUser user = auth.CurrentUser;
-        if (user != null)
-        {
-            UserProfile profile = new UserProfile
-            {
-                DisplayName = UserName
-            };
-            user.UpdateUserProfileAsync(profile).ContinueWith(task =>
-            {
-                if (task.IsCanceled)
-                {
-                    Debug.LogError("UpdateUserProfileAsync was canceled.");
-                    return;
-                }
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("UpdateUserProfileAsync encountered an error : " + task.Exception);
-                    return;
-                }
-
-                Debug.Log("User profile updated successfully.");
-            });
-        }
-    }
-    #endregion
-
-    #region Email Sign In
-    public bool checkSignIn()
-    {
-        if (!IsFirebaseReady || IsSignInOnProgress || User != null)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    public async Task SignIn(string emailText, string passwordText)
-    {
-        IsSignInOnProgress = true;
-
-        await auth.SignInWithEmailAndPasswordAsync(emailText, passwordText).ContinueWithOnMainThread(
-            task =>
-            {
-                Debug.Log(message: $"Sign in status : {task.Status}");
-
-                IsSignInOnProgress = false;
-
-                if (task.IsCanceled)
-                {
-                    SignInMessage = task.Exception.Message;
-                }
-                else if (task.IsFaulted)
-                {
-                    Exception exception = task.Exception;
-                    FirebaseException firebaseEx = exception as FirebaseException;
-                    if(firebaseEx != null)
-                    {
-                        var errorCode = (AuthError)firebaseEx.ErrorCode;
-                        SignInMessage = "Error : " + GetErrorMessage(errorCode);
-                    }
-                }
-                else
-                {
-                    SignInMessage = "Log In Success";
-                    User = task.Result.User;
-                    SetPhotonNickName();
-                }
-            });
-        await SetUserData();
     }
     #endregion
 
@@ -248,12 +132,11 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
     #endregion
 
     #region Siggin Common Functions
-    private void SetPhotonNickName()
+    public void SetPhotonNickName()
     {
         int index = User.Email.IndexOf("@");
         PhotonManager.NickNameString = User.Email.Substring(0, index);
         PhotonManager.Instance.SetUserID(User.UserId);
-        Debug.Log($"NickName : {PhotonManager.NickNameString}");
     }
     #endregion
 
@@ -278,38 +161,6 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
             User = auth.CurrentUser;
         }
         return User;
-    }
-    #endregion
-
-    #region Get Error Message
-    private static string GetErrorMessage(AuthError errorCode)
-    {
-        string message = "";
-        switch(errorCode)
-        {
-            case AuthError.AccountExistsWithDifferentCredentials:
-                message = "Account Not Exist";
-                break;
-            case AuthError.MissingPassword:
-                message = "Missing Password";
-                break;
-            case AuthError.WrongPassword:
-                message = "Wrong Password";
-                break;
-            case AuthError.EmailAlreadyInUse:
-                message = "Your Email Already in Use";
-                break;
-            case AuthError.InvalidEmail:
-                message = "Your Email Invalid";
-                break;
-            case AuthError.MissingEmail:
-                message = "Your Email Missing";
-                break;
-            default:
-                message = "Invalid Error";
-                break;
-        }
-        return message;
     }
     #endregion
 
@@ -409,7 +260,7 @@ public class DatabaseManager : BehaviorSingleton<DatabaseManager>
         return snapshot.Exists;
     }
 
-    private async Task SetUserData()
+    public async Task SetUserData()
     {
         string uid = User.UserId;
         if (await isDataExist(uid)) // get data from database
